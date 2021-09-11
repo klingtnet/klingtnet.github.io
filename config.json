@@ -1,0 +1,8 @@
+{
+    "author": "Andreas Linz",
+    "base_url": "",
+    "content_dir": "./content",
+	"static_dir": "./static",
+	"output_dir": "./output",
+	"templates_dir": "./templates"
+}

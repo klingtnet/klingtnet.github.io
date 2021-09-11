@@ -1,0 +1,233 @@
+:root {
+    /* TODO: proper color scheme  */
+    --text-color: #111111;
+    --bg-color: #ffffff;
+    --bg-color-transparent: #ffffff77;
+    --dimmed-text: #ababab;
+    --color-1: #F2385A;
+    --color-2: #F5A503;
+    --mono-font: 'Fira Code', monospace;
+    --text-font: 'Fira GO', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #ffffff;
+        --bg-color: #111111;
+        --bg-color-transparent: #11111177;
+        --dimmed-text: #555;
+    }
+}
+
+html {
+    font-family: var(--text-font);
+    line-height: 1.6;
+    font-size: 1.3rem;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+}
+
+img {
+    /* https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design#responsive_images */
+    max-width: 100%;
+}
+
+h1 {
+    font-size: 2.6em;
+    font-weight: 900;
+    background: -webkit-linear-gradient(top left, var(--color-1), var(--color-2) 61%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+pre {
+    overflow: auto;
+    word-wrap: normal;
+    white-space: pre;
+}
+
+.mono {
+    font-family: var(--mono-font);
+    font-size: 0.9rem;
+}
+
+pre, code {
+    font-family: var(--mono-font);
+    font-size: 0.9rem;
+}
+
+main {
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+
+@media (min-width: 72ch) {
+    main {
+        grid-area: content;
+        /* Source: https://jrl.ninja/etc/1/ */
+        max-width: 72ch;
+        padding: 1.5rem;
+        margin: auto;
+    }
+}
+
+div.wrapper {
+    display: grid;
+    height: 100%;
+    grid-template-areas: "header""main""footer";
+    grid-template-rows: max-content 1fr max-content;
+}
+
+div.main {
+    grid-area: main;
+    max-width: 100vw;
+}
+
+div.header {
+    grid-area: header;
+}
+
+div.footer {
+    grid-area: footer;
+}
+
+.header-bar {
+    display: flex;
+    flex-flow: row;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 72ch;
+    margin: auto;
+    padding: 2rem 1rem;
+}
+
+.header-menu {
+    display: flex;
+    align-items: baseline;
+}
+
+.mobile-menu {
+    display: block;
+}
+
+details.mobile-menu>summary {
+    font-size: 0;
+    list-style: none;
+    text-align: center;
+    transition: transform 300ms ease-in-out;
+}
+
+details.mobile-menu[open]>summary {
+    color: var(--dimmed-text);
+    transform: rotate(90deg);
+}
+
+.dropdown {
+    position: absolute;
+    background-color: var(--bg-color);
+    width: min(72ch, calc(100% - 2rem));
+}
+
+@supports (backdrop-filter: blur(20px)) or (-webkit-backdrop-filter: blur(20px)) {
+    .dropdown {
+        background-color: var(--bg-color-transparent);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+}
+
+.hamburger {
+    width: 2rem;
+    height: 2rem;
+}
+
+.nav-icon {
+    width: 2rem;
+    height: 2rem;
+}
+
+@media (prefers-color-scheme: dark) {
+    .invert-if-dark {
+        filter: invert(1);
+    }
+}
+
+.valign {
+    vertical-align: middle;
+}
+
+.sm-margin-right {
+    margin-right: 1rem;
+}
+
+.sm-margin-bottom {
+    margin-bottom: 1rem;
+}
+
+.sm-margin-top {
+    margin-top: 1rem;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+ul.nav {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+}
+
+ul.nobullets {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+ul.nav>li {
+    padding: 1rem 0;
+    margin: 0 2rem 0 2rem;
+    width: 100%;
+    text-align: center;
+}
+
+ul.nav>li:hover, ul.nav>li:focus {
+    background-color: var(--color-1);
+    transition: background-color 300ms ease-in-out;
+}
+
+.reset-color, .reset-color:hover, .reset-color:visited, .reset-color:active {
+    color: var(--text-color);
+}
+
+a {
+    color: var(--color-1);
+}
+
+a:link {
+    text-decoration: none;
+    /* color: var(--text-color); */
+}
+
+a:visited {
+    color: var(--dimmed-text);
+}
+
+a:hover {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+a:active {
+    text-decoration: none;
+}
+
+.center {
+    text-align: center;
+}
