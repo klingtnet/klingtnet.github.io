@@ -1,0 +1,41 @@
+@font-face {
+    font-family: 'Fira GO';
+    font-style: normal;
+    font-weight: 400;
+    src: url(Roman/FiraGO-Regular.woff2) format('woff');
+}
+
+@font-face {
+    font-family: 'Fira GO';
+    font-weight: 400;
+    src: url(Italic/FiraGO-Italic.woff2) format('woff');
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Fira GO';
+    font-style: normal;
+    font-weight: 700;
+    src: url(Roman/FiraGO-Bold.woff2) format('woff');
+}
+
+@font-face {
+    font-family: 'Fira GO';
+    font-weight: 700;
+    src: url(Italic/FiraGO-BoldItalic.woff2) format('woff');
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Fira GO';
+    font-style: normal;
+    font-weight: 900;
+    src: url(Roman/FiraGO-Heavy.woff2) format('woff');
+}
+
+@font-face {
+    font-family: 'Fira GO';
+    font-weight: 900;
+    src: url(Italic/FiraGO-HeavyItalic.woff2) format('woff');
+    font-style: italic;
+}
