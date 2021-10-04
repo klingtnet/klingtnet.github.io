@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+git ls-files | entr sh -c "ssg --config config.json; echo rebuilt @ $(date)"

@@ -1,0 +1,14 @@
+{{ define "content" }}
+<ul class="nobullets">
+    {{ range $_, $page := .Pages }}
+    <li class="sm-margin-bottom">
+        <span class="mono">{{ $page.FM.CreatedAt.String }}</span>
+        <a href="{{ pageLink $page }}">{{ $page.FM.Title }}</a>
+    </li>
+    {{ end }}
+</ul>
+{{ end }}
+
+{{ define "headerExtra" }}
+<link rel="alternate" type="application/rss+xml" title="{{ .Dir }} feed" href="{{ absLink .Dir }}.rss">
+{{ end }}

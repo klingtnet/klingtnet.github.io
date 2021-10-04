@@ -1,0 +1,28 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: true
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17.x
+      - name: Install static-site-generator
+        run: go install github.com/klingtnet/static-site-generator/cmd/ssg@latest
+      - name: Build
+        run: mkdir output && $GOPATH/bin/ssg --config config.json
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: output
+          publish_branch: gh-pages
