@@ -19,7 +19,7 @@ jobs:
       - name: Install static-site-generator
         run: go install github.com/klingtnet/static-site-generator/cmd/ssg@latest
       - name: Build
-        run: mkdir output && $GOPATH/bin/ssg --config config.json
+        run: mkdir output && ~/go/bin/ssg --config config.json
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
