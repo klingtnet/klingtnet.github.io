@@ -60,7 +60,7 @@ It does not get much simpler than this and I assume that this might be the first
 [play-simple]: https://play.golang.org/p/jml6LqHApAN
 [play-bubble-sort]: https://play.golang.org/p/wlTPJe7B5Ij
 [lobsters]: https://lobste.rs/s/gh1ngc/is_this_simplest_most_surprising_sorting
-[bubble-sort]: Bubble_sort
+[bubble-sort]: https://en.wikipedia.org/wiki/Bubble_sort
 [paper]: https://arxiv.org/pdf/2110.01111.pdf
 
 [^1]: Take this definition with a grain of salt, I wrote this off the top of my head.
