@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <title>The simplest sorting algorithm</title>
+
+  <link rel="icon" type="image/svg+xml" href='/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <header>
+        
+<nav>
+  <div class="header-bar">
+    <details class="mobile-menu">
+      <summary><img class="hamburger nav-icon invert-if-dark" src='/assets/hamburger.svg'>
+      </summary>
+      <div class="dropdown sm-margin-top">
+        <ul class="nav nobullets">
+          
+          <li><a class="reset-color" href='/index.html'>Home</a></li>
+          
+          <li><a class="reset-color" href='/articles'>Articles</a></li>
+          
+          <li><a class="reset-color" href='/about-me.html'>About Me</a></li>
+          
+          <li><a class="reset-color" href='/imprint.html'>Imprint</a></li>
+          
+          <li><a class="reset-color" href='/privacy-policy.html'>Privacy Policy</a></li>
+          
+        </ul>
+      </div>
+    </details>
+    <div>
+      <span class="bold sm-margin-right">klingt.net</span>
+      <img class="valign nav-icon invert-if-dark" alt="website logo" src="/assets/logo.svg">
+    </div>
+  </div>
+</nav>
+
+      </header>
+    </div>
+    <div class="main">
+      <main>
+        
+<h1>The simplest sorting algorithm</h1>
+<p>Not all us have enjoyed a formal computer science education so let's define what a sorting algorithm actually does:</p>
+<blockquote>
+<p>A sorting algorithm takes an array and puts it elements in a certain order. What order means depends on the values stored in the array, e.g. in numerical order numbers or lexicographic order for strings. <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+</blockquote>
+<p>Let's see an example, for an array <code>a = [4,2,3,1]</code>, a sorting algorith applied to <code>a</code> will result in <code>[1,2,3,4]</code> when numerically sorted in ascending order.</p>
+<p>Ok, now that we've defined what sorting means let's head over to why I am writing this article.  I discovered a paper called <em>Is this the simplest (and most surprising) sorting algorithm ever?</em> on <a href="https://lobste.rs/s/gh1ngc/is_this_simplest_most_surprising_sorting">lobste.rs</a> today.  Sorting algorithms are often used in basic computer science lectures to teach algorithms. The first algorithm students encounter is very often <a href="Bubble_sort">Bubble sort</a>.</p>
+<p>Bubble sort is by no means a complicated algorithm as you can see in the prototypical Go implementation below:</p>
+<pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
+
+for {
+    swapped := false
+    for i := 1; i &lt; len(xs); i++ {
+        if xs[i-1] &gt; xs[i] {
+            xs[i-1], xs[i] = xs[i], xs[i-1]
+            swapped = true
+        }
+    }
+    if !swapped {
+        break
+    }
+}
+fmt.Println(xs) // prints [-1 2 3 4 6 10]
+</code></pre>
+<p>You can play with the implementation in the <a href="https://play.golang.org/p/wlTPJe7B5Ij">Go playground</a>.  It just iterates over the array until there is no element to swap anymore.  The only complicated thing is to keep around the state if two elements got swapped.</p>
+<p>To my surprise the <a href="https://arxiv.org/pdf/2110.01111.pdf">paper</a> mentioned above is describing an even more straightforward way to sort an array:</p>
+<pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
+for i := 0; i &lt; len(xs); i++ {
+  for j := 0; j &lt; len(xs); j++ {
+    if xs[i] &lt; xs[j] {
+      xs[i], xs[j] = xs[j], xs[i]
+    }
+  }
+}
+fmt.Println(xs) // prints [-1 2 3 4 6 10]
+</code></pre>
+<p>It does not get much simpler than this and I assume that this might be the first algorithm future computer science students might encounter in their basic lessons. You can try this one out in the <a href="https://play.golang.org/p/jml6LqHApAN">Go playground</a> as well.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Take this definition with a grain of salt, I wrote this off the top of my head.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+    <div class="footer">
+      <footer>
+        
+<p class="center">
+  <a href="#">Back to top.</a>
+</p>
+
+      </footer>
+    </div>
+  </div>
+</body>
+
+</html>
+
+
+
+
