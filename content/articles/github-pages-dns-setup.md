@@ -11,7 +11,7 @@
 
 # GitHub Pages DNS Setup
 
-I chose [GitHub Pages][ghp] to serve [this website][this-website].  By default a GitHub Pages website is served under `<repo>.github.io`, which is fine but now what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain `klingt.net`.
+I chose [GitHub Pages][ghp] to serve [this website][this-website].  By default a GitHub Pages website is served under `<repo>.github.io`, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain `klingt.net`.
 
 Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  [^1]
 
