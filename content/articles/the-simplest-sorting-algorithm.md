@@ -55,7 +55,7 @@ for i := 0; i < len(xs); i++ {
 fmt.Println(xs) // prints [-1 2 3 4 6 10]
 ```
 
-It does not get much simpler than this and I assume that this might be the first algorithm future computer science students might encounter in their basic lessons. You can try this one out in the [Go playground][play-simple] as well.
+It does not get much simpler than this and I assume that this might be the first algorithm future computer science students will encounter in their basic lessons. You can try this one out in the [Go playground][play-simple] as well.
 
 [play-simple]: https://play.golang.org/p/jml6LqHApAN
 [play-bubble-sort]: https://play.golang.org/p/wlTPJe7B5Ij
