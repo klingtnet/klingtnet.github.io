@@ -64,11 +64,11 @@
       <main>
         
 <h1>The simplest sorting algorithm</h1>
-<p>Not all us have enjoyed a formal computer science education so let's define what a sorting algorithm actually does:</p>
+<p>Not all of us have enjoyed a formal computer science education so let's define what a sorting algorithm actually does:</p>
 <blockquote>
-<p>A sorting algorithm takes an array and puts it elements in a certain order. What order means depends on the values stored in the array, e.g. in numerical order numbers or lexicographic order for strings. <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p>A sorting algorithm takes an array and puts it elements in a certain order. What order means depends on the values stored in the array, e.g. in numerical order for numbers or lexicographic order for strings. <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
 </blockquote>
-<p>Let's see an example, for an array <code>a = [4,2,3,1]</code>, a sorting algorith applied to <code>a</code> will result in <code>[1,2,3,4]</code> when numerically sorted in ascending order.</p>
+<p>Let's see an example, for an array <code>a = [4,2,3,1]</code>, a sorting algorithm applied to <code>a</code> will result in <code>[1,2,3,4]</code> when numerically sorted in ascending order.</p>
 <p>Ok, now that we've defined what sorting means let's head over to why I am writing this article.  I discovered a paper called <em>Is this the simplest (and most surprising) sorting algorithm ever?</em> on <a href="https://lobste.rs/s/gh1ngc/is_this_simplest_most_surprising_sorting">lobste.rs</a> today.  Sorting algorithms are often used in basic computer science lectures to teach algorithms. The first algorithm students encounter is very often <a href="https://en.wikipedia.org/wiki/Bubble_sort">Bubble sort</a>.</p>
 <p>Bubble sort is by no means a complicated algorithm as you can see in the prototypical Go implementation below:</p>
 <pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
@@ -99,7 +99,14 @@ for i := 0; i &lt; len(xs); i++ {
 }
 fmt.Println(xs) // prints [-1 2 3 4 6 10]
 </code></pre>
-<p>It does not get much simpler than this and I assume that this might be the first algorithm future computer science students will encounter in their basic lessons. You can try this one out in the <a href="https://play.golang.org/p/jml6LqHApAN">Go playground</a> as well.</p>
+<p>It does not get much simpler than this <del>and I assume that this might be the first algorithm future computer science students will encounter in their basic lessons.</del>  For me this algorithm is easier to remember than the classic bubble sort but the paper states that it is not a good candidate for an algorithm introduction.</p>
+<blockquote>
+<p>You certainly do not want to use it as a first example to introduce
+students to sorting algorithms. It is not stable, does not work well for
+external sorting, cannot sort inputs arriving online, and does not benefit
+from partially sorted inputs.</p>
+</blockquote>
+<p>You can try this one out in the <a href="https://play.golang.org/p/jml6LqHApAN">Go playground</a> as well.</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
