@@ -11,11 +11,11 @@
 
 # The simplest sorting algorithm
 
-Not all us have enjoyed a formal computer science education so let's define what a sorting algorithm actually does:
+Not all of us have enjoyed a formal computer science education so let's define what a sorting algorithm actually does:
 
-> A sorting algorithm takes an array and puts it elements in a certain order. What order means depends on the values stored in the array, e.g. in numerical order numbers or lexicographic order for strings. [^1]
+> A sorting algorithm takes an array and puts it elements in a certain order. What order means depends on the values stored in the array, e.g. in numerical order for numbers or lexicographic order for strings. [^1]
 
-Let's see an example, for an array `a = [4,2,3,1]`, a sorting algorith applied to `a` will result in `[1,2,3,4]` when numerically sorted in ascending order.
+Let's see an example, for an array `a = [4,2,3,1]`, a sorting algorithm applied to `a` will result in `[1,2,3,4]` when numerically sorted in ascending order.
 
 Ok, now that we've defined what sorting means let's head over to why I am writing this article.  I discovered a paper called _Is this the simplest (and most surprising) sorting algorithm ever?_ on [lobste.rs][lobsters] today.  Sorting algorithms are often used in basic computer science lectures to teach algorithms. The first algorithm students encounter is very often [Bubble sort][bubble-sort].
 
