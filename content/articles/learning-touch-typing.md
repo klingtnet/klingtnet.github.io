@@ -9,6 +9,8 @@
 }
 ```
 
+# Learning Touch Typing
+
 Lately two articles about developer productivity appeared in my news feed.  The first was [speed matters][sm], which is part of the great [reflections on a decade of coding][roadc] article series, and second is [some reasons to work on productivity and velocity][pv] by Dan Luu.  Both articles stated that [touch typing][wiki] improved their productivity.  The productivity boost was not limited to a bare increase in word per minute that one can type, instead the greater leverage comes from an increased accuracy.  Making less typing errors improves the writing flow because every typo requires a context switch in order to fix the mistake.  Jamie Brandon wrote:
 
 > If you compare two coders, one who can touch type and one who has to hunt and peck, the difference between them is not just down to typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.

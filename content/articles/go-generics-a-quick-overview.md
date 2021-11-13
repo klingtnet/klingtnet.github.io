@@ -9,6 +9,8 @@
 }
 ```
 
+# Go Generics - A Quick Overview
+
 A large part of this article is based on Ian Lance Taylor's great [Using Generics in Go][generics-yt] talk that was presented at [Go Day 2021][goday].
 
 The generics topic polarized the Go community and still does, even though not as much as it did initially.
