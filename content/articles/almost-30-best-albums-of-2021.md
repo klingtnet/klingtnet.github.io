@@ -9,7 +9,7 @@
 
 # (Almost 30) Best Albums of 2021
 
-Without further ado I admit being a music junkie.  I love discovering new music in my journey through online record stores or whenever I am in one of the local record shops.  One of the positive side effects of Covid was that people had more time listening to music and started buying records.  Vinyl sales were already on the rise over the past years, but the last two years has given them an extra boost that lead to new record stores popping up in the Leipzig and elsewhere.
+Without further ado I admit being a music junkie.  I love discovering new music in my journey through online record stores or whenever I am in one of the local record shops.  One of the positive side effects of Covid was that people had more time listening to music and started buying records.  Vinyl sales were already on the rise over the past years, but the last two years has given them an extra boost that lead to new record stores popping up in Leipzig and elsewhere.
 
 Stop buying crap, support your favorite artists instead!
 
