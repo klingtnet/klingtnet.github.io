@@ -19,11 +19,11 @@ Stop buying crap, support your favorite artists instead!
 
 Roy Montgomery.  [Grouper]'s 2009 [split EP](https://www.discogs.com/master/214067-Roy-Montgomery-Grouper-Roy-Montgomery-Grouper) introduced me to the music of the New Zealand based guitarist and it also spawned my love for drone and ambient music.  I cannot exactly say what makes me love his music so much, but somehow the layered guitar tunes together with the ethereal reverb in the background create an atmosphere that makes me comfy, and which reminds of warm and sunny summer days that I spent in the country side (or that I just imagined while daydreaming).  For me it's just the perfect music to relax and drift away with my thoughts.
 
-When [Grapefruit Record Club] announced the 40th anniversary LP series I haven't give it a second thought and pre-ordered the vinyls the same day, planning to make myself a little christmas present.  But, shipping was delayed to January 2022 because an unprecedented backup at pressing plants ([damn you Adele!](https://www.vox.com/the-goods/2021/11/22/22797290/adele-vinyl-record-supply-chain-delays)).
+When [Grapefruit Record Club] announced the 40th anniversary LP series I haven't given it a second thought and pre-ordered the vinyls the same day, planning to make myself a little christmas present.  But, shipping was delayed to January 2022 because of an unprecedented backup at pressing plants ([damn you Adele!](https://www.vox.com/the-goods/2021/11/22/22797290/adele-vinyl-record-supply-chain-delays)).
 
-Roy Montgomery might be best known for his work with Dadamah, an experimental rock/shoegaze group where he sang and played guitar.  Their sole album, This is Not a Dream, contains two tracks that still give me goosebumps whenever I listen to them, [Too Hot to Dry](https://www.youtube.com/watch?v=MpwKdaPCcII&t=592s) and [High Tension House](https://www.youtube.com/watch?v=MpwKdaPCcII&t=1714s).  His music is melancholic while being still positive, hard to describe.  This tension might be the reason I'm so fascinated by it.
+Roy Montgomery might be best known for his work with Dadamah, an experimental rock/shoegaze group where he sang and played guitar.  Their sole album, _This is Not a Dream_, contains two tracks that still give me goosebumps whenever I listen to them, [Too Hot to Dry](https://www.youtube.com/watch?v=MpwKdaPCcII&t=592s) and [High Tension House](https://www.youtube.com/watch?v=MpwKdaPCcII&t=1714s).  His music is melancholic while being still positive, hard to describe.  This tension might be the reason I'm so fascinated by it.
 
-In an interview, I read about him, he said that he is a self-taught guitarist. This gives me hope that I can sometimes create similar atmospheres on my guitar.  One my new year's resolutions is to finally take guitar lessons, no excuses anymore.
+In an interview, I read about him, he said that he is a self-taught guitarist. This gives me hope that I can sometimes create similar atmospheres on my guitar.  One of my new year's resolutions is to finally take guitar lessons, no excuses anymore.
 
 <iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2966139599/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://grapefruit1.bandcamp.com/album/roy-montgomery-40th-anniversary-2021-lp-series">Roy Montgomery 40th Anniversary 2021 LP Series by Roy Montgomery</a></iframe>
 
@@ -61,7 +61,7 @@ An album best listened to on a quiet evening with a wood fire or while watching 
 
 ![Album Art of Stazma - Leftovers](https://f4.bcbits.com/img/a0248618665_16.jpg)
 
-Stazma's leftovers are better than some other's best productions.  I have a soft spot for blazing breakcore beats, especially when they incorporate well versed rapping or funky Squarepusher'esque basslines on top.  There are a lot of excellent breakcore producers in France, [Ruby my Dear] or [Igorrr] for example.  Still, Stazma is a master of his craft and shares his production techniques, like Woulg, with the rest of the world on [YouTube](https://www.youtube.com/channel/UCOiJihb6aQyKch4FDST3niw).
+Stazma's leftovers are better than some other's best productions.  I have a soft spot for blazing breakcore beats, especially when they incorporate well versed rapping or funky Squarepusher'esque basslines on top.  There are dozens of excellent breakcore producers in France, [Ruby my Dear] or [Igorrr] for example.  Still, Stazma is a master of his craft and shares his production techniques, like Woulg, with the rest of the world on [YouTube](https://www.youtube.com/channel/UCOiJihb6aQyKch4FDST3niw).
 
 If you haven't gotten bored by the Amen break yet, and if you like hard and fast break beats then this is something you should listen to.
 
@@ -81,7 +81,7 @@ Perfect music for driving on the Autobahn or to dance alone in your living room 
 
 ![Album Art of Harold Budd - Abandoned Cities](https://f4.bcbits.com/img/a2697139059_16.jpg)
 
-Yet another from a master of his genre.  Not a 2021 release, strictly speaking, but a re-release of Harold Budds' 1984 record _Abandoned Cities_.  This one is much darker than his other works and reminds me a bit of the early [Tangerine Dream].  Most mystery or sci-fi movies would benefit from a soundtrack like this.
+Yet another album from a master of his genre.  Not a 2021 release, strictly speaking, but a re-release of Harold Budds' 1984 record _Abandoned Cities_.  This one is much darker than his other works and reminds me a bit of the early [Tangerine Dream].  Most mystery or sci-fi movies would benefit from a soundtrack like this.
 
 A soundtrack for being outside on a starry night, but only if you're not afraid of the dark.
 
@@ -101,8 +101,7 @@ This is a record for people pretending not to like classical music but are overw
 
 ![Album Art of Tommy Guerrero - Sunshine Radio](https://f4.bcbits.com/img/a1891857574_16.jpg)
 
-The californian Tommy Guerrero, former pro skateboarders, now a professional musician is living the dream (at least I hope he does :sweat_smile:).  His music is best described as a fusion of Instrumental Rock, Jazz, Funk and Downtempo[^2] influenced by 
-hot shimmering air, cacti, yucca, agaves and tequila at sundown.  Okay, that's just my mental picture of his music but I still think it gives you an idea of what to expect.
+The californian Tommy Guerrero, former pro skateboarder, now a professional musician is living the dream (at least I hope he does :sweat_smile:).  His music is best described as a fusion of Instrumental Rock, Jazz, Funk and Downtempo[^2] influenced by hot shimmering air, cacti, yucca, agaves and tequila at sundown.  Okay, that's just my mental picture of his music but I still think it gives you an idea of what to expect.
 
 Hear this, or his other records, if you want to get in a good mood or if you want to relax on a hot summer evening.  Best listened to with friends, some beers and a joint :herb:.
 
@@ -269,9 +268,9 @@ No need to speak french to listen to this one, a record made for summer evenings
 
 ![Album Art of Submotion Orchestra - Finest Hour](https://f4.bcbits.com/img/a2343263499_16.jpg)
 
-I am sorry for having another reissue in the list, but that's how it is.  Actually I'm not sorry at all because this album is bloody gem and your life will be worse if you have never listened to it!  Submotion Orchestra are a seven piece band from England that are influenced by soul, dub(step), electronica and trip-hop.  I have no idea how this record, released in 2009, could fly under my radar until this year.
+I am sorry for having another reissue in the list, but that's how it is.  Actually I'm not sorry at all because this album is a bloody gem and your life will be worse if you have never listened to it!  Submotion Orchestra are a seven piece band from England that are influenced by soul, dub(step), electronica and trip-hop.  I have no idea how this record, released in 2009, could fly under my radar until this year.
 
-A platter so versatile that it fits any time and moment, ideally the more mellow ones.
+A record so versatile that it fits any time and moment, ideally the more mellow ones.
 
 <iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3033307561/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://submotionorchestra.bandcamp.com/album/finest-hour">Finest Hour by Submotion Orchestra</a></iframe>
 
@@ -297,7 +296,7 @@ An album for people who like Slowdive, My Bloody Valentine or Cocteau Twins.
 
 ---
 
-Writing those short reviews was much fun and is something I should do more regularly, even though in smaller batches and not for almost 30 albums at a time.  Also, note that the albums were added in not particular order or relevance.  There were tons of other records I could have added but they did not fit because they either weren't released in 2021 nor reissued.
+Writing those short reviews was much fun and is something I should do more regularly, even though in smaller batches and not for almost 30 albums at a time.  Also, note that the albums were added in no particular order or relevance.  There were tons of other records I could have added but they did not fit because they either weren't released in 2021 nor reissued.
 
 [Grouper]: https://grouper.bandcamp.com/
 [Grapefruit Record Club]: https://www.grapefruitrecordclub.com/
