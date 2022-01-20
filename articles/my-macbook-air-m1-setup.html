@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="I recently made myself a present and bought a MacBook Air M1.  This is my first macOS machine and in this article I will let you know which productivity tools I use, what other software and how my basic configuration looks like.">
+  
+  <title>My MacBook Air M1 setup</title>
+
+  <link rel="icon" type="image/svg+xml" href='/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <header>
+        
+<nav>
+  <div class="header-bar">
+    <details class="mobile-menu">
+      <summary><img class="hamburger nav-icon invert-if-dark" src='/assets/hamburger.svg'>
+      </summary>
+      <div class="dropdown sm-margin-top">
+        <ul class="nav nobullets">
+          
+          <li><a class="reset-color" href='/index.html'>Home</a></li>
+          
+          <li><a class="reset-color" href='/articles'>Articles</a></li>
+          
+          <li><a class="reset-color" href='/about-me.html'>About Me</a></li>
+          
+          <li><a class="reset-color" href='/imprint.html'>Imprint</a></li>
+          
+          <li><a class="reset-color" href='/privacy-policy.html'>Privacy Policy</a></li>
+          
+        </ul>
+      </div>
+    </details>
+    <div>
+      <span class="bold sm-margin-right">klingt.net</span>
+      <img class="valign nav-icon invert-if-dark" alt="website logo" src="/assets/logo.svg">
+    </div>
+  </div>
+</nav>
+
+      </header>
+    </div>
+    <div class="main">
+      <main>
+        
+<h1>Preface</h1>
+<p>It was in the very early nineties when I first used a computer.  It must have been the 286 of my neighbor or the Amiga of my cousin.  A couple of years later, I think when I was in 4th grade, I got my first own computer.  A 486DX2-66 with 8 megs of RAM and a horribly slow 1GB SCSI hard drive, connected through an Adaptec ISA SCSI Controller card.  Not only was the hard drive slow as hell, maybe 1 MB/s at tops, it was also very noisy.  Annoyingly loud to be honest, like if it wrote every bit with a chisel into stone.  This machine ran MS-DOS and so I learned how to remove unnecessary drivers from <code>autoexec.bat</code>, like the mouse driver, in order to free up a couple kilobytes of RAM so that I can play DOOM or whatever.</p>
+<p>Anyways, couple years later I got my first Windows PC, an AMD k6-2 with 333MHz that was equipped with the famous IBM Deskstar hard drive.  This hard disk was even noisier as my old SCSI drive while also being very unreliable, hence they were also known as IBM Deathstar.  Of course you can imagine how funny it was to ship the broken drive to IBM's service center somewhere in Great Britain, waiting for it to be returned so that I have a working PC again.  It took them over a month, or longer, to return the drive which meant that I had no computer in the meantime.  Actually, I didn't even know if they had received the drive or if it got lost in the english channel.  You just had to wait patiently in the good ol' days.  Unimaginable in today's world, people would get mad if they didn't receive an update every couple of hours.  Somehow people were still knew how to be patient back then, and so was I, which meant that I had to spent my time with other things.  Internet was still something new and the time you were online could be counted in minutes a day.  This is probably one of the reasons for people being patient.  Having no smartphone meant that the ordinary folk still had an attention spans longer than a fart lasts, which means they could read a book or watch a movie without being distracted.  Hell, they even managed to meet each other to talk and have some beers (I do miss that since COVID).</p>
+<p>Sorry, I was drifting away, thing is, I wanted to tell that I was a Windows user until I began to study computer science in 2010.  I slowly moved over to Linux then and used it ever since, which means I am a <del>penguin</del> Linux user for more than 9 years now<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.  However, I always missed my favorite audio software in Linux, even though it got better in recent years with Wine, <a href="https://github.com/robbert-vdh/yabridge">yabridge</a>, <a href="https://www.bitwig.com/">Bitwig</a>, and <a href="https://pipewire.org/">pipewire</a>.  Still, it isn't a lot of fun because there is so much configuration involved.  But not only that, every so often something breaks and after ten minutes fixing whatever has failed you give up and do something else, which is not music making.</p>
+<p>For quite some time now I've been arguing with myself if I can justify to get a Mac and be done with it.  Some years ago this would have been a serious financial decision but now I earn enough so that I can just buy one if I want one.  This is a privilege and I'm well aware of that.  But trust me, I still know way to well what it means to have almost no spare money.</p>
+<p>Maybe it's only me but computers should just work.  I happily pay the additional price if it means that I don't have to deal with bug trackers in my rare free time.  The mac solves exactly that for me.  It just works and I have (almost) the best of both worlds, all my favorite audio software as well as all the developer tools I need.  Except that docker sucks really big on Apple, but that's okay for me.  With the introduction of Apple silicon there is also less reason to keep on x86.  The M1 chips are the biggest performance impact since SSDs entered the home computer market.  I received an M1 MacBook Pro from my employee, the 2020 model not the M1 Pro, and the machine is great and almost as fast as my Ryzen 3700x desktop.  Of course, the touch bar is garbage and I understand why they ditched it with the new models.  Eventually I decided to buy myself a present and get the better and slightly cheaper alternative to the 2020 MacBook Pro, the fan-less MacBook Air.  This thing is fast, battery life feels endless it is always dead silent.  The fan in the Pro model is also off almost all of the time, but knowing that there isn't even fan inside is just mind blowing, regarding how noisy laptops commonly are.  For now I can just say that I 💚 this thing.</p>
+<h1>My MacBook Air M1 Setup</h1>
+<p>Here's the list of things I installed on the MacBook Air:</p>
+<p>First thing I did was to install Firefox with two extensions <a href="https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/">multi-account containers</a> and <a href="https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/?utm_source=addons.mozilla.org&amp;utm_medium=referral&amp;utm_content=search">ublock origin</a> of course.  It should be prohibited to use a web browser without ad blocker.</p>
+<p>Now it was time to get <a href="https://obsidian.md/">Obsidian</a> so that I can take notes.  As for most tools I just use the default configuration, except that I have activated the daily notes extension.  This extension allows to easily create a page from a template for each day, where my template looks like this:</p>
+<pre><code class="language-md"># {{date}}
+
+- placeholder
+
+## Tasks
+
+- [ ] a task
+</code></pre>
+<p>Another indispensable tool is <a href="https://keepassxc.org/">KeePassXC</a>.  Honestly, I don't know most of my passwords and I don't care to since KeePass does that for me.</p>
+<p>Having a password manager installed meant that I can lookup my Apple password to sign in into my Apple account.  Otherwise I could not install anything from the app store.  The mac app store is the same garbage as all the other ones and I think they are a bad idea.</p>
+<p>Let's go on with another Mozilla tool that I use daily and this is <a href="https://www.thunderbird.net/en-US/">Thunderbird</a>.  I could use Apple Mail but there is no way to only accept text mails with this fancy app, so I just stick with the ⚡️🕊.  Once in a while I send a GPG encrypted email, which is also a no go for Apples hipster mail client.</p>
+<p>What really amazed me after years of Linux desktop usage was that CalDav (calendar) and CardDav (address book) is very well integrated into the system and it took me like 30s to connect it to my <a href="https://www.fastmail.com/">Fastmail</a> account.  The calendar app is fine by the way.</p>
+<p>Despite being no flat-earther I do like <a href="https://telegram.org/">Telegram</a> for it's thin desktop client.  They still know how to build a cross platform app that doesn't require to load a browser in the background.</p>
+<p>Don't worry my dear reader, I also use <a href="https://signal.org/">Signal</a>, one does not rule out the other.</p>
+<p>Admittedly, window management is very primitive on macOS.  I have tried tiling window managers on Linux but I didn't like them too much, probably because they required days of configuration until they were usable.  I'm simple in that regards and just wanted to have something like Aero Snap on Windows, that is tiling windows by dragging them to a screen border.  For macOS there was an app called Hookshot that was recently renamed to <a href="https://rectangleapp.com/pro">Rectangle</a>.  I payed for Rectangle App but I only use windows snapping.  Renaming an app from something easy to google to a generic term like rectangle is a questionable decision to begin with, but if you have already installed Hookshot and want to upgrade to Rectangle I recommend to uninstall it and power cycle the machine.  This is no joke, window snapping still didn't work after a reboot but after I powered the laptop on and off.  Don't ask, I would like to know as well why this was necessary (I don't refer to the renaming here 😅).</p>
+<p>Another thing which annoyed me on macOS is that you cannot switch between windows of the same app using <code>&lt;cmd&gt;+&lt;tab&gt;</code>.  Some expert had the fantastic idea to hide this functionality behind <code>&lt;cmd&gt;+~</code>, hope that whoever did that is happy now.  Gnome replicated the same idiotic behavior but at least you could configure it.  Well, there is a great open source app called <a href="https://alt-tab-macos.netlify.app">alt-tab</a> for macOS which binds by default to <code>&lt;option&gt;+&lt;tab&gt;</code> and provides a sensible application switcher.</p>
+<p>Time to install a code editor.  My weapon of choice is <del>GNU Emacs</del> <a href="https://code.visualstudio.com/">VS Code</a>.  I try to keep the number of extensions minimal and use whatever is the default suggestion for a file type.  There is one additional setup to do on macOS that is to run <code>Shell Command: Install 'code' command in PATH</code> with <code>&lt;ctrl&gt;+P</code> so that I can start VS Code from within a terminal.</p>
+<p><a href="https://go.dev/">Go</a> go go!</p>
+<p>It breaks my heart but I also need to install <a href="https://www.jetbrains.com/idea/">JetBrains IDEA</a> in the community edition because there still is <a href="https://github.com/klingtnet/bitwig-extensions">a Java repository I need to work on</a>.</p>
+<p>I am a <a href="https://www.ibm.com/plex/">IBM Plex</a> convert and now use <a href="https://www.jetbrains.com/lp/mono/">JetBrains Mono</a> as my monospace font of choice.</p>
+<p><a href="https://www.spotify.com/de/">Spotify</a>, the billion dollar company that is unable to distinguish two artists with the same name.  The day I figure out how to properly handle ID3 tags with Go will be the day I cancel my Spotify subscription and remove their electron monstrosity.  Till then I will use their app and live with the limitation of 10k songs per playlist.  Oh, one additional thing, make sure to disable <em>Normalize Volume</em>, all it does is to make everything half as loud which is not what I understand of volume normalization but what do I know.</p>
+<p>Once in a while I need to create or work with vector graphics and so I bought <a href="https://affinity.serif.com/en-us/designer/">Affinity Designer</a> while it was on x-mas sale two years ago.  I am by far no expert in this domain, but let me tell you, I would prefer this to Adobe Illustrator any time of the day.  Even without a discount, 55€ is more than fair for the software you get.  You could also buy a tube of <a href="https://www.supremenewyork.com/previews/fallwinter2020/accessories/supreme-colgate-toothpaste">Supreme Toothpaste</a> for that money, depends on if you already gave up or not.</p>
+<p><a href="https://github.com/MonitorControl/MonitorControl/">MonitorControl</a> is another great piece of software.  Controlling the brightness of my external display like for the integrated one is a feature I always wanted.  For Linux there is an alternative called <a href="https://github.com/ddccontrol/ddccontrol">ddccontrol</a> but it's not as neatly integrated as MonitorControl is.</p>
+<p><a href="https://rust-lang.org">Rust</a>, once my favorite programming language, is also something I use regularly, even though not as often as I should.  The language toolchain is best installed using <a href="https://rustup.rs/">rustup</a>.</p>
+<p>VPN providers are often a bit shady, the one exception for me is <a href="https://mullvad.net/en/">Mullvad</a>.  They <a href="https://mullvad.net/de/blog/2017/7/13/mullvad-donates-wireguard/">support the development of Wireguard</a> and they their client is open source.  Also, they go a long way in trying to use as less data as possible from you.  What other service provider allows you to register without entering any personal information?  I know none.</p>
+<h2>Shell Setup</h2>
+<p>On Linux I used <a href="https://github.com/alacritty/alacritty/issues/4673">alacritty</a> as my terminal emulator of choice but they don't notarize their binaries for macOS, which I can understand somehow.  Luckily there is <a href="https://iterm2.com/">iterm2</a> which feels like a proper replacement.</p>
+<p>I haven't adapted my <a href="https://github.com/klingtnet/dotfiles">dotfiles</a> repository yet and decided to start from scratch with this system.  My <code>.gitconfig</code> is rather simple:</p>
+<pre><code class="language-ini">[pull]
+	ff = only
+[user]
+	email = &lt;redacted&gt;
+	name = Andreas Linz
+	signingkey = &lt;redacted&gt;
+[core]
+	editor = vim
+
+[alias]
+	p = push
+	co = checkout
+	s = status
+	c = commit
+	a = add
+	hash = rev-parse HEAD
+	todos = ! git diff --name-only &quot;$1&quot; | xargs rg --no-heading --trim TODO
+[init]
+	defaultBranch = master
+
+[url &quot;git@github.com:&quot;]
+	  insteadOf = gh:
+[commit]
+	gpgsign = true
+</code></pre>
+<p>Coming from Linux the thing I miss most is a package manager, especially when you're used to something like <code>pacman</code> from Arch Linux.  The situation on macOS is not as bad as on Windows but at least we have <a href="https://brew.sh/">homebrew</a> and <a href="https://www.macports.org/">MacPorts</a>.  I went with homebrew because that's what everyone is using and despite its terminology where everything is named after thins in a brewery or bar.  Since GUI applications usually come with an auto updater I decided to only install CLI tools and libraries with <code>brew</code>.</p>
+<p>With the URL rewrite from above's gitconfig I can easily clone repositories from GitHub by doing <code>git clone gh:org/repo</code>.  But there is <a href="https://github.com/cli/cli">GitHub CLI</a> that can do much more, like managing issues, pull requests or watch running actions.  That's the first tool I've installed using <code>brew</code>, not because I use it that often, just because it was the first tool that came to my mind.</p>
+<p>Shameless plug, <a href="https://github.com/klingtnet/netdrop">netdrop</a> is a tool that proved to be helpful.  It allows me to send a pipe over my local network, or just a file.  Most of my config files were copied like that.</p>
+<p>My shell setup is pretty simple since a while.  On Arch Linux is used plain bash with a minimal configuration and a custom <a href="https://github.com/klingtnet/dotfiles/tree/master/tools/rusty-prompt">Rust prompt renderer</a>.  The default shell on macOS is <code>zsh</code> so I went with that.  Instead of my own prompt renderer I now use <a href="https://starship.rs/">starship</a> which is pretty powerful out of the box and requires almost no configuration.  This is how my <code>~/.zshrc</code> looks like:</p>
+<pre><code class="language-bash">HISTFILE=~/.zsh_history
+HISTSIZE=999999999
+SAVEHIST=$HISTSIZE
+
+# setopt inc_append_history
+setopt share_history
+setopt hist_ignore_dups
+setopt hist_ignore_space
+
+alias ll='ls -alh'
+alias cdtemp='cd $(mktemp -d)'
+
+# autocompletion
+# https://stackoverflow.com/a/58517668
+autoload -Uz compinit &amp;&amp; compinit -u
+
+# https://stackoverflow.com/a/12403798
+bindkey &quot;^[[1;3C&quot; forward-word
+bindkey &quot;^[[1;3D&quot; backward-word
+
+# ... shell completions were omitted.
+
+eval &quot;$(starship init zsh)&quot;
+</code></pre>
+<p>Before I switched to <a href="https://github.com/alacritty/alacritty/issues/4673">alacritty</a> I was using <a href="https://github.com/gnunn1/tilix">tilix</a> <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> because it supported terminal splitting, tabs and so on.  The reason for using alacritty was that it used the GPU for rendering and was much smoother.  The downside of alacritty is that it has almost no features (which some might see as a feature itself).  However, I now needed a terminal multiplexer and there is one obvious choice, that is <code>tmux</code>.  Learning tmux was pretty easy since I only needed to know a couple of keyboard shortcuts and it allowed me to use terminal multiplexing independently from the terminal emulator.  That's the reason I continue using it, even though <code>iterm</code> supports terminal multiplexing as well.</p>
+<p>With the advent of Rust and Go a couple of modern alternatives for common shell tools came along.  One of those is <a href="https://github.com/BurntSushi/ripgrep">ripgrep</a>, a replacement for <code>grep</code>, that is pretty fast also quite ergonomic since I save two characters each time I've to <em>grep</em> for something.  Every time I used <code>find</code> I wondered if this tool was implemented in complete isolation because it CLI just feels weird, e.g. the single dash flags like <code>-name</code> and that the path to search in is the first argument, even before the flags.  An alternative is <code>fd</code>, which comes with an easy to use CLI and should provide all the features of <code>find</code>.  I didn't miss anything at least.  There is one more tool I want to tell you about and this is <a href="https://github.com/junegunn/fzf">fzf</a>.  A fuzzy search tool that I mainly use to reverse search in my <code>zsh</code> history.</p>
+<p>We are not finished here, so stay with me for two essential tools in my setup, [pandoc] and <a href="https://imagemagick.org/index.php">imagemagick</a>.  Whenever you need to convert from some document format into another, e.g. from <code>.md</code> into <code>.docx</code>, <code>pandoc</code> has you covered.  You can also mix document formats, it was a great relief to write <a href="https://github.com/klingtnet/master-thesis">my masters thesis</a> in Markdown with some inline LaTeX here and there and let pandoc deal with the conversion into the obnoxious LaTeX syntax.  ImageMagick 🧙🏻‍♂️ comes into play when I need to convert between image file formats or I need to resize a picture.  Great tool but let me give you a tip, never expose it (or ghostscript) to the internet.  I heard the people do that, sigh.</p>
+<p>The end is near, not of the world but of this article.  I am stubborn and refuse to deal with git integrations of any editor or IDE, instead I rebase, cherry-pick, commit and whatnot in the shell.  For this I need a proper editor and the obvious choice is <del>Emacs</del> vim, of course.  The older I get the more my configuration files are converging into standard settings.  My <code>.vim/vimrc</code> is only a couple of lines long:</p>
+<pre><code class="language-viml">&quot; :help vimrc
+&quot; :options
+&quot; to unset use :no&lt;option&gt;
+syntax on
+set number		&quot; set line numbers
+set cursorline		&quot; highlight line of cursor
+set smartindent
+set ttyfast		&quot; indicate fast TTY connection, should improve scrolling behavior
+set hlsearch		&quot; highlight last searched word
+set spell		&quot; enable spellcheck
+set ruler		&quot; show cursor position in status line
+set t_Co=256
+filetype plugin on
+filetype indent on
+colorscheme gruvbox
+</code></pre>
+<p>I hope that was self explanatory.  A pleasant surprise was that <code>vim</code> has its own package manager since version 8.0<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>.  This means that plugin installation is dead easy now, just create a folder like <code>~/.vim/pack/personal/start</code> and clone all the plugins you need below the <code>start</code> directory.  In my case those plugins are:</p>
+<ul>
+<li><a href="https://github.com/dense-analysis/ale">ale</a> for language server protocol support</li>
+<li><a href="https://github.com/kien/ctrlp.vim">ctrlp</a> to (fuzzy) find files</li>
+<li><a href="https://github.com/vim-airline/vim-airline">vim-airline</a> for a nice status bar</li>
+<li><a href="https://github.com/tpope/vim-surround">vim-surround</a> to easily wrap strings in quotes</li>
+<li><a href="https://github.com/morhetz/gruvbox">gruvbox</a> for some eye candy</li>
+</ul>
+<p>The last thing I did was to setup GPG (PGP?).  I haven't used <a href="https://sequoia-pgp.org/">sequoia</a> yet but I do hope that it comes with a sensible interface, in contrast to GPG.  Every time my key, and its subkeys, is about to expire I need to lookup how I can renew it.  Each time I do wonder why I need to <em>expire</em> the key to renew it.  Anyways, I do sign my git commits and once in a while send and receive encrypted email, hence I need to live with GPGs peculiarities.  For <a href="https://www.thunderbird.net/en-US/">Thunderbird</a> I needed to export my private key into a file, otherwise it couldn't import.  Exporting a private key can be done with:</p>
+<pre><code class="language-sh">$ gpg --output private.pgp --armor --export-secret-key &lt;fingerprint&gt;
+</code></pre>
+<p>Make sure to delete the file afterwards.  A bit more complicated was to setup commit signing.  I found a bunch of articles that describe how to achieve that on macOS but they all had some problems so I will share my setup instructions below:</p>
+<pre><code class="language-bash">$ brew install gnupg pinentry-mac
+$ git config --global user.signingkey &lt;fingerprint&gt;
+$ git config --global commit.gpgsign true
+$ grep pinentry-program ~/.gnupg/gpg-agent.conf
+pinentry-program /opt/homebrew/bin/pinentry-mac
+$ gpgconf --kill gpg-agent
+</code></pre>
+<h2>Audio Applications</h2>
+<p>I will tell you more about my audio software setup in part 2 of this article, the article is already long enough.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Time flies.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>Also the only popular D application I know.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p>You can find the documentation by running <code>:help packages</code> in vim.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+    <div class="footer">
+      <footer>
+        
+<p class="center">
+  <a href="#">Back to top.</a>
+</p>
+
+      </footer>
+    </div>
+  </div>
+</body>
+
+</html>
+
+
+
+
