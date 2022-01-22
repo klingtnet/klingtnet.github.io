@@ -1,0 +1,9 @@
+{
+    "author": "Andreas Linz",
+    "base_url": "http://localhost:3333",
+    "content_dir": "./content",
+	"static_dir": "./static",
+	"output_dir": "./output",
+	"templates_dir": "./templates",
+	"unsafe_html": true
+}
