@@ -49,7 +49,7 @@ The album cover should leave no doubt that this is nothing for the faint-hearted
 
 ![Album Art of Dean McPhee - Witch's Ladder](https://f4.bcbits.com/img/a0181296910_16.jpg)
 
-Over to something completely different to the above (and below) albums.  Dean McPhee, a UK based solo ambient and folk guitarist which I discovered through his previous record called [Four Stones](https://deanmcphee.bandcamp.com/album/four-stones).  Witch's Ladder is inspired by folklore, mysticism and the beatiful, wide open and lonely landscapes of northern England.
+Over to something completely different to the above (and below) albums.  Dean McPhee, a UK based solo ambient and folk guitarist which I discovered through his previous record called [Four Stones](https://deanmcphee.bandcamp.com/album/four-stones).  Witch's Ladder is inspired by folklore, mysticism and the beautiful, wide open and lonely landscapes of northern England.
 
 An album best listened to on a quiet evening with a wood fire or while watching the world fly by through a train window.  Enjoy.
 
