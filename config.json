@@ -1,6 +1,6 @@
 {
     "author": "Andreas Linz",
-    "base_url": "",
+    "base_url": "https://klingt.net",
     "content_dir": "./content",
 	"static_dir": "./static",
 	"output_dir": "./output",
