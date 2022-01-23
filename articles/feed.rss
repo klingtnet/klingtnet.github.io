@@ -4,7 +4,7 @@
     <link>https://klingt.net/articles</link>
     <description></description>
     <managingEditor> (Andreas Linz)</managingEditor>
-    <pubDate>Sun, 23 Jan 2022 17:19:12 +0000</pubDate>
+    <pubDate>Sun, 23 Jan 2022 17:26:01 +0000</pubDate>
     <item>
       <title>(Almost) 30 Best Albums of 2021</title>
       <link>https://klingt.net/articles/almost-30-best-albums-of-2021.html</link>
@@ -35,7 +35,7 @@
   <script defer>
     hljs.highlightAll();
   </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width`);</script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
 </head>
 
 <body>
@@ -221,7 +221,7 @@
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Jan 2022 17:19:12 +0000</pubDate>
+      <pubDate>Sun, 23 Jan 2022 17:26:01 +0000</pubDate>
     </item>
     <item>
       <title>GitHub Pages DNS Setup</title>
@@ -253,7 +253,7 @@
   <script defer>
     hljs.highlightAll();
   </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width`);</script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
 </head>
 
 <body>
@@ -301,7 +301,7 @@ klingt.net.             929     IN      A       185.199.110.153
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Jan 2022 17:19:12 +0000</pubDate>
+      <pubDate>Sun, 23 Jan 2022 17:26:01 +0000</pubDate>
     </item>
     <item>
       <title>Go Generics - A Quick Overview</title>
@@ -333,7 +333,7 @@ klingt.net.             929     IN      A       185.199.110.153
   <script defer>
     hljs.highlightAll();
   </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width`);</script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
 </head>
 
 <body>
@@ -501,7 +501,73 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Jan 2022 17:19:12 +0000</pubDate>
+      <pubDate>Sun, 23 Jan 2022 17:26:01 +0000</pubDate>
+    </item>
+    <item>
+      <title>Learning Touch Typing</title>
+      <link>https://klingt.net/articles/learning-touch-typing.html</link>
+      <description>My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.">
+  
+  <title>Learning Touch Typing</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Learning Touch Typing</h1>
+<p>Lately two articles about developer productivity appeared in my news feed.  The first was <a href="https://scattered-thoughts.net/writing/speed-matters/">speed matters</a>, which is part of the great <a href="https://scattered-thoughts.net/writing/reflections-on-a-decade-of-coding/">reflections on a decade of coding</a> article series, and second is <a href="https://danluu.com/productivity-velocity/">some reasons to work on productivity and velocity</a> by Dan Luu.  Both articles stated that <a href="https://en.wikipedia.org/wiki/Touch_typing">touch typing</a> improved their productivity.  The productivity boost was not limited to a bare increase in word per minute that one can type, instead the greater leverage comes from an increased accuracy.  Making less typing errors improves the writing flow because every typo requires a context switch in order to fix the mistake.  Jamie Brandon wrote:</p>
+<blockquote>
+<p>If you compare two coders, one who can touch type and one who has to hunt and peck, the difference between them is not just down to typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.</p>
+</blockquote>
+<p>Dan Luu  wrote this about typing speed:</p>
+<blockquote>
+<p>I've actually looked at where my time goes and a lot of it goes to things that are canonical examples of things that you shouldn't waste time improving because people don't spend much time doing them.</p>
+<p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
+</blockquote>
+<p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
+<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower that my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
+<p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
+<p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
+<p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
+<p>Now it's all about practicing and getting back to speed.  For this reason I forced myself to write this article using touch typing which went okay but could have been a bit smoother 🙄  Anyways, if you now decide to learn this skill as well I wish you all the best 💪.  It's not as hard to learn as you might think and it should only take a month of typing to become fast and accurate.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 23 Jan 2022 17:26:01 +0000</pubDate>
     </item>
     <item>
       <title>AMD Ryzen random reboots under Linux when in idle</title>
@@ -533,7 +599,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
   <script defer>
     hljs.highlightAll();
   </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width`);</script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
 </head>
 
 <body>
@@ -585,73 +651,7 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Jan 2022 17:19:12 +0000</pubDate>
-    </item>
-    <item>
-      <title>Learning Touch Typing</title>
-      <link>https://klingt.net/articles/learning-touch-typing.html</link>
-      <description>My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.">
-  
-  <title>Learning Touch Typing</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width`);</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Learning Touch Typing</h1>
-<p>Lately two articles about developer productivity appeared in my news feed.  The first was <a href="https://scattered-thoughts.net/writing/speed-matters/">speed matters</a>, which is part of the great <a href="https://scattered-thoughts.net/writing/reflections-on-a-decade-of-coding/">reflections on a decade of coding</a> article series, and second is <a href="https://danluu.com/productivity-velocity/">some reasons to work on productivity and velocity</a> by Dan Luu.  Both articles stated that <a href="https://en.wikipedia.org/wiki/Touch_typing">touch typing</a> improved their productivity.  The productivity boost was not limited to a bare increase in word per minute that one can type, instead the greater leverage comes from an increased accuracy.  Making less typing errors improves the writing flow because every typo requires a context switch in order to fix the mistake.  Jamie Brandon wrote:</p>
-<blockquote>
-<p>If you compare two coders, one who can touch type and one who has to hunt and peck, the difference between them is not just down to typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.</p>
-</blockquote>
-<p>Dan Luu  wrote this about typing speed:</p>
-<blockquote>
-<p>I've actually looked at where my time goes and a lot of it goes to things that are canonical examples of things that you shouldn't waste time improving because people don't spend much time doing them.</p>
-<p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
-</blockquote>
-<p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
-<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower that my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
-<p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
-<p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
-<p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
-<p>Now it's all about practicing and getting back to speed.  For this reason I forced myself to write this article using touch typing which went okay but could have been a bit smoother 🙄  Anyways, if you now decide to learn this skill as well I wish you all the best 💪.  It's not as hard to learn as you might think and it should only take a month of typing to become fast and accurate.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Jan 2022 17:19:12 +0000</pubDate>
+      <pubDate>Sun, 23 Jan 2022 17:26:01 +0000</pubDate>
     </item>
     <item>
       <title>The simplest sorting algorithm</title>
@@ -682,7 +682,7 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
   <script defer>
     hljs.highlightAll();
   </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width`);</script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
 </head>
 
 <body>
@@ -752,7 +752,7 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Jan 2022 17:19:12 +0000</pubDate>
+      <pubDate>Sun, 23 Jan 2022 17:26:01 +0000</pubDate>
     </item>
     <item>
       <title>My MacBook Air M1 setup</title>
@@ -784,7 +784,7 @@ from partially sorted inputs.</p>
   <script defer>
     hljs.highlightAll();
   </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width`);</script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
 </head>
 
 <body>
@@ -948,7 +948,7 @@ $ gpgconf --kill gpg-agent
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Jan 2022 17:19:12 +0000</pubDate>
+      <pubDate>Sun, 23 Jan 2022 17:26:01 +0000</pubDate>
     </item>
   </channel>
 </rss>
