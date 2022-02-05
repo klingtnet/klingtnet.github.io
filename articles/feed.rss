@@ -4,7 +4,7 @@
     <link>https://klingt.net/articles</link>
     <description></description>
     <managingEditor> (Andreas Linz)</managingEditor>
-    <pubDate>Fri, 04 Feb 2022 19:59:19 +0000</pubDate>
+    <pubDate>Sat, 05 Feb 2022 11:53:56 +0000</pubDate>
     <item>
       <title>(Almost) 30 Best Albums of 2021</title>
       <link>https://klingt.net/articles/almost-30-best-albums-of-2021.html</link>
@@ -221,7 +221,7 @@
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 04 Feb 2022 19:59:19 +0000</pubDate>
+      <pubDate>Sat, 05 Feb 2022 11:53:56 +0000</pubDate>
     </item>
     <item>
       <title>GitHub Pages DNS Setup</title>
@@ -301,7 +301,7 @@ klingt.net.             929     IN      A       185.199.110.153
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 04 Feb 2022 19:59:19 +0000</pubDate>
+      <pubDate>Sat, 05 Feb 2022 11:53:56 +0000</pubDate>
     </item>
     <item>
       <title>Go Generics - A Quick Overview</title>
@@ -501,7 +501,88 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 04 Feb 2022 19:59:19 +0000</pubDate>
+      <pubDate>Sat, 05 Feb 2022 11:53:56 +0000</pubDate>
+    </item>
+    <item>
+      <title>How to delete unreachable commits on GitHub</title>
+      <link>https://klingt.net/articles/how-to-delete-unreachable-commits-on-github.html</link>
+      <description>GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.">
+  
+  <title>How to delete unreachable commits on GitHub</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>How to delete unreachable commits on GitHub</h1>
+<p>The dangling<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> <a href="https://github.com/klingtnet/klingtnet.github.io/blob/b2444ca54c74a7c9dde6504cf028b6c0f4729d8f/content/resume.md#L3">commit</a> shown in the screenshot below should have never been on GitHub, at least not publicly visible.  The commit was part of a branch called <code>draft</code> that I pushed to the repository when it was still private.  If I am not mistaken then I removed the file, squashed and merged the <code>draft</code> branch into <code>master</code>, deleted the branch and then pushed it onto GitHub.  After making sure that branch <code>draft</code> was gone on GitHub I made the repository public.</p>
+<p><img src="unreachable-commit.png" alt="unreachable commit"></p>
+<p>As you can clearly see the commit is still there, and I only discovered this by accident when using GitHub's search.  So, the question is now how to delete this commit?  I cannot even reach the commit from my local repository:</p>
+<pre><code class="language-shell">$ git show b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
+fatal: bad object b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
+</code></pre>
+<p>Its parent commit is reachable though:</p>
+<pre><code class="language-shell">$ git show 01aea0c8e1bdceb7869403814a4ebb87e25883b2
+commit 01aea0c8e1bdceb7869403814a4ebb87e25883b2
+Author: Andreas Linz &lt;klingt.net@gmail.com&gt;
+Date:   Sun Jul 25 16:18:10 2021 +0200
+
+    Initial commit
+</code></pre>
+<p>If the commit would still be part of my local repository I could have removed it with this call and subsequent <code>git push</code>.</p>
+<pre><code class="language-shell">$ git reflog expire --expire-unreachable=all
+</code></pre>
+<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/ticket/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
+<blockquote>
+<p>As you mentioned, it does indeed appear to be an an unreferenced commit dangling in our cache. I went ahead and performed the garbage collection and cache clearance operations for the repository klingtnet/klingtnet.github.io. Attempting to access the commit directly now returns a 404.</p>
+</blockquote>
+<p>Luckily the commit contained no secrets, but what I learned from this lesson is that I need to double or triple check the contents of my repository before making it public on GitHub.  A simple deletion of a branch might not be sufficient.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sat, 05 Feb 2022 11:53:56 +0000</pubDate>
     </item>
     <item>
       <title>Learning Touch Typing</title>
@@ -552,7 +633,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 <p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
 </blockquote>
 <p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
-<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower that my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
+<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower than my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
 <p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
 <p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
 <p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
@@ -567,7 +648,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 04 Feb 2022 19:59:19 +0000</pubDate>
+      <pubDate>Sat, 05 Feb 2022 11:53:56 +0000</pubDate>
     </item>
     <item>
       <title>My MacBook Air M1 setup</title>
@@ -763,91 +844,7 @@ $ gpgconf --kill gpg-agent
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 04 Feb 2022 19:59:19 +0000</pubDate>
-    </item>
-    <item>
-      <title>AMD Ryzen random reboots under Linux when in idle</title>
-      <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
-      <description>This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.">
-  
-  <title>AMD Ryzen random reboots under Linux when in idle</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>AMD Ryzen random reboots under Linux when in idle</h1>
-<p>At the end of 2019 I decided to replace my, now 10 years old, trusty Intel i7 920 machine.
-The main motivation was that the i7 was not powerful enough to drive a bunch of CPU hungry software synth, and I always wanted to have a machine that was able to handle any amount of audio plugins I throw at it.
-It was still fast enough for some casual gaming or web browsing so I gave it to a friend who was looking for PC at that time.  Otherwise I would have had to throw it away, which would have made me feel a little guilty.
-Anyways, AMD Ryzen was all the buzz at that time so I decided to go for that and ordered all the necessary parts.</p>
-<p>Here are the relevant specs for reference:</p>
-<ul>
-<li>CPU: AMD Ryzen 3700X</li>
-<li>Mainboard: ASUS ROG STRIX B450-I GAMING</li>
-<li>Memory: 32GB Corsair DDR4 DRAM 3200MHz (part no. <code>CMK32GX4M2B3200C16</code>) <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></li>
-<li>OS: Arch Linux kernel 5.14.8-arch1-1</li>
-</ul>
-<p>Now to the actual topic of this post that is the random reboots that the Ryzen PC showed when running in idle for some time.
-I ran a stress test over night and there was no spontaneous reboot so I could rule out a faulty power supply.
-Checking <code>journalctl</code> for errors did not reveal anything suspicious <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>, in fact the logs just ended before the reboot without any error message.</p>
-<p>There is a <a href="https://wiki.gentoo.org/wiki/Ryzen#Random_reboots_with_mce_events">Ryzen page on Gentoo's wiki</a> that recommends to set two kernel parameters:</p>
-<ul>
-<li><code>idle=nomwait</code></li>
-<li>and <code>processor.max_cstate=5</code></li>
-</ul>
-<p>The latter one disables certain processor <a href="https://www.thomas-krenn.com/en/wiki/Processor_P-states_and_C-states#C-states">c-states</a> which are basically sleep levels a processor can reach when idling, where C0 is the active state and Cn is the <em>lowest level of activity</em> or <em>power consumption</em>.  Disabling c-states is actually wasting energy and thus not very desirable.  I then set both kernel parameters and tried the latest kernel and the LTS variant, but spontaneous reboots still occured.  For a moment I ran out of ideas and suspected that either my Ryzen CPU was defective.</p>
-<p>A couple of weeks passed and after some UEFI update I had to reset BIOS settings to <em>optimized defaults</em>.  With default settings no random reboots happened anymore!  Problem solved?  Not yet.  In default settings memory is not running at full speed and Ryzen CPUs scale quite well with memory bandwidth.  Enabling the <a href="https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html">XMP memory profile</a> is, except the a different boot order, the only thing I change from defaults.  This made me curious and after some googling I stumbled over a <a href="https://linustechtips.com/topic/1298348-ryzen-reboot-at-idle-solved-rma/">linustechtips forum thread</a> where someone suggested to disable memory <em>power down mode</em>.  Because BIOS settings are often undocumented I cannot exactly say what this settings does, except from the obviously disabling some memory power saving feature.  Anyways, this setting was located under <code>AI Tweaker -&gt; Memory Timing Controls</code> which is kind of hidden.</p>
-<p>To make a long story short, disabling memory <em>power down mode</em> made the random reboots disappear, even when if the memory XMP profile is activated.</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p>dmidecode to the rescue, god knows which RAM I had installed: <code>$ sudo dmidecode --type memory | grep -i part</code>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:2" role="doc-endnote">
-<p><code>$ journalctl --priority 0..3 --boot=-1</code>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Fri, 04 Feb 2022 19:59:19 +0000</pubDate>
+      <pubDate>Sat, 05 Feb 2022 11:53:56 +0000</pubDate>
     </item>
     <item>
       <title>The simplest sorting algorithm</title>
@@ -948,7 +945,91 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 04 Feb 2022 19:59:19 +0000</pubDate>
+      <pubDate>Sat, 05 Feb 2022 11:53:56 +0000</pubDate>
+    </item>
+    <item>
+      <title>AMD Ryzen random reboots under Linux when in idle</title>
+      <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
+      <description>This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.">
+  
+  <title>AMD Ryzen random reboots under Linux when in idle</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>AMD Ryzen random reboots under Linux when in idle</h1>
+<p>At the end of 2019 I decided to replace my, now 10 years old, trusty Intel i7 920 machine.
+The main motivation was that the i7 was not powerful enough to drive a bunch of CPU hungry software synth, and I always wanted to have a machine that was able to handle any amount of audio plugins I throw at it.
+It was still fast enough for some casual gaming or web browsing so I gave it to a friend who was looking for PC at that time.  Otherwise I would have had to throw it away, which would have made me feel a little guilty.
+Anyways, AMD Ryzen was all the buzz at that time so I decided to go for that and ordered all the necessary parts.</p>
+<p>Here are the relevant specs for reference:</p>
+<ul>
+<li>CPU: AMD Ryzen 3700X</li>
+<li>Mainboard: ASUS ROG STRIX B450-I GAMING</li>
+<li>Memory: 32GB Corsair DDR4 DRAM 3200MHz (part no. <code>CMK32GX4M2B3200C16</code>) <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></li>
+<li>OS: Arch Linux kernel 5.14.8-arch1-1</li>
+</ul>
+<p>Now to the actual topic of this post that is the random reboots that the Ryzen PC showed when running in idle for some time.
+I ran a stress test over night and there was no spontaneous reboot so I could rule out a faulty power supply.
+Checking <code>journalctl</code> for errors did not reveal anything suspicious <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>, in fact the logs just ended before the reboot without any error message.</p>
+<p>There is a <a href="https://wiki.gentoo.org/wiki/Ryzen#Random_reboots_with_mce_events">Ryzen page on Gentoo's wiki</a> that recommends to set two kernel parameters:</p>
+<ul>
+<li><code>idle=nomwait</code></li>
+<li>and <code>processor.max_cstate=5</code></li>
+</ul>
+<p>The latter one disables certain processor <a href="https://www.thomas-krenn.com/en/wiki/Processor_P-states_and_C-states#C-states">c-states</a> which are basically sleep levels a processor can reach when idling, where C0 is the active state and Cn is the <em>lowest level of activity</em> or <em>power consumption</em>.  Disabling c-states is actually wasting energy and thus not very desirable.  I then set both kernel parameters and tried the latest kernel and the LTS variant, but spontaneous reboots still occured.  For a moment I ran out of ideas and suspected that either my Ryzen CPU was defective.</p>
+<p>A couple of weeks passed and after some UEFI update I had to reset BIOS settings to <em>optimized defaults</em>.  With default settings no random reboots happened anymore!  Problem solved?  Not yet.  In default settings memory is not running at full speed and Ryzen CPUs scale quite well with memory bandwidth.  Enabling the <a href="https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html">XMP memory profile</a> is, except the a different boot order, the only thing I change from defaults.  This made me curious and after some googling I stumbled over a <a href="https://linustechtips.com/topic/1298348-ryzen-reboot-at-idle-solved-rma/">linustechtips forum thread</a> where someone suggested to disable memory <em>power down mode</em>.  Because BIOS settings are often undocumented I cannot exactly say what this settings does, except from the obviously disabling some memory power saving feature.  Anyways, this setting was located under <code>AI Tweaker -&gt; Memory Timing Controls</code> which is kind of hidden.</p>
+<p>To make a long story short, disabling memory <em>power down mode</em> made the random reboots disappear, even when if the memory XMP profile is activated.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>dmidecode to the rescue, god knows which RAM I had installed: <code>$ sudo dmidecode --type memory | grep -i part</code>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><code>$ journalctl --priority 0..3 --boot=-1</code>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sat, 05 Feb 2022 11:53:56 +0000</pubDate>
     </item>
   </channel>
 </rss>
