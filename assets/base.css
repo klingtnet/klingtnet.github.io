@@ -46,6 +46,10 @@ h1 {
     -webkit-text-fill-color: transparent;
 }
 
+blockquote {
+    font-style: italic;
+}
+
 pre {
     overflow: auto;
     word-wrap: normal;
