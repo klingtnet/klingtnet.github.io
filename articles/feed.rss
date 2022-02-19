@@ -4,11 +4,11 @@
     <link>https://klingt.net/articles</link>
     <description></description>
     <managingEditor> (Andreas Linz)</managingEditor>
-    <pubDate>Sat, 19 Feb 2022 11:20:10 +0000</pubDate>
+    <pubDate>Sat, 19 Feb 2022 12:01:23 +0000</pubDate>
     <item>
-      <title>AMD Ryzen random reboots under Linux when in idle</title>
-      <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
-      <description>This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.</description>
+      <title>GitHub Pages DNS Setup</title>
+      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
+      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
       <content:encoded><![CDATA[<!doctype html>
 <html lang="en">
 
@@ -16,9 +16,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <meta name="description" content="This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.">
+  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
   
-  <title>AMD Ryzen random reboots under Linux when in idle</title>
+  <title>GitHub Pages DNS Setup</title>
 
   <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
   <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
@@ -43,37 +43,33 @@
     <div class="main">
       <main>
         
-<h1>AMD Ryzen random reboots under Linux when in idle</h1>
-<p>At the end of 2019 I decided to replace my, now 10 years old, trusty Intel i7 920 machine.
-The main motivation was that the i7 was not powerful enough to drive a bunch of CPU hungry software synth, and I always wanted to have a machine that was able to handle any amount of audio plugins I throw at it.
-It was still fast enough for some casual gaming or web browsing so I gave it to a friend who was looking for PC at that time.  Otherwise I would have had to throw it away, which would have made me feel a little guilty.
-Anyways, AMD Ryzen was all the buzz at that time so I decided to go for that and ordered all the necessary parts.</p>
-<p>Here are the relevant specs for reference:</p>
-<ul>
-<li>CPU: AMD Ryzen 3700X</li>
-<li>Mainboard: ASUS ROG STRIX B450-I GAMING</li>
-<li>Memory: 32GB Corsair DDR4 DRAM 3200MHz (part no. <code>CMK32GX4M2B3200C16</code>) <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></li>
-<li>OS: Arch Linux kernel 5.14.8-arch1-1</li>
-</ul>
-<p>Now to the actual topic of this post that is the random reboots that the Ryzen PC showed when running in idle for some time.
-I ran a stress test over night and there was no spontaneous reboot so I could rule out a faulty power supply.
-Checking <code>journalctl</code> for errors did not reveal anything suspicious <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>, in fact the logs just ended before the reboot without any error message.</p>
-<p>There is a <a href="https://wiki.gentoo.org/wiki/Ryzen#Random_reboots_with_mce_events">Ryzen page on Gentoo's wiki</a> that recommends to set two kernel parameters:</p>
-<ul>
-<li><code>idle=nomwait</code></li>
-<li>and <code>processor.max_cstate=5</code></li>
-</ul>
-<p>The latter one disables certain processor <a href="https://www.thomas-krenn.com/en/wiki/Processor_P-states_and_C-states#C-states">c-states</a> which are basically sleep levels a processor can reach when idling, where C0 is the active state and Cn is the <em>lowest level of activity</em> or <em>power consumption</em>.  Disabling c-states is actually wasting energy and thus not very desirable.  I then set both kernel parameters and tried the latest kernel and the LTS variant, but spontaneous reboots still occured.  For a moment I ran out of ideas and suspected that either my Ryzen CPU was defective.</p>
-<p>A couple of weeks passed and after some UEFI update I had to reset BIOS settings to <em>optimized defaults</em>.  With default settings no random reboots happened anymore!  Problem solved?  Not yet.  In default settings memory is not running at full speed and Ryzen CPUs scale quite well with memory bandwidth.  Enabling the <a href="https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html">XMP memory profile</a> is, except the a different boot order, the only thing I change from defaults.  This made me curious and after some googling I stumbled over a <a href="https://linustechtips.com/topic/1298348-ryzen-reboot-at-idle-solved-rma/">linustechtips forum thread</a> where someone suggested to disable memory <em>power down mode</em>.  Because BIOS settings are often undocumented I cannot exactly say what this settings does, except from the obviously disabling some memory power saving feature.  Anyways, this setting was located under <code>AI Tweaker -&gt; Memory Timing Controls</code> which is kind of hidden.</p>
-<p>To make a long story short, disabling memory <em>power down mode</em> made the random reboots disappear, even when if the memory XMP profile is activated.</p>
+<h1>GitHub Pages DNS Setup</h1>
+<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
+<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
+<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
+<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
+<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
+www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
+</code></pre>
+<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
+<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
+<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
+klingt.net.             929     IN      A       185.199.109.153
+klingt.net.             929     IN      A       185.199.111.153
+klingt.net.             929     IN      A       185.199.108.153
+klingt.net.             929     IN      A       185.199.110.153
+</code></pre>
+<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
+<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
+<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
+<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
+<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>dmidecode to the rescue, god knows which RAM I had installed: <code>$ sudo dmidecode --type memory | grep -i part</code>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:2" role="doc-endnote">
-<p><code>$ journalctl --priority 0..3 --boot=-1</code>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -87,7 +83,7 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 19 Feb 2022 11:20:10 +0000</pubDate>
+      <pubDate>Sat, 19 Feb 2022 12:01:23 +0000</pubDate>
     </item>
     <item>
       <title>The simplest sorting algorithm</title>
@@ -188,7 +184,7 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 19 Feb 2022 11:20:10 +0000</pubDate>
+      <pubDate>Sat, 19 Feb 2022 12:01:23 +0000</pubDate>
     </item>
     <item>
       <title>Learning Touch Typing</title>
@@ -254,12 +250,12 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 19 Feb 2022 11:20:10 +0000</pubDate>
+      <pubDate>Sat, 19 Feb 2022 12:01:23 +0000</pubDate>
     </item>
     <item>
-      <title>GitHub Pages DNS Setup</title>
-      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
-      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
+      <title>AMD Ryzen random reboots under Linux when in idle</title>
+      <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
+      <description>This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.</description>
       <content:encoded><![CDATA[<!doctype html>
 <html lang="en">
 
@@ -267,9 +263,9 @@ from partially sorted inputs.</p>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
+  <meta name="description" content="This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.">
   
-  <title>GitHub Pages DNS Setup</title>
+  <title>AMD Ryzen random reboots under Linux when in idle</title>
 
   <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
   <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
@@ -294,33 +290,37 @@ from partially sorted inputs.</p>
     <div class="main">
       <main>
         
-<h1>GitHub Pages DNS Setup</h1>
-<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
-<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
-<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
-<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
-<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
-www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
-</code></pre>
-<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
-<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
-<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
-klingt.net.             929     IN      A       185.199.109.153
-klingt.net.             929     IN      A       185.199.111.153
-klingt.net.             929     IN      A       185.199.108.153
-klingt.net.             929     IN      A       185.199.110.153
-</code></pre>
-<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
-<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
-<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
-<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
-<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
+<h1>AMD Ryzen random reboots under Linux when in idle</h1>
+<p>At the end of 2019 I decided to replace my, now 10 years old, trusty Intel i7 920 machine.
+The main motivation was that the i7 was not powerful enough to drive a bunch of CPU hungry software synth, and I always wanted to have a machine that was able to handle any amount of audio plugins I throw at it.
+It was still fast enough for some casual gaming or web browsing so I gave it to a friend who was looking for PC at that time.  Otherwise I would have had to throw it away, which would have made me feel a little guilty.
+Anyways, AMD Ryzen was all the buzz at that time so I decided to go for that and ordered all the necessary parts.</p>
+<p>Here are the relevant specs for reference:</p>
+<ul>
+<li>CPU: AMD Ryzen 3700X</li>
+<li>Mainboard: ASUS ROG STRIX B450-I GAMING</li>
+<li>Memory: 32GB Corsair DDR4 DRAM 3200MHz (part no. <code>CMK32GX4M2B3200C16</code>) <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></li>
+<li>OS: Arch Linux kernel 5.14.8-arch1-1</li>
+</ul>
+<p>Now to the actual topic of this post that is the random reboots that the Ryzen PC showed when running in idle for some time.
+I ran a stress test over night and there was no spontaneous reboot so I could rule out a faulty power supply.
+Checking <code>journalctl</code> for errors did not reveal anything suspicious <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>, in fact the logs just ended before the reboot without any error message.</p>
+<p>There is a <a href="https://wiki.gentoo.org/wiki/Ryzen#Random_reboots_with_mce_events">Ryzen page on Gentoo's wiki</a> that recommends to set two kernel parameters:</p>
+<ul>
+<li><code>idle=nomwait</code></li>
+<li>and <code>processor.max_cstate=5</code></li>
+</ul>
+<p>The latter one disables certain processor <a href="https://www.thomas-krenn.com/en/wiki/Processor_P-states_and_C-states#C-states">c-states</a> which are basically sleep levels a processor can reach when idling, where C0 is the active state and Cn is the <em>lowest level of activity</em> or <em>power consumption</em>.  Disabling c-states is actually wasting energy and thus not very desirable.  I then set both kernel parameters and tried the latest kernel and the LTS variant, but spontaneous reboots still occured.  For a moment I ran out of ideas and suspected that either my Ryzen CPU was defective.</p>
+<p>A couple of weeks passed and after some UEFI update I had to reset BIOS settings to <em>optimized defaults</em>.  With default settings no random reboots happened anymore!  Problem solved?  Not yet.  In default settings memory is not running at full speed and Ryzen CPUs scale quite well with memory bandwidth.  Enabling the <a href="https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html">XMP memory profile</a> is, except the a different boot order, the only thing I change from defaults.  This made me curious and after some googling I stumbled over a <a href="https://linustechtips.com/topic/1298348-ryzen-reboot-at-idle-solved-rma/">linustechtips forum thread</a> where someone suggested to disable memory <em>power down mode</em>.  Because BIOS settings are often undocumented I cannot exactly say what this settings does, except from the obviously disabling some memory power saving feature.  Anyways, this setting was located under <code>AI Tweaker -&gt; Memory Timing Controls</code> which is kind of hidden.</p>
+<p>To make a long story short, disabling memory <em>power down mode</em> made the random reboots disappear, even when if the memory XMP profile is activated.</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>dmidecode to the rescue, god knows which RAM I had installed: <code>$ sudo dmidecode --type memory | grep -i part</code>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><code>$ journalctl --priority 0..3 --boot=-1</code>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -334,7 +334,7 @@ klingt.net.             929     IN      A       185.199.110.153
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 19 Feb 2022 11:20:10 +0000</pubDate>
+      <pubDate>Sat, 19 Feb 2022 12:01:23 +0000</pubDate>
     </item>
     <item>
       <title>Go Generics - A Quick Overview</title>
@@ -534,7 +534,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 19 Feb 2022 11:20:10 +0000</pubDate>
+      <pubDate>Sat, 19 Feb 2022 12:01:23 +0000</pubDate>
     </item>
     <item>
       <title>My MacBook Air M1 setup</title>
@@ -730,7 +730,7 @@ $ gpgconf --kill gpg-agent
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 19 Feb 2022 11:20:10 +0000</pubDate>
+      <pubDate>Sat, 19 Feb 2022 12:01:23 +0000</pubDate>
     </item>
     <item>
       <title>How to delete unreachable commits on GitHub</title>
@@ -811,7 +811,7 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 19 Feb 2022 11:20:10 +0000</pubDate>
+      <pubDate>Sat, 19 Feb 2022 12:01:23 +0000</pubDate>
     </item>
     <item>
       <title>(Almost) 30 Best Albums of 2021</title>
@@ -1029,7 +1029,7 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 19 Feb 2022 11:20:10 +0000</pubDate>
+      <pubDate>Sat, 19 Feb 2022 12:01:23 +0000</pubDate>
     </item>
   </channel>
 </rss>
