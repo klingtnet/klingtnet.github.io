@@ -1,18 +1,18 @@
 ```json
 {
   "author": "Andreas Linz",
-  "title": "Go 1.18 with a focus on generics",
+  "title": "Go 1.18 with some fuzzing and a focus on generics",
   "description": "Go 1.18 is the biggest release since Go 1.0 came out.  In this article I will summarize most of the updates and additions and I will also give a more in-depth look into generics.  This article will also be the basis of the talk I will give at the #25 Golang Leipzig meetup.",
   "created_at": "2022-02-19"
 }
 ```
 
-# Go 1.18 with a focus on Generics
+# Go 1.18 with some fuzzing and a focus on generics
 
 Go 1.18[^1] is the biggest release since the Go version 1.0 came out in 2012.  What made this release so important are two major features that got introduced to Go, those are:
 
-- Generics
-- and Fuzz testing support.
+- generics
+- and fuzz testing support.
 
 Before we go into more detail about the last two features, let's look at the general innovations first.
 
@@ -20,7 +20,7 @@ Regardless of Go 1.18 being a larger than normal release, it will be no exceptio
 
 ## `debug/buildinfo`
 
-Binaries compiled with the new version will automatically include version control information.  This data can be accessed at runtime through ` runtime/debug.ReadBuildInfo` or by running `go version -m path/to/binary`.  A common workaround that was used before was to set version information on compile time using a `go build` flag like ` -ldflags "-X main.Version=$VERSION"` which is now obsolete.
+Binaries compiled with the new version will automatically include version control information.  This data can be accessed at runtime through ` runtime/debug.ReadBuildInfo` or by running `go version -m path/to/binary`.  A common workaround that is often used, and will be obsolete now, is to set version information on compile time using a `go build` flag like ` -ldflags "-X main.Version=$VERSION"`.
 
 ```shell
 $ go1.18rc1 version -m hello
@@ -43,13 +43,13 @@ hello: go1.18rc1
 
 ## `net/netip`
 
-[Tailscales' custom IP address struct][tailscale ip] landed in the standard library.  In contrast to [`net.IPAddr`][net.ipaddr] this type is immutable, takes less memory is comparable making it usable as a map key.  Brad Fitzpatrick did a talk about [Go at Tailscale] in FOSDEM 2021 where he goes into the details why they needed a new IP type.
+[Tailscales' custom IP address struct][tailscale ip] landed in the standard library.  In contrast to [`net.IPAddr`][net.ipaddr] this type is immutable, takes less memory and is comparable making it usable as a map key.  Brad Fitzpatrick did a talk about [Go at Tailscale] in FOSDEM 2021 where he goes into the details why they needed a new IP type.
 
-## Miscellaneous
+## Miscellaneous changes
 
 With `strings.Cut()` you can cut a string around the first instance of a separator, e.g. `strings.Cut("a,b,c", ",")` will result in `"a", "b,c", true`, where the last argument indicates if the separator was found or not.  The `strings.Title()` function for making a string title-case is now deprecated because it doesn't handle unicode properly, use [`x/test/cases.Title`][cases.title] instead.
 
-In range pipelines of `html/template` or `text/template` templates iteration can now be ended with `{{break}}` or the next iterations can be started with `{{continue}}`.
+Iteration in range pipelines of `html/template` or `text/template` templates can now be ended with `{{break}}` or the next iteration can be started immediately with `{{continue}}`.
 
 Mutexes from `sync` now have non blocking `TryLock/TryRLock` methods that try to acquire the lock if it's not currently held.
 
@@ -57,11 +57,11 @@ Mutexes from `sync` now have non blocking `TryLock/TryRLock` methods that try to
 
 A small [MaxBytesHandler](https://pkg.go.dev/net/http@master#MaxBytesHandler) middleware was added to the `http` package.  This middleware limits the amount of data read from a request body or written in a response.  Most Go HTTP routers and web frameworks already provide such a middleware, often to prevent denial-of-service attacks.
 
-The `go vet` linting tool was updated to work with generic functions and types.  Did you know that `go vet` is run automatically when you `go test` your application?
+The `go vet` linting tool was updated to work with generic functions and types.  Did you know that `go vet` is automatically run when you `go test` your application?
 
 Our beloved formatting tool `gofmt` now reads and formats source code files concurrently making it significantly faster.  To be honest, formatting speed was never an issue for any Go code base I worked with.
 
-TLS 1.0 and TLS 1.1 are disabled for by default now for _client_ connections, the server side still allows TLS 1.0.
+TLS 1.0 and TLS 1.1 are disabled by default now for _client_ connections, the server side still allows TLS 1.0.
 
 ## Compiler
 
@@ -69,11 +69,11 @@ Go now supports [four microarchitecture levels] for the `amd64` target.  A speci
 
 <!-- TODO: Use github.com/golang/benchmarks or a small tool that applies image transformations to benchmark architecture levels  -->
 
-In the [previous release] the calling convention for functions on x86-64 targets switched from stack to register based, resulting in a minor speedup and slightly smaller binaries.  Support for the register based calling convention is now expanded to arm64[^2] and amd64 on all operating systems.
+In the [previous release] the calling convention for functions on x86-64 targets switched from stack to register based, resulting in a minor speedup and slightly smaller binaries.  Support for register based calling convention is now expanded to arm64[^2] and amd64 on all operating systems.
 
 ## Workspace Mode
 
-The [module workspace proposal] was accepted and implemented.  Workspace mode is activated if the `go` tool finds a `go.work` file in the current directory or any of its parents.  This file could look like this:
+The [module workspace proposal] was accepted and implemented.  Workspace mode is activated if the `go` tool finds a `go.work` file in the current directory or any of its parents.  A `go.work` file might look like this:
 
 ```
 go 1.18
@@ -84,13 +84,13 @@ use ./baz
 replace example.com/foo v1.2.3 => example.com/bar v1.4.5
 ```
 
-Note that, as for any other `go.*` file, there is a subcommand that must be used to create or edit its contents.  In this case the command is `go work`.  In workspace mode you can easily use development versions of a library for many go modules, without having to write a `replace` directives in each of every `go.mod` files.  In the example above, that was copied from `go help work`, `./baz` could be a fork of `github.com/strechr/testify` or any other dependency you need to modify locally.
+Note that, as for any other `go.*` file, there is a subcommand that should be used to create or edit its contents.  In this case the command is `go work`.  In workspace mode you can easily use development versions of a library for many go modules, without having to write a `replace` directives in each of every `go.mod` files.  In the example above, that was copied from `go help work`, `./baz` could be a fork of `github.com/go-redis/redis` or any other dependency you need to modify locally.
 
 ## Fuzzing
 
 Regular unit tests use a fixed set of inputs to test a function, this often includes simple success cases and inputs that represent corner cases, e.g. the empty string, `nil` so on and so forth.
 
-Fuzz testing, or fuzzing, on the other hand generates random inputs to test functions with the goal to trigger bugs.  You can imagine that the search space, from which random inputs are taken, gets  huge very quickly.  Hence, fuzz testing implementations often use techniques to reduce the search space, e.g. some form of heuristics like starting with extreme values of an input type, those could be `NaN`, `-/+inf` for a float type or invalid unicode strings.
+Fuzz testing, or fuzzing, on the other hand generates random inputs to test functions with the goal to trigger bugs.  You can imagine that the search space, from which random inputs are taken, gets  huge very quickly.  Hence, fuzz testing implementations often use techniques to reduce the search space, e.g. instrumenting your code or some form of heuristics like starting with extreme values of an input type, those could be `NaN`, `-/+inf` for a float type or invalid unicode strings.
 
 Anyways, we don't have to care about the implementation details since the Go team did all the hard work of implementing a fuzzing framework for us and we can just use it.  A starting point to learn about fuzz testing in Go is the [fuzzing landing page] that also links to the official tutorial.
 
@@ -115,7 +115,7 @@ func FuzzHex(f *testing.F) {
 
 Fuzz tests look very similar to regular unit tests but their name must start with `Fuzz`.  Inputs to the _seed corpus_, a set of default test inputs, are registered using `f.Add()`.  A fuzz test must have only one fuzz target, that is the function passed to `f.Fuzz()` which takes an instance of `*testing.T` as their first argument. All remaining arguments must be in same order and type as those added to the seed corpus with `f.Add()`.  To enable fuzzing pass the `-fuzz=FuzzMyTest` flag to `go test`.  If the flag was not specified fuzz tests are still run, but only with their fixed seed corpus as input.  Only a limited set of types is allowed as fuzz inputs, primitives, `string` and `[]byte` among others.
 
-Of a fuzz tested function only properties can be tests since there is no control over the inputs.  Properties could be that the functions result is still a valid unicode string or that a number is in a certain range.
+Since there is no control over the inputs of a fuzz tested function only properties of it can be tested.  Properties could be that the functions result is still a valid unicode string or that a number is in a certain range.
 
 Be aware that fuzzing can create several gigabytes of data in the fuzz cache and might cause high load on the test machine.  I would therefore advise against enabling fuzz tests in a CI pipeline.
 
@@ -140,7 +140,7 @@ func min[T int | uint | int64](x, y T) T {
 }
 ```
 
-What's different from a normal Go function is that there is a _type parameter_ list in square brackets (`[T int | uint | int64]`) before the function arguments.  Here we can define the set of types the function is allowed to be instantiated with.  Thanks to Go's type inference we don't have to explicitly write out the type when calling the function, instead we can just do `min(1, -5)` and the compiler will be smart enough to infer the type for us.
+What's different from a normal Go function is that there is a _type parameter_ list in square brackets `[T int | uint | int64]` before the function arguments.  Here we can define the set of types the function is allowed to be instantiated with.  Thanks to Go's type inference we don't have to explicitly write out the type when calling the function, instead we can just do `min(1, -5)` and the compiler will be smart enough to infer the type for us.
 
 One last minute change to the release was that the [constraints package] was moved out of the standard library.  This package predefined a set of common interfaces, e.g. one for signed or unsigned integer numbers.  This brings us to the next point, that is we don't need to define the set of allowed types inline, instead we can define them in an interface like:
 
@@ -163,7 +163,7 @@ func min[T Signed](x, y T) T {
 
 A new operator is shown in the example above, the tilde operator `~T` specifies the underlying type of `T`.  Sounds confusing but is actually pretty simple, in Go one often defines type alias, e.g. `type MyEnum string` and if a function only accepts `[T string]` then it could not be instantiated with an argument of type `MyEnum` even though the argument is a string.  But `[T ~string]` on the other hand will happily accept any type whose underlying type is string, making the generic function much more useful.
 
-For some functions there is no need to restrict the set of type at all and in such cases you can use `[T interface{}]`, or even better, use `any` instead of `interface{}`.  An example of such a function with great "general" use is the following one that returns a pointer to any type:
+For some functions there is no need to restrict the set of type at all and in such cases you can use `[T interface{}]`, or even better, use `any` instead of `interface{}`.  An example of such a function with great "general" use is the following one that returns a pointer to any type[^3]:
 
 ```go
 func PointerOf[T any](t T) *T {
@@ -171,7 +171,7 @@ func PointerOf[T any](t T) *T {
 }
 ```
 
-Parameter list are by no means limited to a single type.  I hope the following function name leaves no doubt that this is a contrived example without practical use:
+Parameter lists are by no means limited to a single type.  I hope the following function name leaves no doubt that this is a contrived example without practical use:
 
 ```go
 func weirdAddYankovic[T1 int | uint, T2 float32 | float64](x T1, y T2) string {
@@ -205,7 +205,7 @@ Also, do **not** use generics if the implementation of a common methods is diffe
 
 Generics are no panacea and there are limitations with the current implementation of this feature.  Most notably type parameters cannot be used in methods.  This limitation might be lifted with Go 1.19 and there is also a workaround the [facilitator pattern].
 
-No type parameters will be used in the standard library with Go 1.18.  I think it was a sensible decision of the Go team to first gather some experience with how the feature is used and then in a later release introduce generics to the standard library.  However, there are already some generic utility functions for [slices](https://pkg.go.dev/golang.org/x/exp/slices) and [maps](https://pkg.go.dev/golang.org/x/exp/maps).  What I anticipate is a library that provides Rust iterator like functionality for slices, maps and sets.
+No type parameters will be used in the standard library with Go 1.18.  I think it's a sensible decision of the Go team to first gather some experience with how the feature is used and then in a later release introduce generics to the standard library.  However, there are already some generic utility functions for [slices](https://pkg.go.dev/golang.org/x/exp/slices) and [maps](https://pkg.go.dev/golang.org/x/exp/maps).  What I anticipate is a library that provides Rust iterator like functionality for slices, maps and sets.
 
 I hope I could give you some viable insights into the features and changes that Go 1.18 will bring.  Now _go_ and write some, potentially generic, code!
 
@@ -228,3 +228,4 @@ I hope I could give you some viable insights into the features and changes that 
 
 [^1]: For this article [Go 1.18 release candidate 1](https://go.dev/dl/#go1.18rc10) was used.  This release can be installed by running `go install golang.org/dl/go1.18rc1@latest && go1.18rc1 download`.  Any other details were mostly found in the [preliminary release notes](https://tip.golang.org/doc/go1.18#library).
 [^2]: Also for PowerPC, but I don't know anyone targeting those CPUs.
+[^3]: Someone took the opportunity to implement a [`new` package](https://github.com/carlmjohnson/new).
