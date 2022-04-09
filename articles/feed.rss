@@ -4,7 +4,7 @@
     <link>https://klingt.net/articles</link>
     <description></description>
     <managingEditor> (Andreas Linz)</managingEditor>
-    <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
+    <pubDate>Sat, 09 Apr 2022 12:48:25 +0000</pubDate>
     <item>
       <title>AMD Ryzen random reboots under Linux when in idle</title>
       <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
@@ -87,7 +87,7 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:48:25 +0000</pubDate>
     </item>
     <item>
       <title>The simplest sorting algorithm</title>
@@ -188,7 +188,7 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:48:25 +0000</pubDate>
     </item>
     <item>
       <title>Learning Touch Typing</title>
@@ -254,87 +254,7 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
-    </item>
-    <item>
-      <title>GitHub Pages DNS Setup</title>
-      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
-      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
-  
-  <title>GitHub Pages DNS Setup</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>GitHub Pages DNS Setup</h1>
-<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
-<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
-<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
-<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
-<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
-www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
-</code></pre>
-<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
-<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
-<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
-klingt.net.             929     IN      A       185.199.109.153
-klingt.net.             929     IN      A       185.199.111.153
-klingt.net.             929     IN      A       185.199.108.153
-klingt.net.             929     IN      A       185.199.110.153
-</code></pre>
-<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
-<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
-<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
-<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
-<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:48:25 +0000</pubDate>
     </item>
     <item>
       <title>Go Generics - A Quick Overview</title>
@@ -534,7 +454,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:48:25 +0000</pubDate>
     </item>
     <item>
       <title>(Almost) 30 Best Albums of 2021</title>
@@ -752,88 +672,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
-    </item>
-    <item>
-      <title>How to delete unreachable commits on GitHub</title>
-      <link>https://klingt.net/articles/how-to-delete-unreachable-commits-on-github.html</link>
-      <description>GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.">
-  
-  <title>How to delete unreachable commits on GitHub</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>How to delete unreachable commits on GitHub</h1>
-<p>The dangling<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> <a href="https://github.com/klingtnet/klingtnet.github.io/blob/b2444ca54c74a7c9dde6504cf028b6c0f4729d8f/content/resume.md#L3">commit</a> shown in the screenshot below should have never been on GitHub, at least not publicly visible.  The commit was part of a branch called <code>draft</code> that I pushed to the repository when it was still private.  If I am not mistaken then I removed the file, squashed and merged the <code>draft</code> branch into <code>master</code>, deleted the branch and then pushed it onto GitHub.  After making sure that branch <code>draft</code> was gone on GitHub I made the repository public.</p>
-<p><img src="unreachable-commit.png" alt="unreachable commit"></p>
-<p>As you can clearly see the commit is still there, and I only discovered this by accident when using GitHub's search.  So, the question is now how to delete this commit?  I cannot even reach the commit from my local repository:</p>
-<pre><code class="language-shell">$ git show b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
-fatal: bad object b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
-</code></pre>
-<p>Its parent commit is reachable though:</p>
-<pre><code class="language-shell">$ git show 01aea0c8e1bdceb7869403814a4ebb87e25883b2
-commit 01aea0c8e1bdceb7869403814a4ebb87e25883b2
-Author: Andreas Linz &lt;klingt.net@gmail.com&gt;
-Date:   Sun Jul 25 16:18:10 2021 +0200
-
-    Initial commit
-</code></pre>
-<p>If the commit would still be part of my local repository I could have removed it with this call and subsequent <code>git push</code>.</p>
-<pre><code class="language-shell">$ git reflog expire --expire-unreachable=all
-</code></pre>
-<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/ticket/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
-<blockquote>
-<p>As you mentioned, it does indeed appear to be an an unreferenced commit dangling in our cache. I went ahead and performed the garbage collection and cache clearance operations for the repository klingtnet/klingtnet.github.io. Attempting to access the commit directly now returns a 404.</p>
-</blockquote>
-<p>Luckily the commit contained no secrets, but what I learned from this lesson is that I need to double or triple check the contents of my repository before making it public on GitHub.  A simple deletion of a branch might not be sufficient.</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:48:25 +0000</pubDate>
     </item>
     <item>
       <title>My MacBook Air M1 setup</title>
@@ -1029,7 +868,88 @@ $ gpgconf --kill gpg-agent
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:48:25 +0000</pubDate>
+    </item>
+    <item>
+      <title>How to delete unreachable commits on GitHub</title>
+      <link>https://klingt.net/articles/how-to-delete-unreachable-commits-on-github.html</link>
+      <description>GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.">
+  
+  <title>How to delete unreachable commits on GitHub</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>How to delete unreachable commits on GitHub</h1>
+<p>The dangling<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> <a href="https://github.com/klingtnet/klingtnet.github.io/blob/b2444ca54c74a7c9dde6504cf028b6c0f4729d8f/content/resume.md#L3">commit</a> shown in the screenshot below should have never been on GitHub, at least not publicly visible.  The commit was part of a branch called <code>draft</code> that I pushed to the repository when it was still private.  If I am not mistaken then I removed the file, squashed and merged the <code>draft</code> branch into <code>master</code>, deleted the branch and then pushed it onto GitHub.  After making sure that branch <code>draft</code> was gone on GitHub I made the repository public.</p>
+<p><img src="unreachable-commit.png" alt="unreachable commit"></p>
+<p>As you can clearly see the commit is still there, and I only discovered this by accident when using GitHub's search.  So, the question is now how to delete this commit?  I cannot even reach the commit from my local repository:</p>
+<pre><code class="language-shell">$ git show b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
+fatal: bad object b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
+</code></pre>
+<p>Its parent commit is reachable though:</p>
+<pre><code class="language-shell">$ git show 01aea0c8e1bdceb7869403814a4ebb87e25883b2
+commit 01aea0c8e1bdceb7869403814a4ebb87e25883b2
+Author: Andreas Linz &lt;klingt.net@gmail.com&gt;
+Date:   Sun Jul 25 16:18:10 2021 +0200
+
+    Initial commit
+</code></pre>
+<p>If the commit would still be part of my local repository I could have removed it with this call and subsequent <code>git push</code>.</p>
+<pre><code class="language-shell">$ git reflog expire --expire-unreachable=all
+</code></pre>
+<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/ticket/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
+<blockquote>
+<p>As you mentioned, it does indeed appear to be an an unreferenced commit dangling in our cache. I went ahead and performed the garbage collection and cache clearance operations for the repository klingtnet/klingtnet.github.io. Attempting to access the commit directly now returns a 404.</p>
+</blockquote>
+<p>Luckily the commit contained no secrets, but what I learned from this lesson is that I need to double or triple check the contents of my repository before making it public on GitHub.  A simple deletion of a branch might not be sufficient.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sat, 09 Apr 2022 12:48:25 +0000</pubDate>
     </item>
     <item>
       <title>Go 1.18 with some fuzzing and a focus on generics</title>
@@ -1229,7 +1149,7 @@ func Write(w io.Writer) error {}
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:48:25 +0000</pubDate>
     </item>
     <item>
       <title>How I Detected and Removed Malware from a Wordpress Installation</title>
@@ -1644,7 +1564,7 @@ if (empty($_COOKIE['ssl_message'])) {
 <p>There is an incredibly handy tool called <a href="https://gchq.github.io/CyberChef/">CyberChef</a> for applying chains of encodings and decodings to an input string.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3" role="doc-endnote">
-<p>I need to file a GitHub issue so they can look for the actual security vulnerability.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><del>I need to file a GitHub issue so they can look for the actual security vulnerability.</del> I filed an <a href="https://github.com/WordPress/health-check/issues/425">issue</a>.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -1658,7 +1578,87 @@ if (empty($_COOKIE['ssl_message'])) {
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Apr 2022 12:38:35 +0000</pubDate>
+      <pubDate>Sat, 09 Apr 2022 12:48:25 +0000</pubDate>
+    </item>
+    <item>
+      <title>GitHub Pages DNS Setup</title>
+      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
+      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
+  
+  <title>GitHub Pages DNS Setup</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>GitHub Pages DNS Setup</h1>
+<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
+<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
+<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
+<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
+<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
+www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
+</code></pre>
+<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
+<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
+<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
+klingt.net.             929     IN      A       185.199.109.153
+klingt.net.             929     IN      A       185.199.111.153
+klingt.net.             929     IN      A       185.199.108.153
+klingt.net.             929     IN      A       185.199.110.153
+</code></pre>
+<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
+<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
+<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
+<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
+<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sat, 09 Apr 2022 12:48:25 +0000</pubDate>
     </item>
   </channel>
 </rss>
