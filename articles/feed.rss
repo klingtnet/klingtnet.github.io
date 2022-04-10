@@ -4,7 +4,7 @@
     <link>https://klingt.net/articles</link>
     <description></description>
     <managingEditor> (Andreas Linz)</managingEditor>
-    <pubDate>Sun, 10 Apr 2022 09:50:50 +0000</pubDate>
+    <pubDate>Sun, 10 Apr 2022 09:52:00 +0000</pubDate>
     <item>
       <title>AMD Ryzen random reboots under Linux when in idle</title>
       <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
@@ -87,7 +87,7 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 10 Apr 2022 09:50:50 +0000</pubDate>
+      <pubDate>Sun, 10 Apr 2022 09:52:00 +0000</pubDate>
     </item>
     <item>
       <title>The simplest sorting algorithm</title>
@@ -188,7 +188,7 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 10 Apr 2022 09:50:50 +0000</pubDate>
+      <pubDate>Sun, 10 Apr 2022 09:52:00 +0000</pubDate>
     </item>
     <item>
       <title>GitHub Pages DNS Setup</title>
@@ -214,34 +214,6 @@ from partially sorted inputs.</p>
   
   <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
     media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sun, 10 Apr 2022 09:50:50 +0000</pubDate>
-    </item>
-    <item>
-      <title>Learning Touch Typing</title>
-      <link>https://klingt.net/articles/learning-touch-typing.html</link>
-      <description>My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.">
-  
-  <title>Learning Touch Typing</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
   <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
     media="screen and (prefers-color-scheme: dark)" />
   <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
@@ -256,120 +228,33 @@ from partially sorted inputs.</p>
     <div class="main">
       <main>
         
-<h1>Learning Touch Typing</h1>
-<p>Lately two articles about developer productivity appeared in my news feed.  The first was <a href="https://scattered-thoughts.net/writing/speed-matters/">speed matters</a>, which is part of the great <a href="https://scattered-thoughts.net/writing/reflections-on-a-decade-of-coding/">reflections on a decade of coding</a> article series, and second is <a href="https://danluu.com/productivity-velocity/">some reasons to work on productivity and velocity</a> by Dan Luu.  Both articles stated that <a href="https://en.wikipedia.org/wiki/Touch_typing">touch typing</a> improved their productivity.  The productivity boost was not limited to a bare increase in word per minute that one can type, instead the greater leverage comes from an increased accuracy.  Making less typing errors improves the writing flow because every typo requires a context switch in order to fix the mistake.  Jamie Brandon wrote:</p>
-<blockquote>
-<p>If you compare two coders, one who can touch type and one who has to hunt and peck, the difference between them is not just down to typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.</p>
-</blockquote>
-<p>Dan Luu  wrote this about typing speed:</p>
-<blockquote>
-<p>I've actually looked at where my time goes and a lot of it goes to things that are canonical examples of things that you shouldn't waste time improving because people don't spend much time doing them.</p>
-<p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
-</blockquote>
-<p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
-<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower than my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
-<p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
-<p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
-<p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
-<p>Now it's all about practicing and getting back to speed.  For this reason I forced myself to write this article using touch typing which went okay but could have been a bit smoother 🙄  Anyways, if you now decide to learn this skill as well I wish you all the best 💪.  It's not as hard to learn as you might think and it should only take a month of typing to become fast and accurate.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sun, 10 Apr 2022 09:50:50 +0000</pubDate>
-    </item>
-    <item>
-      <title>The simplest sorting algorithm</title>
-      <link>https://klingt.net/articles/the-simplest-sorting-algorithm.html</link>
-      <description></description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  
-  <title>The simplest sorting algorithm</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>The simplest sorting algorithm</h1>
-<p>Not all of us have enjoyed a formal computer science education so let's define what a sorting algorithm actually does:</p>
-<blockquote>
-<p>A sorting algorithm takes an array and puts it elements in a certain order. What order means depends on the values stored in the array, e.g. in numerical order for numbers or lexicographic order for strings. <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-</blockquote>
-<p>Let's see an example, for an array <code>a = [4,2,3,1]</code>, a sorting algorithm applied to <code>a</code> will result in <code>[1,2,3,4]</code> when numerically sorted in ascending order.</p>
-<p>Ok, now that we've defined what sorting means let's head over to why I am writing this article.  I discovered a paper called <em>Is this the simplest (and most surprising) sorting algorithm ever?</em> on <a href="https://lobste.rs/s/gh1ngc/is_this_simplest_most_surprising_sorting">lobste.rs</a> today.  Sorting algorithms are often used in basic computer science lectures to teach algorithms. The first algorithm students encounter is very often <a href="https://en.wikipedia.org/wiki/Bubble_sort">Bubble sort</a>.</p>
-<p>Bubble sort is by no means a complicated algorithm as you can see in the prototypical Go implementation below:</p>
-<pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
-
-for {
-    swapped := false
-    for i := 1; i &lt; len(xs); i++ {
-        if xs[i-1] &gt; xs[i] {
-            xs[i-1], xs[i] = xs[i], xs[i-1]
-            swapped = true
-        }
-    }
-    if !swapped {
-        break
-    }
-}
-fmt.Println(xs) // prints [-1 2 3 4 6 10]
+<h1>GitHub Pages DNS Setup</h1>
+<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
+<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
+<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
+<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
+<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
+www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
 </code></pre>
-<p>You can play with the implementation in the <a href="https://play.golang.org/p/wlTPJe7B5Ij">Go playground</a>.  It just iterates over the array until there is no element to swap anymore.  The only complicated thing is to keep around the state if two elements got swapped.</p>
-<p>To my surprise the <a href="https://arxiv.org/pdf/2110.01111.pdf">paper</a> mentioned above is describing an even more straightforward way to sort an array:</p>
-<pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
-for i := 0; i &lt; len(xs); i++ {
-  for j := 0; j &lt; len(xs); j++ {
-    if xs[i] &lt; xs[j] {
-      xs[i], xs[j] = xs[j], xs[i]
-    }
-  }
-}
-fmt.Println(xs) // prints [-1 2 3 4 6 10]
+<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
+<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
+<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
+klingt.net.             929     IN      A       185.199.109.153
+klingt.net.             929     IN      A       185.199.111.153
+klingt.net.             929     IN      A       185.199.108.153
+klingt.net.             929     IN      A       185.199.110.153
 </code></pre>
-<p>It does not get much simpler than this <del>and I assume that this might be the first algorithm future computer science students will encounter in their basic lessons.</del>  For me this algorithm is easier to remember than the classic bubble sort but the paper states that it is not a good candidate for an algorithm introduction.</p>
-<blockquote>
-<p>You certainly do not want to use it as a first example to introduce
-students to sorting algorithms. It is not stable, does not work well for
-external sorting, cannot sort inputs arriving online, and does not benefit
-from partially sorted inputs.</p>
-</blockquote>
-<p>You can try this one out in the <a href="https://play.golang.org/p/jml6LqHApAN">Go playground</a> as well.</p>
+<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
+<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
+<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
+<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
+<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>Take this definition with a grain of salt, I wrote this off the top of my head.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -383,7 +268,7 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 10 Apr 2022 09:50:50 +0000</pubDate>
+      <pubDate>Sun, 10 Apr 2022 09:52:00 +0000</pubDate>
     </item>
     <item>
       <title>Go Generics - A Quick Overview</title>
@@ -583,7 +468,73 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 10 Apr 2022 09:50:50 +0000</pubDate>
+      <pubDate>Sun, 10 Apr 2022 09:52:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Learning Touch Typing</title>
+      <link>https://klingt.net/articles/learning-touch-typing.html</link>
+      <description>My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.">
+  
+  <title>Learning Touch Typing</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Learning Touch Typing</h1>
+<p>Lately two articles about developer productivity appeared in my news feed.  The first was <a href="https://scattered-thoughts.net/writing/speed-matters/">speed matters</a>, which is part of the great <a href="https://scattered-thoughts.net/writing/reflections-on-a-decade-of-coding/">reflections on a decade of coding</a> article series, and second is <a href="https://danluu.com/productivity-velocity/">some reasons to work on productivity and velocity</a> by Dan Luu.  Both articles stated that <a href="https://en.wikipedia.org/wiki/Touch_typing">touch typing</a> improved their productivity.  The productivity boost was not limited to a bare increase in word per minute that one can type, instead the greater leverage comes from an increased accuracy.  Making less typing errors improves the writing flow because every typo requires a context switch in order to fix the mistake.  Jamie Brandon wrote:</p>
+<blockquote>
+<p>If you compare two coders, one who can touch type and one who has to hunt and peck, the difference between them is not just down to typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.</p>
+</blockquote>
+<p>Dan Luu  wrote this about typing speed:</p>
+<blockquote>
+<p>I've actually looked at where my time goes and a lot of it goes to things that are canonical examples of things that you shouldn't waste time improving because people don't spend much time doing them.</p>
+<p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
+</blockquote>
+<p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
+<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower than my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
+<p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
+<p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
+<p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
+<p>Now it's all about practicing and getting back to speed.  For this reason I forced myself to write this article using touch typing which went okay but could have been a bit smoother 🙄  Anyways, if you now decide to learn this skill as well I wish you all the best 💪.  It's not as hard to learn as you might think and it should only take a month of typing to become fast and accurate.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 10 Apr 2022 09:52:00 +0000</pubDate>
     </item>
     <item>
       <title>My MacBook Air M1 setup</title>
@@ -779,7 +730,7 @@ $ gpgconf --kill gpg-agent
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 10 Apr 2022 09:50:50 +0000</pubDate>
+      <pubDate>Sun, 10 Apr 2022 09:52:00 +0000</pubDate>
     </item>
     <item>
       <title>How to delete unreachable commits on GitHub</title>
@@ -860,7 +811,7 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 10 Apr 2022 09:50:50 +0000</pubDate>
+      <pubDate>Sun, 10 Apr 2022 09:52:00 +0000</pubDate>
     </item>
     <item>
       <title>(Almost) 30 Best Albums of 2021</title>
@@ -1078,12 +1029,12 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 10 Apr 2022 09:50:50 +0000</pubDate>
+      <pubDate>Sun, 10 Apr 2022 09:52:00 +0000</pubDate>
     </item>
     <item>
       <title>How I Detected and Removed Malware from a Wordpress Installation</title>
       <link>https://klingt.net/articles/how-i-detected-and-removed-malware-from-a-wordpress-installation.html</link>
-      <description>Wordpress is the major target for malware, mainly because it&#39;s so widespread often unmaintained, and plugins add additional loopholes to the already fragile CMs.  Even with auto updates enabled, you Wordpress instance will not be safe from getting infected with malware.  In this article I will describe how I removed a malware from an up-to-date wordpress instance and describe what I found there.</description>
+      <description>Wordpress is the major target for malware, mainly because it&#39;s so widespread, often unmaintained, and plugins add additional loopholes to the already fragile CMS.  Even with auto updates enabled, your Wordpress instance will not be safe from getting infected with malware.  In this article I will describe how I removed a malware from an up-to-date wordpress instance and describe what I found there.</description>
       <content:encoded><![CDATA[<!doctype html>
 <html lang="en">
 
@@ -1091,7 +1042,7 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <meta name="description" content="Wordpress is the major target for malware, mainly because it&#39;s so widespread often unmaintained, and plugins add additional loopholes to the already fragile CMs.  Even with auto updates enabled, you Wordpress instance will not be safe from getting infected with malware.  In this article I will describe how I removed a malware from an up-to-date wordpress instance and describe what I found there.">
+  <meta name="description" content="Wordpress is the major target for malware, mainly because it&#39;s so widespread, often unmaintained, and plugins add additional loopholes to the already fragile CMS.  Even with auto updates enabled, your Wordpress instance will not be safe from getting infected with malware.  In this article I will describe how I removed a malware from an up-to-date wordpress instance and describe what I found there.">
   
   <title>How I Detected and Removed Malware from a Wordpress Installation</title>
 
@@ -1508,7 +1459,7 @@ if (empty($_COOKIE['ssl_message'])) {
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 10 Apr 2022 09:50:50 +0000</pubDate>
+      <pubDate>Sun, 10 Apr 2022 09:52:00 +0000</pubDate>
     </item>
     <item>
       <title>Go 1.18 with some fuzzing and a focus on generics</title>
@@ -1708,7 +1659,7 @@ func Write(w io.Writer) error {}
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 10 Apr 2022 09:50:50 +0000</pubDate>
+      <pubDate>Sun, 10 Apr 2022 09:52:00 +0000</pubDate>
     </item>
   </channel>
 </rss>
