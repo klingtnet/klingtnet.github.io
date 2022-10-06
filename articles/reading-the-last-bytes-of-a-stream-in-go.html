@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.">
+  
+  <title>Reading the last bytes of a stream in Go</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <header>
+        
+<nav>
+  <div class="header-bar">
+    <details class="mobile-menu">
+      <summary><img class="hamburger nav-icon invert-if-dark" src='https://klingt.net/assets/hamburger.svg'>
+      </summary>
+      <div class="dropdown sm-margin-top">
+        <ul class="nav nobullets">
+          
+          <li><a class="reset-color" href='https://klingt.net/index.html'>Home</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/articles'>Articles</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/about-me.html'>About Me</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/imprint.html'>Imprint</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/privacy-policy.html'>Privacy Policy</a></li>
+          
+        </ul>
+      </div>
+    </details>
+    <div>
+      <span class="bold sm-margin-right">klingt.net</span>
+      <img class="valign nav-icon invert-if-dark" alt="website logo" src="https://klingt.net/assets/logo.svg">
+    </div>
+  </div>
+</nav>
+
+      </header>
+    </div>
+    <div class="main">
+      <main>
+        
+<p>It's about half a year since my last blog post, so it's about time to write another one.</p>
+<p>Yesterday I was working on a private project that required to read a block of bytes from the end of an <code>io.Reader</code>.
+On a first glance that sounds like a trivial problem, but doing this <em>efficiently</em> turned out to be more complicated than initially thought.</p>
+<p>If your <code>io.Reader</code> stems from a file you're lucky, because regular files allow random access through the system <a href="https://man7.org/linux/man-pages/man2/lseek.2.html">seek call</a> that is exposed on a <code>os.File</code> with its <a href="https://pkg.go.dev/os#File.Seek"><code>Seek</code> method</a>.  However, my function only accepts a plain <code>io.Reader</code> and not an <code>os.File</code>, so this option is out of question.</p>
+<p>How can we read the last N bytes of a <em>finite</em> stream of some kind?</p>
+<h2>Naïve solution</h2>
+<p>A naïve solution would be to <a href="https://pkg.go.dev/io#ReadAll">read the whole file into memory</a> and then discard everything except for some slice of bytes at the end.</p>
+<pre><code class="language-go">func readTail(r io.Reader, N int) ([]byte, error) {
+	data, err := io.ReadAll(r)
+	if err != nil {
+		return nil, err
+	}
+
+	return data[len(data)-N:], nil
+}
+</code></pre>
+<p>This is pretty wasteful and might require huge amounts of memory, depending on how long the stream you want to consume is.</p>
+<h2>Two interleaved buffers</h2>
+<p>The next idea I had was to read the stream in chunks of size N, and discarding every chunk except the last one.
+But this won't work because of a variety of reasons, first and foremost if the stream length is not an integer multiple of N then the last chunk might be incomplete since it is only the remainder of file size divided by chunk size (N).</p>
+<p><img src="unalinged-end-of-file-read.png" alt="illustration of an unaligned read"></p>
+<p>So, why not maintain two buffers, one for the previous read and another one for the current read.
+When reaching EOF we can then concatenate the second last read with the last and return an slice of size N, right?
+This might work, but turns out to be pretty complicated because of how <code>io.Read</code> might behave.
+A call to <code>Read</code> is not guaranteed to return <code>N</code> bytes, instead it might fill only a <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=60-61">part of the given buffer</a>:</p>
+<pre><code class="language-go">// If some data is available but not len(p) bytes, Read conventionally
+// returns what is available instead of waiting for more.
+</code></pre>
+<p>So, we can't easily fill the two buffers in an interleaved manner because a single read might not fill a whole buffer.
+Of course, there's <a href="https://pkg.go.dev/io#ReadFull"><code>io.ReadFull</code></a> which takes care of reading exactly N bytes if available, but the logic would still be quite convoluted.</p>
+<h2>Ring buffer</h2>
+<p>After dabbling around for a while with the solution I had, I realized that what I wrote looked almost like a <a href="https://en.wikipedia.org/wiki/Circular_buffer">ring buffer</a>.
+With a ring buffer, sometimes also called circular buffer, we only need O(n) space instead of O(2n) as required with the previous concept.
+The gist is to store each chunk in a ring buffer, wrapping around if it exceeds the end of the ring buffers internal array.</p>
+<p><img src="ring-buffer-end-of-file-read.png" alt="illustration of reading chunks with a ring buffer"></p>
+<p>After we reached the end of the stream we can just return a slice from the ring buffer, starting from the write head and reaching back N bytes.
+Those are two operations if we need to wrap around</p>
+<pre><code class="language-go">copy(dst[:N-wpos], ringbuf[wpos:])
+copy(dst[N-wpos:], ringbuf[:wpos])
+</code></pre>
+<p>where <code>wpos</code> is the index of the write head.</p>
+<p>One thing that bit me was that <code>io.Read</code> might return <code>io.EOF</code> together with a non-zero amount of bytes read, <em>or</em> it could return <code>0, io.EOF</code> after the last call that returned a non-zero amount of bytes and a <code>nil</code> error.
+This is <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=83">documented behavior</a> but could still be surprising.</p>
+<pre><code class="language-go">// An instance of this general case is that a Reader returning
+// a non-zero number of bytes at the end of the input stream may
+// return either err == EOF or err == nil. The next Read should
+// return 0, EOF.
+</code></pre>
+<p>You can find an ugly example in <a href="https://go.dev/play/p/M-WcpkVviGV">this playground</a> but be aware that you need to run it locally, since external URLs might not be resolved in the playground.</p>
+<p>There are a number of performance considerations that arise from this implementation, e.g. a very small <code>N</code> might lead to a huge number of read calls if the ring buffer's size is equal to <code>N</code>.
+Technically they are independent, the only condition is that the ring buffer must at least have a size of <code>N</code>.</p>
+<p>You might've guessed it already but the good old <code>tail</code> utility serves the same purpose.  I haven't had a look in <a href="https://github.com/coreutils/coreutils/blob/master/src/tail.c">GNU tail's source code</a> yet, but I'm curious to see how they achieved this.</p>
+<p>I hope that helped someone.
+Please let me know if you've an even more efficient solution or there is any other feedback for me.</p>
+
+
+      </main>
+    </div>
+    <div class="footer">
+      <footer>
+        
+<p class="center">
+  <a href="#">Back to top.</a>
+</p>
+
+      </footer>
+    </div>
+  </div>
+</body>
+
+</html>
+
+
+
+
