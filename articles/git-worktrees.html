@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.">
+  
+  <title>Git Worktrees</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <header>
+        
+<nav>
+  <div class="header-bar">
+    <details class="mobile-menu">
+      <summary><img class="hamburger nav-icon invert-if-dark" src='https://klingt.net/assets/hamburger.svg'>
+      </summary>
+      <div class="dropdown sm-margin-top">
+        <ul class="nav nobullets">
+          
+          <li><a class="reset-color" href='https://klingt.net/index.html'>Home</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/articles'>Articles</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/about-me.html'>About Me</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/imprint.html'>Imprint</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/privacy-policy.html'>Privacy Policy</a></li>
+          
+        </ul>
+      </div>
+    </details>
+    <div>
+      <span class="bold sm-margin-right">klingt.net</span>
+      <img class="valign nav-icon invert-if-dark" alt="website logo" src="https://klingt.net/assets/logo.svg">
+    </div>
+  </div>
+</nav>
+
+      </header>
+    </div>
+    <div class="main">
+      <main>
+        
+<h1>Git Worktrees</h1>
+<p>At work I often face the situation that I want to locally review some feature branch of a colleague.
+In general that's easy, one <code>git switch --track origin/branch-name</code> later and you have the changes in your local repository.
+However, most of the time I was currently working in my own feature branch where I had unstaged changes.
+This means I needed to commit my local changes before I could switch to the colleague's branch.
+Wouldn't it be nice if I could work on multiple branches of a repository at the same time?</p>
+<p>You might be tempted to say, I know how to do that, just make a second clone of the repository and call it a day.
+That would work, of course, but it'd also be very wasteful since the whole repository needs to be cloned twice.
+For large repositories this could mean duplicating hundreds or thousands of megabytes.
+But guess what, git got you covered!  There's a lesser known command that handles exactly this use case, it's <a href="https://git-scm.com/docs/git-worktree">git worktree</a>.</p>
+<p>There's a variety of ways how to use git worktrees.</p>
+<h2>Existing repository</h2>
+<p>Let's assume that you're in some repository that you cloned a while a go and you now want to switch to a different branch without committing your local changes.
+We can do that by creating a new worktree like this:</p>
+<pre><code class="language-sh">$ git worktree add ../repository.feat-x origin/feat-x
+</code></pre>
+<p>This will create a copy, which shares the same <code>.git</code> data, in <code>../repository.feat-x</code> at branch <code>origin/feat-x</code>.
+You can choose whichever branch you like, but it's sensible to not add the worktree inside the existing repository because you would need to ignore the new directory then.
+Checking out a new branch when creating a worktree is also very easy, just pass <code>-b my-branch-name</code>, that's it.</p>
+<p>If you're done with your work you can remove your worktree like</p>
+<pre><code class="language-sh">$ rm -rf ../repository.feat-x
+</code></pre>
+<p>or run</p>
+<pre><code class="language-sh">$ git worktree remove repository.feat-x
+</code></pre>
+<p>instead.
+But <code>git worktree remove</code> should be preferred, otherwise some metadata will not be removed until a <code>git gc</code> or <code>git worktree prune</code> was run.</p>
+<p>All worktrees of a repository can be listed with <code>git worktree list</code>.</p>
+<h2>New repository layout</h2>
+<p>On <a href="https://lobste.rs">lobste.rs</a> I found a very <a href="https://lobste.rs/s/r5c6o8/git_worktrees#c_opoqjn">appealing idea</a> that I will try the next time I need to clone a repository.
+They suggested to do a bare clone, that means only fetch the <code>.git</code> folder and then add worktrees for the branches you need.
+I think that's best shown at an example.
+Let's say we want to patch something in Go compiler on <code>master</code>, <code>1.19</code> and <code>1.18</code>:</p>
+<pre><code class="language-sh">$ git clone --bare git@github.com:golang/go go/.git
+cd go
+git worktree add master
+git worktree add release-branch.go1.18
+git worktree add release-branch.go1.19
+</code></pre>
+<p>This will create the following directory structure:</p>
+<pre><code>go
+├── .git
+├── master
+├── release-branch.go1.18
+└── release-branch.go1.19
+</code></pre>
+<p>For work projects I could imagine a directory structure that looks similar to this:</p>
+<pre><code class="language-sh">go
+├── .git
+├── work
+├── experiment
+└── review
+</code></pre>
+<p>Note that each worktree just acts like a copy of the repository, so I can switch to whatever branch I like, i.e. the worktree is not pinned to the branch it was created with.
+In the example above I would use <code>work/</code> for my local feature development, <code>experiment/</code> for trying out some ideas, and <code>review/</code> whenever I need to checkout and review some feature of a colleague locally.</p>
+<p>Let me know what your experience with git worktree is and if and how you use it.</p>
+
+
+      </main>
+    </div>
+    <div class="footer">
+      <footer>
+        
+<p class="center">
+  <a href="#">Back to top.</a>
+</p>
+
+      </footer>
+    </div>
+  </div>
+</body>
+
+</html>
+
+
+
+
