@@ -4,7 +4,7 @@
     <link>https://klingt.net/articles</link>
     <description></description>
     <managingEditor> (Andreas Linz)</managingEditor>
-    <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
+    <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
     <item>
       <title>AMD Ryzen random reboots under Linux when in idle</title>
       <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
@@ -87,7 +87,374 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
+    </item>
+    <item>
+      <title>The simplest sorting algorithm</title>
+      <link>https://klingt.net/articles/the-simplest-sorting-algorithm.html</link>
+      <description></description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <title>The simplest sorting algorithm</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>The simplest sorting algorithm</h1>
+<p>Not all of us have enjoyed a formal computer science education so let's define what a sorting algorithm actually does:</p>
+<blockquote>
+<p>A sorting algorithm takes an array and puts it elements in a certain order. What order means depends on the values stored in the array, e.g. in numerical order for numbers or lexicographic order for strings. <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+</blockquote>
+<p>Let's see an example, for an array <code>a = [4,2,3,1]</code>, a sorting algorithm applied to <code>a</code> will result in <code>[1,2,3,4]</code> when numerically sorted in ascending order.</p>
+<p>Ok, now that we've defined what sorting means let's head over to why I am writing this article.  I discovered a paper called <em>Is this the simplest (and most surprising) sorting algorithm ever?</em> on <a href="https://lobste.rs/s/gh1ngc/is_this_simplest_most_surprising_sorting">lobste.rs</a> today.  Sorting algorithms are often used in basic computer science lectures to teach algorithms. The first algorithm students encounter is very often <a href="https://en.wikipedia.org/wiki/Bubble_sort">Bubble sort</a>.</p>
+<p>Bubble sort is by no means a complicated algorithm as you can see in the prototypical Go implementation below:</p>
+<pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
+
+for {
+    swapped := false
+    for i := 1; i &lt; len(xs); i++ {
+        if xs[i-1] &gt; xs[i] {
+            xs[i-1], xs[i] = xs[i], xs[i-1]
+            swapped = true
+        }
+    }
+    if !swapped {
+        break
+    }
+}
+fmt.Println(xs) // prints [-1 2 3 4 6 10]
+</code></pre>
+<p>You can play with the implementation in the <a href="https://play.golang.org/p/wlTPJe7B5Ij">Go playground</a>.  It just iterates over the array until there is no element to swap anymore.  The only complicated thing is to keep around the state if two elements got swapped.</p>
+<p>To my surprise the <a href="https://arxiv.org/pdf/2110.01111.pdf">paper</a> mentioned above is describing an even more straightforward way to sort an array:</p>
+<pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
+for i := 0; i &lt; len(xs); i++ {
+  for j := 0; j &lt; len(xs); j++ {
+    if xs[i] &lt; xs[j] {
+      xs[i], xs[j] = xs[j], xs[i]
+    }
+  }
+}
+fmt.Println(xs) // prints [-1 2 3 4 6 10]
+</code></pre>
+<p>It does not get much simpler than this <del>and I assume that this might be the first algorithm future computer science students will encounter in their basic lessons.</del>  For me this algorithm is easier to remember than the classic bubble sort but the paper states that it is not a good candidate for an algorithm introduction.</p>
+<blockquote>
+<p>You certainly do not want to use it as a first example to introduce
+students to sorting algorithms. It is not stable, does not work well for
+external sorting, cannot sort inputs arriving online, and does not benefit
+from partially sorted inputs.</p>
+</blockquote>
+<p>You can try this one out in the <a href="https://play.golang.org/p/jml6LqHApAN">Go playground</a> as well.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Take this definition with a grain of salt, I wrote this off the top of my head.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
+    </item>
+    <item>
+      <title>Learning Touch Typing</title>
+      <link>https://klingt.net/articles/learning-touch-typing.html</link>
+      <description>My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.">
+  
+  <title>Learning Touch Typing</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Learning Touch Typing</h1>
+<p>Lately two articles about developer productivity appeared in my news feed.  The first was <a href="https://scattered-thoughts.net/writing/speed-matters/">speed matters</a>, which is part of the great <a href="https://scattered-thoughts.net/writing/reflections-on-a-decade-of-coding/">reflections on a decade of coding</a> article series, and second is <a href="https://danluu.com/productivity-velocity/">some reasons to work on productivity and velocity</a> by Dan Luu.  Both articles stated that <a href="https://en.wikipedia.org/wiki/Touch_typing">touch typing</a> improved their productivity.  The productivity boost was not limited to a bare increase in word per minute that one can type, instead the greater leverage comes from an increased accuracy.  Making less typing errors improves the writing flow because every typo requires a context switch in order to fix the mistake.  Jamie Brandon wrote:</p>
+<blockquote>
+<p>If you compare two coders, one who can touch type and one who has to hunt and peck, the difference between them is not just down to typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.</p>
+</blockquote>
+<p>Dan Luu  wrote this about typing speed:</p>
+<blockquote>
+<p>I've actually looked at where my time goes and a lot of it goes to things that are canonical examples of things that you shouldn't waste time improving because people don't spend much time doing them.</p>
+<p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
+</blockquote>
+<p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
+<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower than my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
+<p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
+<p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
+<p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
+<p>Now it's all about practicing and getting back to speed.  For this reason I forced myself to write this article using touch typing which went okay but could have been a bit smoother 🙄  Anyways, if you now decide to learn this skill as well I wish you all the best 💪.  It's not as hard to learn as you might think and it should only take a month of typing to become fast and accurate.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
+    </item>
+    <item>
+      <title>Go Generics - A Quick Overview</title>
+      <link>https://klingt.net/articles/go-generics-a-quick-overview.html</link>
+      <description>In this blog post I will give a quick overview of Go Generics, i.e. what they are, how and when to use them.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="In this blog post I will give a quick overview of Go Generics, i.e. what they are, how and when to use them.">
+  
+  <title>Go Generics - A Quick Overview</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Go Generics - A Quick Overview</h1>
+<p>A large part of this article is based on Ian Lance Taylor's great <a href="https://www.youtube.com/watch?v=nr8EpUO9jhw">Using Generics in Go</a> talk that was presented at <a href="https://opensourcelive.withgoogle.com/events/go-day-2021">Go Day 2021</a>.</p>
+<p>The generics topic polarized the Go community and still does, even though not as much as it did initially.
+In the meantime the acceptance for adding generics to the language has increased a lot and only a a small—but not negligible—part of the Go community is rejecting the idea.
+Rarely in the last five years of Go programming has there been a situation where generics were either required or where they would have dramatically improved the readability or maintainability of my code.
+Of course, there are certain things that are much easier to implement in a reusable fashion with generics.
+For me this has been writing custom data structures, mostly sets and once or twice a tree, and also for utility and library code that worked with numeric types or on string and byte slices.</p>
+<p>Overall, I think they will be a great addition to the language and will enable the community to provide a series of powerful, new libraries.
+If you want to take a deep dive into the topic then take a look at <a href="https://golang.org/s/generics-proposal">type parameters proposal</a> which explains how generics will look like in Go 1.18, planned to be released in February 2022.</p>
+<p>Now that we've talked about generics, what are they actually?</p>
+<blockquote>
+<p>Generics let you write data-structures and functions with types specified later.</p>
+</blockquote>
+<p>Note that this feature is sometimes referred to as <a href="https://en.wikipedia.org/wiki/Parametric_polymorphism">parametric polymorphism</a>.
+Functions and types in Go 1.18+ may receive so called <em>type parameters</em> which help to <em>generalize</em> them over a set of applicable types, hence the name generics.
+This might sound confusing at first but I think the following example will clarify the concept.</p>
+<pre><code class="language-go">func min[T constraints.Ordered](a, b T) T {
+	if a &lt; b {
+		return a
+	} else {
+		return b
+	}
+}
+
+// min(12,3) will return 3
+</code></pre>
+<p>You can try out the above example using <a href="https://pkg.go.dev/golang.org/dl/gotip"><code>gotip</code></a>.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>
+What makes this function different from a regular Go function is the <em>type parameter list</em> <code>[T constraints.Ordered]</code>.
+It looks like a normal function parameter list, but is instead enclosed in square brackets.
+Each type parameter has a constraint that limits the set of actual types it can be instantiated with.
+The <a href="https://github.com/golang/go/blob/17980dff368256a0763cf042376d3fb36d06c109/src/constraints/constraints.go"><code>constraints</code> package</a> that ships with Go 1.18 will provide a set common constraints, but new ones can be defined as well (refer to the proposal if you want to know how to define them).
+There is also the special <code>any</code> constraint that allows all types without restriction.</p>
+<p>Type parameters are not limited to functions, they can also be applied to types.
+Below you will see the implementation of a simple stack with type parameters.
+A stack is a primitive first-in first-out (FIFO) data structure.</p>
+<pre><code class="language-go">type Stack[T any] struct {
+    elements []T
+}
+
+func NewStack[T any]() *Stack[T] {
+	return &amp;Stack[T]{elements: []T{}}
+}
+
+func (s *Stack[T]) Push(val T) {
+    s.elements = append(s.elements, val)
+}
+
+func (s *Stack[T]) Pop() T {
+    val := s.elements[len(s.elements)-1]
+    s.elements = s.elements[:len(s.elements)-1]
+    return val
+}
+</code></pre>
+<p>Following is short example that demonstrates how the stack works and how to call a function with type parameters but no arguments.</p>
+<pre><code class="language-go">s := NewStack[int]()
+s.Push(10)
+s.Push(20)
+fmt.Println(s.Pop(), s) // 20 &amp;{[10]}
+fmt.Println(s.Pop(), s) // 10 &amp;{[]}
+</code></pre>
+<p>Type parameters lists are not limited to a single parameter of course, e.g. <code>func F[A any, B constraints.Integer](a A, b B) {}</code> is perfectly valid.</p>
+<h2>When to use Generics?</h2>
+<p>Ian Lance Taylor's <a href="https://www.youtube.com/watch?v=nr8EpUO9jhw">talk</a> also gave some guidelines on <em>when</em> to use generics.</p>
+<blockquote>
+<p>Start with writing plain functions, type parameters can easily be added later.</p>
+</blockquote>
+<p>Another important question that was addressed in the talk is <em>When are type parameters useful?</em></p>
+<blockquote>
+<ul>
+<li>[For] Functions that work on slices, maps and channels of any element type.</li>
+<li>For general purpose data structures.</li>
+</ul>
+</blockquote>
+<p>The next guideline is particularly interesting because it might prevent a design failure that could lead to an cumbersome to use API:</p>
+<blockquote>
+<p>When operating on type parameters, prefer functions over methods!</p>
+</blockquote>
+<p>Let's say your type constraint requires a method like <code>isEqual(t T) bool</code> to be defined on any applicable type.
+This means that any type <code>T</code> would need to implement this method.
+As you can imagine this will get inconvenient pretty fast, especially for types not defined in your package.
+To illustrate this approach a function will be implemented that only adds a value to a slice if it is not already contained, just like <code>add</code> to a set works.
+Any value <code>T</code> must be equatable, i.e. it must implement a <code>isEqual(T) bool</code> method.</p>
+<pre><code class="language-go">func AppendIfNew[T interface{ isEqual(T) bool}](s []T, val T) []T {
+    for _, x := range s {
+        if x.isEqual(val) {
+            return s // unchanged
+        }
+    }
+    return append(s, val)
+}
+
+type myInt int
+
+func (m myInt) isEqual(x myInt) bool {
+	return m == x
+}
+
+// AppendIfNewBad([]myInt{1,2,3,4},5)
+// will return []myInt{1,2,3,4,5}
+</code></pre>
+<p>Of course we could not just use an <code>[]int</code> with <code>AppendIfNewBad</code> because <code>int</code> does not implement our custom &quot;equatable&quot; interface.
+So we needed to implement a custom <code>int</code> type that satisfies the interface.
+Luckily there's a better way.
+Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> accept a function that checks for equality.</p>
+<pre><code class="language-go">func AppendIfNew[T any](s []T, val T, isEqual func(T,T) bool) []T {
+    for _, x := range s {
+        if isEqual(x, val) {
+            return s // unchanged
+        }
+    }
+    return append(s, val)
+}
+
+// AppendIfNew[int]([]int{1,2,3,4}, 5, func(a, b int) bool { return a == b })
+// will return []int{1,2,3,4,5}
+</code></pre>
+<p>With the words of Ian Lance Taylor:</p>
+<blockquote>
+<p>It's much simpler to turn a method into a function than it is to add a method to a type!</p>
+</blockquote>
+<h2>When not to use generics?</h2>
+<p>Generics are no panacea, so it is important to consider when <em>not to use them</em>.</p>
+<blockquote>
+<p>Do not use generics when you are just calling a method on the type argument.</p>
+</blockquote>
+<pre><code class="language-go">func Copy[R io.Reader, W io.Writer](r R, w W) (int64, error) {
+    return io.Copy(w, r)
+}
+</code></pre>
+<p>The type parameters above are redundant and can be replaced by just accepting an <code>io.Reader</code> and <code>io.Writer</code> as shown below:</p>
+<pre><code class="language-go">func Copy(r io.Reader, w io.Writer) (int64, error) {
+    return io.Copy(w, r)
+}
+</code></pre>
+<p>Two additional rules given in the talk will mark the end of the article.  I hope you learned something!</p>
+<blockquote>
+<ul>
+<li>Do not use generics when the implementation of a common method is different for each type.</li>
+<li>Do not use type parameters prematurely; wait until you're about to write boilerplate code.</li>
+</ul>
+</blockquote>
+<p><a href="http://wiki.c2.com/?PrematureOptimization">Premature optimization is the root of all evil</a>.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>it won't compile in the <a href="https://go2goplay.golang.org/">go2go</a> because it is not compatible with the accepted generics proposal.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
     </item>
     <item>
       <title>GitHub Pages DNS Setup</title>
@@ -167,257 +534,7 @@ klingt.net.             929     IN      A       185.199.110.153
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
-    </item>
-    <item>
-      <title>Learning Touch Typing</title>
-      <link>https://klingt.net/articles/learning-touch-typing.html</link>
-      <description>My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.">
-  
-  <title>Learning Touch Typing</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Learning Touch Typing</h1>
-<p>Lately two articles about developer productivity appeared in my news feed.  The first was <a href="https://scattered-thoughts.net/writing/speed-matters/">speed matters</a>, which is part of the great <a href="https://scattered-thoughts.net/writing/reflections-on-a-decade-of-coding/">reflections on a decade of coding</a> article series, and second is <a href="https://danluu.com/productivity-velocity/">some reasons to work on productivity and velocity</a> by Dan Luu.  Both articles stated that <a href="https://en.wikipedia.org/wiki/Touch_typing">touch typing</a> improved their productivity.  The productivity boost was not limited to a bare increase in word per minute that one can type, instead the greater leverage comes from an increased accuracy.  Making less typing errors improves the writing flow because every typo requires a context switch in order to fix the mistake.  Jamie Brandon wrote:</p>
-<blockquote>
-<p>If you compare two coders, one who can touch type and one who has to hunt and peck, the difference between them is not just down to typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.</p>
-</blockquote>
-<p>Dan Luu  wrote this about typing speed:</p>
-<blockquote>
-<p>I've actually looked at where my time goes and a lot of it goes to things that are canonical examples of things that you shouldn't waste time improving because people don't spend much time doing them.</p>
-<p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
-</blockquote>
-<p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
-<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower than my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
-<p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
-<p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
-<p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
-<p>Now it's all about practicing and getting back to speed.  For this reason I forced myself to write this article using touch typing which went okay but could have been a bit smoother 🙄  Anyways, if you now decide to learn this skill as well I wish you all the best 💪.  It's not as hard to learn as you might think and it should only take a month of typing to become fast and accurate.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
-    </item>
-    <item>
-      <title>Go Generics - A Quick Overview</title>
-      <link>https://klingt.net/articles/go-generics-a-quick-overview.html</link>
-      <description>In this blog post I will give a quick overview of Go Generics, i.e. what they are, how and when to use them.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="In this blog post I will give a quick overview of Go Generics, i.e. what they are, how and when to use them.">
-  
-  <title>Go Generics - A Quick Overview</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.</p>
-</blockquote>
-<p>Dan Luu  wrote this about typing speed:</p>
-<blockquote>
-<p>I've actually looked at where my time goes and a lot of it goes to things that are canonical examples of things that you shouldn't waste time improving because people don't spend much time doing them.</p>
-<p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
-</blockquote>
-<p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
-<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower than my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
-<p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
-<p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
-<p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
-<p>Now it's all about practicing and getting back to speed.  For this reason I forced myself to write this article using touch typing which went okay but could have been a bit smoother 🙄  Anyways, if you now decide to learn this skill as well I wish you all the best 💪.  It's not as hard to learn as you might think and it should only take a month of typing to become fast and accurate.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
-    </item>
-    <item>
-      <title>Go Generics - A Quick Overview</title>
-      <link>https://klingt.net/articles/go-generics-a-quick-overview.html</link>
-      <description>In this blog post I will give a quick overview of Go Generics, i.e. what they are, how and when to use them.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="In this blog post I will give a quick overview of Go Generics, i.e. what they are, how and when to use them.">
-  
-  <title>Go Generics - A Quick Overview</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Go Generics - A Quick Overview</h1>
-<p>A large part of this article is based on Ian Lance Taylor's great <a href="https://www.youtube.com/watch?v=nr8EpUO9jhw">Using Generics in Go</a> talk that was presented at <a href="https://opensourcelive.withgoogle.com/events/go-day-2021">Go Day 2021</a>.</p>
-<p>The generics topic polarized the Go community and still does, even though not as much as it did initially.
-In the meantime the acceptance for adding generics to the language has increased a lot and only a a small—but not negligible—part of the Go community is rejecting the idea.
-Rarely in the last five years of Go programming has there been a situation where generics were either required or where they would have dramatically improved the readability or maintainability of my code.
-Of course, there are certain things that are much easier to implement in a reusable fashion with generics.
-For me this has been writing custom data structures, mostly sets and once or twice a tree, and also for utility and library code that worked with numeric types or on string and byte slices.</p>
-<p>Overall, I think they will be a great addition to the language and will enable the community to provide a series of powerful, new libraries.
-If you want to take a deep dive into the topic then take a look at <a href="https://golang.org/s/generics-proposal">type parameters proposal</a> which explains how generics will look like in Go 1.18, planned to be released in February 2022.</p>
-<p>Now that we've talked about generics, what are they actually?</p>
-<blockquote>
-<p>Generics let you write data-structures and functions with types specified later.</p>
-</blockquote>
-<p>Note that this feature is sometimes referred to as <a href="https://en.wikipedia.org/wiki/Parametric_polymorphism">parametric polymorphism</a>.
-Functions and types in Go 1.18+ may receive so called <em>type parameters</em> which help to <em>generalize</em> them over a set of applicable types, hence the name generics.
-This might sound confusing at first but I think the following example will clarify the concept.</p>
-<pre><code class="language-go">func min[T constraints.Ordered](a, b T) T {
-	if a &lt; b {
-		return a
-	} else {
-		return b
-	}
-}
-
-// min(12,3) will return 3
-</code></pre>
-<p>You can try out the above example using <a href="https://pkg.go.dev/golang.org/dl/gotip"><code>gotip</code></a>.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>
-What makes this function different from a regular Go function is the <em>type parameter list</em> <code>[T constraints.Ordered]</code>.
-It looks like a normal function parameter list, but is instead enclosed in square brackets.
-Each type parameter has a constraint that limits the set of actual types it can be instantiated with.
-The <a href="https://github.com/golang/go/blob/17980dff368256a0763cf042376d3fb36d06c109/src/constraints/constraints.go"><code>constraints</code> package</a> that ships with Go 1.18 will provide a set common constraints, but new ones can be defined as well (refer to the proposal if you want to know how to define them).
-There is also the special <code>any</code> constraint that allows all types without restriction.</p>
-<p>Type parameters are not limited to functions, they can also be applied to types.
-Below you will see the implementation of a simple stack with type parameters.
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
-    </item>
-    <item>
-      <title>(Almost) 30 Best Albums of 2021</title>
-      <link>https://klingt.net/articles/almost-30-best-albums-of-2021.html</link>
-      <description>A list of my favorite albums that were (mostly) released in 2021.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="A list of my favorite albums that were (mostly) released in 2021.">
-  
-  <title>(Almost) 30 Best Albums of 2021</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>(Almost 30) Best Albums of 2021</h1>
-<p>Without further ado I admit being a music junkie.  I love discovering new music in my journey through online record stores or whenever I am in one of the local record shops.  One of the positive side effects of Covid was that people had more time listening to music and started buying records.  Vinyl sales were already on the rise over the past years, but the last two years has given them an extra boost that lead to new record stores popping up in Leipzig and elsewhere.</p>
-<p>Stop buying crap, support your favorite artists instead!</p>
-<h2>Roy Montgomery — 40th Anniversary 2021 LP Series</h2>
-<p><img src="https://f4.bcbits.com/img/a1654242133_16.jpg" alt="Album Art of Roy Montgomery - 40th Anniversary 2021 LP Series"></p>
-<p>Roy Montgomery.  <a href="https://grouper.bandcamp.com/">Grouper</a>'s 2009 <a href="https://www.discogs.com/master/214067-Roy-Montgomery-Grouper-Roy-Montgomery-Grouper">split EP</a> introduced me to the music of the New Zealand based guitarist and it also spawned my love for drone and ambient music.  I cannot exactly say what makes me love his music so much, but somehow the layered guitar tunes together with the ethereal reverb in the background create an atmosphere that makes me comfy, and which reminds of warm and sunny summer days that I spent in the country side (or that I just imagined while daydreaming).  For me it's just the perfect music to relax and drift away with my thoughts.</p>
-<p>When <a href="https://www.grapefruitrecordclub.com/">Grapefruit Record Club</a> announced the 40th anniversary LP series I haven't given it a second thought and pre-ordered the vinyls the same day, planning to make myself a little christmas present.  But, shipping was delayed to January 2022 because of an unprecedented backup at pressing plants (<a href="https://www.vox.com/the-goods/2021/11/22/22797290/adele-vinyl-record-supply-chain-delays">damn you Adele!</a>).</p>
-<p>Roy Montgomery might be best known for his work with Dadamah, an experimental rock/shoegaze group where he sang and played guitar.  Their sole album, <em>This is Not a Dream</em>, contains two tracks that still give me goosebumps whenever I listen to them, <a href="https://www.youtube.com/watch?v=MpwKdaPCcII&amp;t=592s">Too Hot to Dry</a> and <a href="https://www.youtube.com/watch?v=MpwKdaPCcII&amp;t=1714s">High Tension House</a>.  His music is melancholic while being still positive, hard to describe.  This tension might be the reason I'm so fascinated by it.</p>
-<p>In an interview, I read about him, he said that he is a self-taught guitarist. This gives me hope that I can sometimes create similar atmospheres on my guitar.  One of my new year's resolutions is to finally take guitar lessons, no excuses anymore.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2966139599/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://grapefruit1.bandcamp.com/album/roy-montgomery-40th-anniversary-2021-lp-series">Roy Montgomery 40th Anniversary 2021 LP Series by Roy Montgomery</a></iframe>
-<h2>Skee Mask — Pool</h2>
-<p><img src="https://f4.bcbits.com/img/a2320122722_16.jpg" alt="Album Art of Skee Mask - P]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
     </item>
     <item>
       <title>(Almost) 30 Best Albums of 2021</title>
@@ -585,54 +702,57 @@ Below you will see the implementation of a simple stack with type parameters.
 <iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3772356991/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://detund.bandcamp.com/album/pleasant-valley">Pleasant Valley by HunoHuno</a></iframe>
 <h2>MC Solaar - Prose Combat</h2>
 <p><img src="https://img.discogs.com/VrvsVa9uPArdXgNzAg4PVexWlzU=/fit-in/600x600/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-20348713-1632585572-9925.jpeg.jpg" alt="Album Art of MC Solaar - Prose Combat"></p>
-<p>Yet another reissue, this time a french hip hop classic originally put out in 1994 and that I managed to miss in my teenage years, much later, where I thought to have discovered everything there is rap-wise<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>.  <a href="https://en.wikipedia.org/wiki/Boom_bap">Boom bap</a> beats are totally my thing and luckily this style has seen a revival in recent years, even though mostly in the undergroud.  I just can't stand those rattling hi-hat trap beats every mumbling rapper uses nowadays, especially since they all sound the same.  No, this is not <em>old man yelling at couds</em>, I am allowed to hate things!  <a href="https://www.imdb.com/title]]></content:encoded>
+<p>Yet another reissue, this time a french hip hop classic originally put out in 1994 and that I managed to miss in my teenage years, much later, where I thought to have discovered everything there is rap-wise<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>.  <a href="https://en.wikipedia.org/wiki/Boom_bap">Boom bap</a> beats are totally my thing and luckily this style has seen a revival in recent years, even though mostly in the undergroud.  I just can't stand those rattling hi-hat trap beats every mumbling rapper uses nowadays, especially since they all sound the same.  No, this is not <em>old man yelling at couds</em>, I am allowed to hate things!  <a href="https://www.imdb.com/title/tt0113247/">La Haine</a>, a movie about youth life in french suburbs of the 90s, features <em>Comme Dans Un Film</em> (like in a movie) which was an outtake of Prose Combat.  A record that perfectly captures the aestehtics of the time, which makes it sound a bit dated but sometimes this is desired and must not be seen as a disadvantage.</p>
+<p>No need to speak french to listen to this one, a record made for summer evenings.</p>
+<p><a href="https://www.discogs.com/release/20348713-MC-Solaar-Prose-Combat">https://www.discogs.com/release/20348713-MC-Solaar-Prose-Combat</a></p>
+<h2>Submotion Orchestra — Finest Hour</h2>
+<p><img src="https://f4.bcbits.com/img/a2343263499_16.jpg" alt="Album Art of Submotion Orchestra - Finest Hour"></p>
+<p>I am sorry for having another reissue in the list, but that's how it is.  Actually I'm not sorry at all because this album is a bloody gem and your life will be worse if you have never listened to it!  Submotion Orchestra are a seven piece band from England that are influenced by soul, dub(step), electronica and trip-hop.  I have no idea how this record, released in 2009, could fly under my radar until this year.</p>
+<p>A record so versatile that it fits any time and moment, ideally the more mellow ones.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3033307561/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://submotionorchestra.bandcamp.com/album/finest-hour">Finest Hour by Submotion Orchestra</a></iframe>
+<h2>Otto A Totland - Companion</h2>
+<p><img src="https://f4.bcbits.com/img/a3487084709_16.jpg" alt="Album Art of Otto A Totland - Companion"></p>
+<p>Already bored by Nils Frahm?  Then this could be something for you.  With <em>Companion</em> norwegian composer Otto A. Totland, one half of the legendary ambient duo <a href="https://www.discogs.com/artist/170843-Deaf-Center">Deaf Center</a>, put out an album of piano compositions recorded at Nils Frahm's Berlin studio (that brings us right back to the start).  Despite most piano records I heard this has a very positive tone, that makes it special for me.  When you're done listening to this album you can continue with Totland's previous two albums, <em>The Lost</em> and <em>Pinô</em>, both not as cheerful as this one.</p>
+<p>When everything is fine listen to this album.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2805599072/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://ottoatotland.bandcamp.com/album/companion">Companion by Otto A Totland</a></iframe>
+<h2>Bleach Lab — Nothing Feels Real</h2>
+<p><img src="https://f4.bcbits.com/img/a0705886315_16.jpg" alt="Album Art of Bleach Lab - Nothing Feels Real"></p>
+<p>Nothing Feels Real seems to be out of time and, without a doubt, could have been an early 90s shoegaze album.  I was really on the fence with adding this one to the list but eventually decided to put it in anyways.  No further description.</p>
+<p>An album for people who like Slowdive, My Bloody Valentine or Cocteau Twins.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=907174083/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://bleachlab.com/album/nothing-feels-real-ep">Nothing Feels Real EP by Bleach Lab</a></iframe>
+<hr>
+<p>Writing those short reviews was much fun and is something I should do more regularly, even though in smaller batches and not for almost 30 albums at a time.  Also, note that the albums were added in no particular order or relevance.  There were tons of other records I could have added but they did not fit because they either weren't released in 2021 nor reissued.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>I think that's the last video game I played for hours non-stop.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>Better known as Balearic. (Sorry, that was an insider joke.)&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p>When did planet-mu stop releasing good music?  Everything they put out in recent years is embarrassing garbage that is just a bit to edgy to be released on Stones Throw.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4" role="doc-endnote">
+<p>You should follow this label, they have a very solid track record of album releases.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5" role="doc-endnote">
+<p>A foolish thought, there is always some great album left to discover.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
-    </item>
-    <item>
-      <title>My MacBook Air M1 setup</title>
-      <link>https://klingt.net/articles/my-macbook-air-m1-setup.html</link>
-      <description>I recently made myself a present and bought a MacBook Air M1.  This is my first macOS machine and in this article I will let you know which productivity tools I use, what other software and how my basic configuration looks like.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="I recently made myself a present and bought a MacBook Air M1.  This is my first macOS machine and in this article I will let you know which productivity tools I use, what other software and how my basic configuration looks like.">
-  
-  <title>My MacBook Air M1 setup</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Preface</h1>
-<p>It was in the very early nineties when I first used a computer.  It must have been the 286 of my neighbor or the Amiga of my cousin.  A couple of years later, I think when I was in 4th grade, I got my first own computer.  A 486DX2-66 with 8 megs of RAM and a horribly slow 1GB SCSI hard drive, connected through an Adaptec ISA SCSI Controller card.  Not only was the hard drive slow as hell, maybe 1 MB/s at tops, it was also very noisy.  Annoyingly loud to be honest, like if it wrote every bit with a chisel into stone.  This machine ran MS-DOS and so I learned how to remove unnecessary drivers from <code>autoexec.bat</code>, like the mouse driver, in order to free up a couple kilobytes of RAM so that I can play DOOM or whatever.</p>
-<p>Anyways, couple years later I got my first Windows PC, an AMD k6-2 with 333MHz that was equipped with the famous IBM Deskstar hard drive.  This hard disk was even noisier as my old SCSI drive while also being very unreliable, hence they were also known as IBM Deathstar.  Of course you can imagine how funny it was to ship the broken drive to IBM's service center somewhere in Great Britain, waiting for it to be returned so that I have a working PC again.  It took them over a month, or longer, to return the drive which meant that I had no computer in the meantime.  Actually, I didn't even know if they had received the drive or if it got lost in the english channel.  You just had to wait patiently in the good ol' days.  Unimaginable in today's world, people would get mad if they didn't receive an update every couple of hours.  Somehow people still knew how to be patient back then, and so was I, which meant that I had to spent my time with other things.  Internet was still something new and the time you were online could be counted in minutes a day.  This is probably one of the reasons for people being patient.  Having no smartphone meant that the ordinary folk still had an attention spans longer than a fart lasts, which means they could read a book or watch a movie without being distracted.  Hell, they even managed to meet each other to talk and have some beers (I do miss that since COVID).</p>
-<p>Sorry, I was drifting away, thing is, I wanted to tell that I was a Windows user until I began to study computer science in 2010.  I slowly moved over to Linux then and used it ever since, which means I am a <del>penguin</del> Linux user for more than 9 years now<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.  However, I always missed my favorite audio software in Linux, even though it got better in recent years with Wine, <a href="https://github.com/robbert-vdh/yabridge">yabridge</a>, <a href="https://www.bitwig.com/">Bitwig</a>, and <a href="https://pipewire.org/">pipewire</a>.  Still, it isn't a lot of fun because there is so much configuration involved.  But not only that, every so often something breaks and after ten minutes fixing whatever has failed]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
     </item>
     <item>
       <title>How to delete unreachable commits on GitHub</title>
@@ -713,7 +833,7 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
     </item>
     <item>
       <title>My MacBook Air M1 setup</title>
@@ -844,18 +964,58 @@ bindkey &quot;^[[1;3D&quot; backward-word
 
 eval &quot;$(starship init zsh)&quot;
 </code></pre>
-<p>Before I switched to <a href="https://github.com/alacritty/alacritty/issues/4673">alacritty</a> I was using <a href="https://github.com/gpire-unreachable=all
+<p>Before I switched to <a href="https://github.com/alacritty/alacritty/issues/4673">alacritty</a> I was using <a href="https://github.com/gnunn1/tilix">tilix</a> <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> because it supported terminal splitting, tabs and so on.  The reason for using alacritty was that it used the GPU for rendering and was much smoother.  The downside of alacritty is that it has almost no features (which some might see as a feature itself).  However, I now needed a terminal multiplexer and there is one obvious choice, that is <code>tmux</code>.  Learning tmux was pretty easy since I only needed to know a couple of keyboard shortcuts and it allowed me to use terminal multiplexing independently from the terminal emulator.  That's the reason I continue using it, even though <code>iterm</code> supports terminal multiplexing as well.</p>
+<p>With the advent of Rust and Go a couple of modern alternatives for common shell tools came along.  One of those is <a href="https://github.com/BurntSushi/ripgrep">ripgrep</a>, a replacement for <code>grep</code>, that is pretty fast also quite ergonomic since I save two characters each time I've to <em>grep</em> for something.  Every time I used <code>find</code> I wondered if this tool was implemented in complete isolation because it CLI just feels weird, e.g. the single dash flags like <code>-name</code> and that the path to search in is the first argument, even before the flags.  An alternative is <code>fd</code>, which comes with an easy to use CLI and should provide all the features of <code>find</code>.  I didn't miss anything at least.  There is one more tool I want to tell you about and this is <a href="https://github.com/junegunn/fzf">fzf</a>.  A fuzzy search tool that I mainly use to reverse search in my <code>zsh</code> history.</p>
+<p>We are not finished here, so stay with me for two essential tools in my setup, [pandoc] and <a href="https://imagemagick.org/index.php">imagemagick</a>.  Whenever you need to convert from some document format into another, e.g. from <code>.md</code> into <code>.docx</code>, <code>pandoc</code> has you covered.  You can also mix document formats, it was a great relief to write <a href="https://github.com/klingtnet/master-thesis">my masters thesis</a> in Markdown with some inline LaTeX here and there and let pandoc deal with the conversion into the obnoxious LaTeX syntax.  ImageMagick 🧙🏻‍♂️ comes into play when I need to convert between image file formats or I need to resize a picture.  Great tool but let me give you a tip, never expose it (or ghostscript) to the internet.  I heard the people do that, sigh.</p>
+<p>The end is near, not of the world but of this article.  I am stubborn and refuse to deal with git integrations of any editor or IDE, instead I rebase, cherry-pick, commit and whatnot in the shell.  For this I need a proper editor and the obvious choice is <del>Emacs</del> vim, of course.  The older I get the more my configuration files are converging into standard settings.  My <code>.vim/vimrc</code> is only a couple of lines long:</p>
+<pre><code class="language-viml">&quot; :help vimrc
+&quot; :options
+&quot; to unset use :no&lt;option&gt;
+syntax on
+set number		&quot; set line numbers
+set cursorline		&quot; highlight line of cursor
+set smartindent
+set ttyfast		&quot; indicate fast TTY connection, should improve scrolling behavior
+set hlsearch		&quot; highlight last searched word
+set spell		&quot; enable spellcheck
+set ruler		&quot; show cursor position in status line
+set t_Co=256
+filetype plugin on
+filetype indent on
+colorscheme gruvbox
 </code></pre>
-<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/ticket/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
-<blockquote>
-<p>As you mentioned, it does indeed appear to be an an unreferenced commit dangling in our cache. I went ahead and performed the garbage collection and cache clearance operations for the repository klingtnet/klingtnet.github.io. Attempting to access the commit directly now returns a 404.</p>
-</blockquote>
-<p>Luckily the commit contained no secrets, but what I learned from this lesson is that I need to double or triple check the contents of my repository before making it public on GitHub.  A simple deletion of a branch might not be sufficient.</p>
+<p>I hope that was self explanatory.  A pleasant surprise was that <code>vim</code> has its own package manager since version 8.0<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>.  This means that plugin installation is dead easy now, just create a folder like <code>~/.vim/pack/personal/start</code> and clone all the plugins you need below the <code>start</code> directory.  In my case those plugins are:</p>
+<ul>
+<li><a href="https://github.com/dense-analysis/ale">ale</a> for language server protocol support</li>
+<li><a href="https://github.com/kien/ctrlp.vim">ctrlp</a> to (fuzzy) find files</li>
+<li><a href="https://github.com/vim-airline/vim-airline">vim-airline</a> for a nice status bar</li>
+<li><a href="https://github.com/tpope/vim-surround">vim-surround</a> to easily wrap strings in quotes</li>
+<li><a href="https://github.com/morhetz/gruvbox">gruvbox</a> for some eye candy</li>
+</ul>
+<p>The last thing I did was to setup GPG (PGP?).  I haven't used <a href="https://sequoia-pgp.org/">sequoia</a> yet but I do hope that it comes with a sensible interface, in contrast to GPG.  Every time my key, and its subkeys, is about to expire I need to lookup how I can renew it.  Each time I do wonder why I need to <em>expire</em> the key to renew it.  Anyways, I do sign my git commits and once in a while send and receive encrypted email, hence I need to live with GPGs peculiarities.  For <a href="https://www.thunderbird.net/en-US/">Thunderbird</a> I needed to export my private key into a file, otherwise it couldn't import.  Exporting a private key can be done with:</p>
+<pre><code class="language-sh">$ gpg --output private.pgp --armor --export-secret-key &lt;fingerprint&gt;
+</code></pre>
+<p>Make sure to delete the file afterwards.  A bit more complicated was to setup commit signing.  I found a bunch of articles that describe how to achieve that on macOS but they all had some problems so I will share my setup instructions below:</p>
+<pre><code class="language-bash">$ brew install gnupg pinentry-mac
+$ git config --global user.signingkey &lt;fingerprint&gt;
+$ git config --global commit.gpgsign true
+$ grep pinentry-program ~/.gnupg/gpg-agent.conf
+pinentry-program /opt/homebrew/bin/pinentry-mac
+$ gpgconf --kill gpg-agent
+</code></pre>
+<h2>Audio Applications</h2>
+<p>I will tell you more about my audio software setup in part 2 of this article, the article is already long enough.</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Time flies.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>Also the only popular D application I know.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p>You can find the documentation by running <code>:help packages</code> in vim.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -869,79 +1029,7 @@ eval &quot;$(starship init zsh)&quot;
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
-    </item>
-    <item>
-      <title>Go 1.18 with some fuzzing and a focus on generics</title>
-      <link>https://klingt.net/articles/go-1-18-with-some-fuzzing-and-a-focus-on-generics.html</link>
-      <description>Go 1.18 is the biggest release since Go 1.0 came out.  In this article I will summarize most of the updates and additions and I will also give a more in-depth look into generics.  This article will also be the basis of the talk I will give at the #25 Golang Leipzig meetup.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="Go 1.18 is the biggest release since Go 1.0 came out.  In this article I will summarize most of the updates and additions and I will also give a more in-depth look into generics.  This article will also be the basis of the talk I will give at the #25 Golang Leipzig meetup.">
-  
-  <title>Go 1.18 with some fuzzing and a focus on generics</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Go 1.18 with some fuzzing and a focus on generics</h1>
-<p>Go 1.18<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> is the biggest release since the Go version 1.0 came out in 2012.  What made this release so important are two major features that got introduced to Go, those are:</p>
-<ul>
-<li>generics</li>
-<li>and fuzz testing support.</li>
-</ul>
-<p>Before we go into more detail about the last two features, let's look at the general innovations first.</p>
-<p>Regardless of Go 1.18 being a larger than normal release, it will be no exception of the rule, meaning the <a href="https://go.dev/doc/go1compat">compatibility promise</a> still holds and there will be no breaking changes.  This is what makes Go a viable choice for production code.</p>
-<h2><code>debug/buildinfo</code></h2>
-<p>Binaries compiled with the new version will automatically include version control information.  This data can be accessed at runtime through <code> runtime/debug.ReadBuildInfo</code> or by running <code>go version -m path/to/binary</code>.  A common workaround that is often used, and will be obsolete now, is to set version information on compile time using a <code>go build</code> flag like <code> -ldflags &quot;-X main.Version=$VERSION&quot;</code>.</p>
-<pre><code class="language-shell">$ go1.18rc1 version -m hello
-hello: go1.18rc1
-        path    hello:
-        mod     hello   (devel)
-        build   -compiler=gc
-        build   CGO_ENABLED=1
-        build   CGO_CFLAGS=
-        build   CGO_CPPFLAGS=
-        build   CGO_CXXFLAGS=
-        build   CGO_LDFLAGS=
-        build   GOARCH=arm64
-        build   GOOS=darwin
-        build   vcs=git
-        build   vcs.revision=9b40c4e23a9f695c5f2adb7886d7d45f3e395eb7
-        build   vcs.time=2022-02-19T11:59:45Z
-        build   vcs.modified=true
-</code></pre>
-<h2><code>net/netip</code></h2>
-<p><a href="https://tailscale.com/blog/netaddr-new-ip-type-for-go/">Tailscales' custom IP address struct</a> landed in the standard library.  In contrast to <a href="https://pkg.go.dev/net#IPAddr"><code>net.IPAddr</code></a> this type is immutable, takes less memory and is comparable making it usable as a map key.  Brad Fitzpatrick did a talk about <a href="https://archive.fosdem.org/2021/schedule/event/gotailscale/">Go at Tailscale</a> in FOSDEM 2021 where he goes into the details why they needed a new IP type.</p>
-<h2>Miscellaneous changes</h2>
-<p>With <code>strings.Cut()</code> you can cut a string around the first instance of a separator, e.g. <code>strings.Cut(&quot;a,b,c&quot;, &quot;,&quot;)</code> will result in <code>&quot;a&quot;, &quot;b,c&quot;, true</code>, where the last argument indicates if the separator was found or not.  The <code>strings.Title()</code> function for making a string title-case is now deprecated ]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
     </item>
     <item>
       <title>Go 1.18 with some fuzzing and a focus on generics</title>
@@ -1075,96 +1163,59 @@ func FuzzHex(f *testing.F) {
 }
 </code></pre>
 <p>What's different from a normal Go function is that there is a <em>type parameter</em> list in square brackets <code>[T int | uint | int64]</code> before the function arguments.  Here we can define the set of types the function is allowed to be instantiated with.  Thanks to Go's type inference we don't have to explicitly write out the type when calling the function, instead we can just do <code>min(1, -5)</code> and the compiler will be smart enough to infer the type for us.</p>
-<p>One last minute change to the release was that the <a href="https://github.com/golang/exp/tree/6cf2b201936e0673ace5b31d2dffa00dafb3ee58/constraints">constraints package</a> was moved out of the standard library.  This package predefined a set of common ]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
-    </item>
-    <item>
-      <title>The simplest sorting algorithm</title>
-      <link>https://klingt.net/articles/the-simplest-sorting-algorithm.html</link>
-      <description></description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  
-  <title>The simplest sorting algorithm</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>The simplest sorting algorithm</h1>
-<p>Not all of us have enjoyed a formal computer science education so let's define what a sorting algorithm actually does:</p>
-<blockquote>
-<p>A sorting algorithm takes an array and puts it elements in a certain order. What order means depends on the values stored in the array, e.g. in numerical order for numbers or lexicographic order for strings. <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-</blockquote>
-<p>Let's see an example, for an array <code>a = [4,2,3,1]</code>, a sorting algorithm applied to <code>a</code> will result in <code>[1,2,3,4]</code> when numerically sorted in ascending order.</p>
-<p>Ok, now that we've defined what sorting means let's head over to why I am writing this article.  I discovered a paper called <em>Is this the simplest (and most surprising) sorting algorithm ever?</em> on <a href="https://lobste.rs/s/gh1ngc/is_this_simplest_most_surprising_sorting">lobste.rs</a> today.  Sorting algorithms are often used in basic computer science lectures to teach algorithms. The first algorithm students encounter is very often <a href="https://en.wikipedia.org/wiki/Bubble_sort">Bubble sort</a>.</p>
-<p>Bubble sort is by no means a complicated algorithm as you can see in the prototypical Go implementation below:</p>
-<pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
-
-for {
-    swapped := false
-    for i := 1; i &lt; len(xs); i++ {
-        if xs[i-1] &gt; xs[i] {
-            xs[i-1], xs[i] = xs[i], xs[i-1]
-            swapped = true
-        }
-    }
-    if !swapped {
-        break
-    }
+<p>One last minute change to the release was that the <a href="https://github.com/golang/exp/tree/6cf2b201936e0673ace5b31d2dffa00dafb3ee58/constraints">constraints package</a> was moved out of the standard library.  This package predefined a set of common interfaces, e.g. one for signed or unsigned integer numbers.  This brings us to the next point, that is we don't need to define the set of allowed types inline, instead we can define them in an interface like:</p>
+<pre><code class="language-go">type Signed interface {
+	~int | ~int8 | ~int16 | ~int32 | ~int64
 }
-fmt.Println(xs) // prints [-1 2 3 4 6 10]
 </code></pre>
-<p>You can play with the implementation in the <a href="https://play.golang.org/p/wlTPJe7B5Ij">Go playground</a>.  It just iterates over the array until there is no element to swap anymore.  The only complicated thing is to keep around the state if two elements got swapped.</p>
-<p>To my surprise the <a href="https://arxiv.org/pdf/2110.01111.pdf">paper</a> mentioned above is describing an even more straightforward way to sort an array:</p>
-<pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
-for i := 0; i &lt; len(xs); i++ {
-  for j := 0; j &lt; len(xs); j++ {
-    if xs[i] &lt; xs[j] {
-      xs[i], xs[j] = xs[j], xs[i]
-    }
-  }
+<p>and then define our <code>min</code> function as</p>
+<pre><code class="language-go">func min[T Signed](x, y T) T {
+	if x &lt;= y {
+		return x
+	}
+	return y
 }
-fmt.Println(xs) // prints [-1 2 3 4 6 10]
 </code></pre>
-<p>It does not get much simpler than this <del>and I assume that this might be the first algorithm future computer science students will encounter in their basic lessons.</del>  For me this algorithm is easier to remember than the classic bubble sort but the paper states that it is not a good candidate for an algorithm introduction.</p>
-<blockquote>
-<p>You certainly do not want to use it as a first example to introduce
-students to sorting algorithms. It is not stable, does not work well for
-external sorting, cannot sort inputs arriving online, and does not benefit
-from partially sorted inputs.</p>
-</blockquote>
-<p>You can try this one out in the <a href="https://play.golang.org/p/jml6LqHApAN">Go playground</a> as well.</p>
+<p>A new operator is shown in the example above, the tilde operator <code>~T</code> specifies the underlying type of <code>T</code>.  Sounds confusing but is actually pretty simple, in Go one often defines type alias, e.g. <code>type MyEnum string</code> and if a function only accepts <code>[T string]</code> then it could not be instantiated with an argument of type <code>MyEnum</code> even though the argument is a string.  But <code>[T ~string]</code> on the other hand will happily accept any type whose underlying type is string, making the generic function much more useful.</p>
+<p>For some functions there is no need to restrict the set of type at all and in such cases you can use <code>[T interface{}]</code>, or even better, use <code>any</code> instead of <code>interface{}</code>.  An example of such a function with great &quot;general&quot; use is the following one that returns a pointer to any type<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>:</p>
+<pre><code class="language-go">func PointerOf[T any](t T) *T {
+	return &amp;t
+}
+</code></pre>
+<p>Parameter lists are by no means limited to a single type.  I hope the following function name leaves no doubt that this is a contrived example without practical use:</p>
+<pre><code class="language-go">func weirdAddYankovic[T1 int | uint, T2 float32 | float64](x T1, y T2) string {
+	sum := float64(x) + float64(y)
+	return strconv.FormatFloat(sum, 'f', -1, 32)
+}
+</code></pre>
+<p>Besides functions, type parameters can also be applied to structs and even interface's can take them:</p>
+<pre><code class="language-go">type Container[T any] struct {
+    elements []T
+}
+
+// c := Container[int]{elements: []int{2,3,4}}
+</code></pre>
+<p>For some reason Go was not able to infer <code>T</code> in the example above and so it must be instantiated explicitly.</p>
+<p>Be aware that using generics comes with downsides, one of them is about 15% slower compile times at the moment, increased binary size since the compiler will generate a variant of the generic function or struct for any type it was instantiated with.  Most importantly, in my opinion, it reduces the readability of your code, so think twice before adding type parameters.</p>
+<p>Do not use type parameters when a regular interface would suffice:</p>
+<pre><code class="language-go">// Wrong: func Write[T io.Writer](w T) error {}
+func Write(w io.Writer) error {}
+</code></pre>
+<p>Also, do <strong>not</strong> use generics if the implementation of a common methods is different for each type.</p>
+<p>Generics are no panacea and there are limitations with the current implementation of this feature.  Most notably type parameters cannot be used in methods.  This limitation might be lifted with Go 1.19 and there is also a workaround the <a href="https://rakyll.org/generics-facilititators/">facilitator pattern</a>.</p>
+<p>No type parameters will be used in the standard library with Go 1.18.  I think it's a sensible decision of the Go team to first gather some experience with how the feature is used and then in a later release introduce generics to the standard library.  However, there are already some generic utility functions for <a href="https://pkg.go.dev/golang.org/x/exp/slices">slices</a> and <a href="https://pkg.go.dev/golang.org/x/exp/maps">maps</a>.  What I anticipate is a library that provides Rust iterator like functionality for slices, maps and sets.</p>
+<p>I hope I could give you some viable insights into the features and changes that Go 1.18 will bring.  Now <em>go</em> and write some, potentially generic, code!</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>Take this definition with a grain of salt, I wrote this off the top of my head.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>For this article <a href="https://go.dev/dl/#go1.18rc10">Go 1.18 release candidate 1</a> was used.  This release can be installed by running <code>go install golang.org/dl/go1.18rc1@latest &amp;&amp; go1.18rc1 download</code>.  Any other details were mostly found in the <a href="https://tip.golang.org/doc/go1.18#library">preliminary release notes</a>.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>Also for PowerPC, but I don't know anyone targeting those CPUs.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p>Someone took the opportunity to implement a <a href="https://github.com/carlmjohnson/new"><code>new</code> package</a>.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -1178,7 +1229,7 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
     </item>
     <item>
       <title>Reading the last bytes of a stream in Go</title>
@@ -1283,7 +1334,7 @@ Please let me know if you've an even more efficient solution or there is any oth
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
     </item>
     <item>
       <title>How I Detected and Removed Malware from a Wordpress Installation</title>
@@ -1713,7 +1764,7 @@ if (empty($_COOKIE['ssl_message'])) {
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
     </item>
     <item>
       <title>Git Worktrees</title>
@@ -1765,13 +1816,13 @@ For large repositories this could mean duplicating hundreds or thousands of mega
 But guess what, git got you covered!  There's a lesser known command that handles exactly this use case, it's <a href="https://git-scm.com/docs/git-worktree">git worktree</a>.</p>
 <p>There's a variety of ways how to use git worktrees.</p>
 <h2>Existing repository</h2>
-<p>Let's assume that you're in some repository that you cloned a while a go and you now want to switch to a different branch without committing your local changes.
-We can do that by creating a new worktree like this:</p>
+<p>Let's assume that you're in some repository that you cloned a while a go and now you want to switch to a different branch without having to commit your local changes.
+We can do that by creating a new <em>worktree</em> like this:</p>
 <pre><code class="language-sh">$ git worktree add ../repository.feat-x origin/feat-x
 </code></pre>
 <p>This will create a copy, which shares the same <code>.git</code> data, in <code>../repository.feat-x</code> at branch <code>origin/feat-x</code>.
-You can choose whichever branch you like, but it's sensible to not add the worktree inside the existing repository because you would need to ignore the new directory then.
-Checking out a new branch when creating a worktree is also very easy, just pass <code>-b my-branch-name</code>, that's it.</p>
+It's sensible to not add the worktree inside the existing repository because then you would need to ignore the worktree directory.</p>
+<p>Checking out a new branch when creating a worktree is also very easy, just pass <code>-b my-branch-name</code>, that's it.</p>
 <p>If you're done with your work you can remove your worktree like</p>
 <pre><code class="language-sh">$ rm -rf ../repository.feat-x
 </code></pre>
@@ -1785,20 +1836,21 @@ But <code>git worktree remove</code> should be preferred, otherwise some metadat
 <p>On <a href="https://lobste.rs">lobste.rs</a> I found a very <a href="https://lobste.rs/s/r5c6o8/git_worktrees#c_opoqjn">appealing idea</a> that I will try the next time I need to clone a repository.
 They suggested to do a bare clone, that means only fetch the <code>.git</code> folder and then add worktrees for the branches you need.
 I think that's best shown at an example.
-Let's say we want to patch something in Go compiler on <code>master</code>, <code>1.19</code> and <code>1.18</code>:</p>
+Let's say we want to patch something in the Go compiler on <code>master</code>, <code>1.19</code> and <code>1.18</code>:</p>
 <pre><code class="language-sh">$ git clone --bare git@github.com:golang/go go/.git
 cd go
 git worktree add master
 git worktree add release-branch.go1.18
 git worktree add release-branch.go1.19
 </code></pre>
-<p>This will create the following directory structure:</p>
+<p>This will create the following directory structure</p>
 <pre><code>go
 ├── .git
 ├── master
 ├── release-branch.go1.18
 └── release-branch.go1.19
 </code></pre>
+<p>where each directory contains the repository at a different branch.</p>
 <p>For work projects I could imagine a directory structure that looks similar to this:</p>
 <pre><code class="language-sh">go
 ├── .git
@@ -1819,7 +1871,7 @@ In the example above I would use <code>work/</code> for my local feature develop
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Fri, 07 Oct 2022 17:18:19 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 17:23:41 +0000</pubDate>
     </item>
   </channel>
 </rss>
