@@ -5,7 +5,9 @@
   "description": "In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.",
   "created_at": "2022-10-05"
 }
-``` 
+```
+
+# Reading the last bytes of a stream in Go
 
 It's about half a year since my last blog post, so it's about time to write another one.
 
