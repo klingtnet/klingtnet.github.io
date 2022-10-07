@@ -4,7 +4,7 @@
     <link>https://klingt.net/articles</link>
     <description></description>
     <managingEditor> (Andreas Linz)</managingEditor>
-    <pubDate>Thu, 06 Oct 2022 12:46:55 +0000</pubDate>
+    <pubDate>Fri, 07 Oct 2022 15:56:50 +0000</pubDate>
     <item>
       <title>AMD Ryzen random reboots under Linux when in idle</title>
       <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
@@ -87,12 +87,12 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 06 Oct 2022 12:46:55 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 15:56:50 +0000</pubDate>
     </item>
     <item>
-      <title>GitHub Pages DNS Setup</title>
-      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
-      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
+      <title>The simplest sorting algorithm</title>
+      <link>https://klingt.net/articles/the-simplest-sorting-algorithm.html</link>
+      <description></description>
       <content:encoded><![CDATA[<!doctype html>
 <html lang="en">
 
@@ -100,9 +100,8 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
   
-  <title>GitHub Pages DNS Setup</title>
+  <title>The simplest sorting algorithm</title>
 
   <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
   <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
@@ -127,33 +126,55 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
     <div class="main">
       <main>
         
-<h1>GitHub Pages DNS Setup</h1>
-<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
-<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
-<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
-<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
-<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
-www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
+<h1>The simplest sorting algorithm</h1>
+<p>Not all of us have enjoyed a formal computer science education so let's define what a sorting algorithm actually does:</p>
+<blockquote>
+<p>A sorting algorithm takes an array and puts it elements in a certain order. What order means depends on the values stored in the array, e.g. in numerical order for numbers or lexicographic order for strings. <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+</blockquote>
+<p>Let's see an example, for an array <code>a = [4,2,3,1]</code>, a sorting algorithm applied to <code>a</code> will result in <code>[1,2,3,4]</code> when numerically sorted in ascending order.</p>
+<p>Ok, now that we've defined what sorting means let's head over to why I am writing this article.  I discovered a paper called <em>Is this the simplest (and most surprising) sorting algorithm ever?</em> on <a href="https://lobste.rs/s/gh1ngc/is_this_simplest_most_surprising_sorting">lobste.rs</a> today.  Sorting algorithms are often used in basic computer science lectures to teach algorithms. The first algorithm students encounter is very often <a href="https://en.wikipedia.org/wiki/Bubble_sort">Bubble sort</a>.</p>
+<p>Bubble sort is by no means a complicated algorithm as you can see in the prototypical Go implementation below:</p>
+<pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
+
+for {
+    swapped := false
+    for i := 1; i &lt; len(xs); i++ {
+        if xs[i-1] &gt; xs[i] {
+            xs[i-1], xs[i] = xs[i], xs[i-1]
+            swapped = true
+        }
+    }
+    if !swapped {
+        break
+    }
+}
+fmt.Println(xs) // prints [-1 2 3 4 6 10]
 </code></pre>
-<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
-<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
-<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
-klingt.net.             929     IN      A       185.199.109.153
-klingt.net.             929     IN      A       185.199.111.153
-klingt.net.             929     IN      A       185.199.108.153
-klingt.net.             929     IN      A       185.199.110.153
+<p>You can play with the implementation in the <a href="https://play.golang.org/p/wlTPJe7B5Ij">Go playground</a>.  It just iterates over the array until there is no element to swap anymore.  The only complicated thing is to keep around the state if two elements got swapped.</p>
+<p>To my surprise the <a href="https://arxiv.org/pdf/2110.01111.pdf">paper</a> mentioned above is describing an even more straightforward way to sort an array:</p>
+<pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
+for i := 0; i &lt; len(xs); i++ {
+  for j := 0; j &lt; len(xs); j++ {
+    if xs[i] &lt; xs[j] {
+      xs[i], xs[j] = xs[j], xs[i]
+    }
+  }
+}
+fmt.Println(xs) // prints [-1 2 3 4 6 10]
 </code></pre>
-<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
-<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
-<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
-<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
-<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
+<p>It does not get much simpler than this <del>and I assume that this might be the first algorithm future computer science students will encounter in their basic lessons.</del>  For me this algorithm is easier to remember than the classic bubble sort but the paper states that it is not a good candidate for an algorithm introduction.</p>
+<blockquote>
+<p>You certainly do not want to use it as a first example to introduce
+students to sorting algorithms. It is not stable, does not work well for
+external sorting, cannot sort inputs arriving online, and does not benefit
+from partially sorted inputs.</p>
+</blockquote>
+<p>You can try this one out in the <a href="https://play.golang.org/p/jml6LqHApAN">Go playground</a> as well.</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Take this definition with a grain of salt, I wrote this off the top of my head.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -167,7 +188,7 @@ klingt.net.             929     IN      A       185.199.110.153
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 06 Oct 2022 12:46:55 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 15:56:50 +0000</pubDate>
     </item>
     <item>
       <title>Learning Touch Typing</title>
@@ -233,7 +254,7 @@ klingt.net.             929     IN      A       185.199.110.153
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 06 Oct 2022 12:46:55 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 15:56:50 +0000</pubDate>
     </item>
     <item>
       <title>Go Generics - A Quick Overview</title>
@@ -433,7 +454,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 06 Oct 2022 12:46:55 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 15:56:50 +0000</pubDate>
     </item>
     <item>
       <title>(Almost) 30 Best Albums of 2021</title>
@@ -651,12 +672,12 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 06 Oct 2022 12:46:55 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 15:56:50 +0000</pubDate>
     </item>
     <item>
-      <title>The simplest sorting algorithm</title>
-      <link>https://klingt.net/articles/the-simplest-sorting-algorithm.html</link>
-      <description></description>
+      <title>GitHub Pages DNS Setup</title>
+      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
+      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
       <content:encoded><![CDATA[<!doctype html>
 <html lang="en">
 
@@ -664,8 +685,9 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
+  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
   
-  <title>The simplest sorting algorithm</title>
+  <title>GitHub Pages DNS Setup</title>
 
   <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
   <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
@@ -690,55 +712,33 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
     <div class="main">
       <main>
         
-<h1>The simplest sorting algorithm</h1>
-<p>Not all of us have enjoyed a formal computer science education so let's define what a sorting algorithm actually does:</p>
-<blockquote>
-<p>A sorting algorithm takes an array and puts it elements in a certain order. What order means depends on the values stored in the array, e.g. in numerical order for numbers or lexicographic order for strings. <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-</blockquote>
-<p>Let's see an example, for an array <code>a = [4,2,3,1]</code>, a sorting algorithm applied to <code>a</code> will result in <code>[1,2,3,4]</code> when numerically sorted in ascending order.</p>
-<p>Ok, now that we've defined what sorting means let's head over to why I am writing this article.  I discovered a paper called <em>Is this the simplest (and most surprising) sorting algorithm ever?</em> on <a href="https://lobste.rs/s/gh1ngc/is_this_simplest_most_surprising_sorting">lobste.rs</a> today.  Sorting algorithms are often used in basic computer science lectures to teach algorithms. The first algorithm students encounter is very often <a href="https://en.wikipedia.org/wiki/Bubble_sort">Bubble sort</a>.</p>
-<p>Bubble sort is by no means a complicated algorithm as you can see in the prototypical Go implementation below:</p>
-<pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
-
-for {
-    swapped := false
-    for i := 1; i &lt; len(xs); i++ {
-        if xs[i-1] &gt; xs[i] {
-            xs[i-1], xs[i] = xs[i], xs[i-1]
-            swapped = true
-        }
-    }
-    if !swapped {
-        break
-    }
-}
-fmt.Println(xs) // prints [-1 2 3 4 6 10]
+<h1>GitHub Pages DNS Setup</h1>
+<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
+<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
+<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
+<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
+<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
+www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
 </code></pre>
-<p>You can play with the implementation in the <a href="https://play.golang.org/p/wlTPJe7B5Ij">Go playground</a>.  It just iterates over the array until there is no element to swap anymore.  The only complicated thing is to keep around the state if two elements got swapped.</p>
-<p>To my surprise the <a href="https://arxiv.org/pdf/2110.01111.pdf">paper</a> mentioned above is describing an even more straightforward way to sort an array:</p>
-<pre><code class="language-go">xs := []int{4, 2, 6, 10, 3, -1}
-for i := 0; i &lt; len(xs); i++ {
-  for j := 0; j &lt; len(xs); j++ {
-    if xs[i] &lt; xs[j] {
-      xs[i], xs[j] = xs[j], xs[i]
-    }
-  }
-}
-fmt.Println(xs) // prints [-1 2 3 4 6 10]
+<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
+<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
+<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
+klingt.net.             929     IN      A       185.199.109.153
+klingt.net.             929     IN      A       185.199.111.153
+klingt.net.             929     IN      A       185.199.108.153
+klingt.net.             929     IN      A       185.199.110.153
 </code></pre>
-<p>It does not get much simpler than this <del>and I assume that this might be the first algorithm future computer science students will encounter in their basic lessons.</del>  For me this algorithm is easier to remember than the classic bubble sort but the paper states that it is not a good candidate for an algorithm introduction.</p>
-<blockquote>
-<p>You certainly do not want to use it as a first example to introduce
-students to sorting algorithms. It is not stable, does not work well for
-external sorting, cannot sort inputs arriving online, and does not benefit
-from partially sorted inputs.</p>
-</blockquote>
-<p>You can try this one out in the <a href="https://play.golang.org/p/jml6LqHApAN">Go playground</a> as well.</p>
+<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
+<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
+<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
+<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
+<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
 <section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>Take this definition with a grain of salt, I wrote this off the top of my head.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -752,7 +752,7 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 06 Oct 2022 12:46:55 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 15:56:50 +0000</pubDate>
     </item>
     <item>
       <title>How to delete unreachable commits on GitHub</title>
@@ -833,7 +833,7 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 06 Oct 2022 12:46:55 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 15:56:50 +0000</pubDate>
     </item>
     <item>
       <title>Go 1.18 with some fuzzing and a focus on generics</title>
@@ -1033,7 +1033,7 @@ func Write(w io.Writer) error {}
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 06 Oct 2022 12:46:55 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 15:56:50 +0000</pubDate>
     </item>
     <item>
       <title>My MacBook Air M1 setup</title>
@@ -1229,7 +1229,7 @@ $ gpgconf --kill gpg-agent
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 06 Oct 2022 12:46:55 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 15:56:50 +0000</pubDate>
     </item>
     <item>
       <title>How I Detected and Removed Malware from a Wordpress Installation</title>
@@ -1659,7 +1659,7 @@ if (empty($_COOKIE['ssl_message'])) {
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 06 Oct 2022 12:46:55 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 15:56:50 +0000</pubDate>
     </item>
     <item>
       <title>Reading the last bytes of a stream in Go</title>
@@ -1699,6 +1699,7 @@ if (empty($_COOKIE['ssl_message'])) {
     <div class="main">
       <main>
         
+<h1>Reading the last bytes of a stream in Go</h1>
 <p>It's about half a year since my last blog post, so it's about time to write another one.</p>
 <p>Yesterday I was working on a private project that required to read a block of bytes from the end of an <code>io.Reader</code>.
 On a first glance that sounds like a trivial problem, but doing this <em>efficiently</em> turned out to be more complicated than initially thought.</p>
@@ -1763,7 +1764,7 @@ Please let me know if you've an even more efficient solution or there is any oth
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 06 Oct 2022 12:46:55 +0000</pubDate>
+      <pubDate>Fri, 07 Oct 2022 15:56:50 +0000</pubDate>
     </item>
   </channel>
 </rss>
