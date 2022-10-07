@@ -24,15 +24,16 @@ There's a variety of ways how to use git worktrees.
 
 ## Existing repository
 
-Let's assume that you're in some repository that you cloned a while a go and you now want to switch to a different branch without committing your local changes.
-We can do that by creating a new worktree like this:
+Let's assume that you're in some repository that you cloned a while a go and now you want to switch to a different branch without having to commit your local changes.
+We can do that by creating a new _worktree_ like this:
 
 ```sh
 $ git worktree add ../repository.feat-x origin/feat-x
 ```
 
 This will create a copy, which shares the same `.git` data, in `../repository.feat-x` at branch `origin/feat-x`.
-You can choose whichever branch you like, but it's sensible to not add the worktree inside the existing repository because you would need to ignore the new directory then.
+It's sensible to not add the worktree inside the existing repository because then you would need to ignore the worktree directory.
+
 Checking out a new branch when creating a worktree is also very easy, just pass `-b my-branch-name`, that's it.
 
 If you're done with your work you can remove your worktree like 
@@ -57,7 +58,7 @@ All worktrees of a repository can be listed with `git worktree list`.
 On [lobste.rs](https://lobste.rs) I found a very [appealing idea](https://lobste.rs/s/r5c6o8/git_worktrees#c_opoqjn) that I will try the next time I need to clone a repository.
 They suggested to do a bare clone, that means only fetch the `.git` folder and then add worktrees for the branches you need.
 I think that's best shown at an example.
-Let's say we want to patch something in Go compiler on `master`, `1.19` and `1.18`:
+Let's say we want to patch something in the Go compiler on `master`, `1.19` and `1.18`:
 
 ```sh
 $ git clone --bare git@github.com:golang/go go/.git
@@ -67,7 +68,7 @@ git worktree add release-branch.go1.18
 git worktree add release-branch.go1.19
 ```
 
-This will create the following directory structure:
+This will create the following directory structure
 
 ```
 go
@@ -76,6 +77,9 @@ go
 ├── release-branch.go1.18
 └── release-branch.go1.19
 ```
+
+where each directory contains the repository at a different branch.
+
 
 For work projects I could imagine a directory structure that looks similar to this:
 
