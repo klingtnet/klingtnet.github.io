@@ -2,8 +2,8 @@
 <ul class="nobullets">
     {{ range $_, $page := .Pages }}
     <li class="sm-margin-bottom">
-        <span class="mono">{{ $page.FM.CreatedAt.String }}</span>
         <a href="{{ pageLink $page }}">{{ $page.FM.Title }}</a>
+        <span class="mono right">{{ $page.FM.CreatedAt.String }}</span>
     </li>
     {{ end }}
 </ul>
