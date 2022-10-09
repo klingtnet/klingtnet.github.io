@@ -179,6 +179,10 @@ details.mobile-menu[open]>summary {
     margin-top: 1rem;
 }
 
+.right {
+    float: right;
+}
+
 .bold {
     font-weight: bold;
 }
