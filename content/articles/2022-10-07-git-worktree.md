@@ -3,7 +3,7 @@
   "author": "Andreas Linz",
   "title": "Git Worktrees",
   "description": "Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they're useful.",
-  "created_at": "2022-10-18"
+  "created_at": "2022-10-07"
 }
 ```
 
