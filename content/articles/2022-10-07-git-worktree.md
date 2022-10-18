@@ -1,7 +1,7 @@
 ```json
 {
   "author": "Andreas Linz",
-  "title": "Git Worktrees",
+  "title": "Git Worktrees (Update)",
   "description": "Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they're useful.",
   "created_at": "2022-10-07"
 }
@@ -55,40 +55,44 @@ All worktrees of a repository can be listed with `git worktree list`.
 
 ## New repository layout
 
-On [lobste.rs](https://lobste.rs) I found a very [appealing idea](https://lobste.rs/s/r5c6o8/git_worktrees#c_opoqjn) that I will try the next time I need to clone a repository.
-They suggested to do a bare clone, that means only fetch the `.git` folder and then add worktrees for the branches you need.
-I think that's best shown at an example.
-Let's say we want to patch something in the Go compiler on `master`, `1.19` and `1.18`:
+**Update**: In the [previous version of this article](https://github.com/klingtnet/klingtnet.github.io/blob/c800968678ffda04ec8a0cab04f28b7774dcefef/content/articles/2022-10-07-git-worktree.md) I used a [bare repository](https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---bare) but this will lead to problems since this type of repository is not intended to be updated or track remote changes.  I did found another simple solution that I will explain below.
+
+Let's say we want to patch something in the Go compiler on `master`, `1.19` and `1.18` branches.
+We can setup the project like this:
 
 ```sh
-$ git clone --bare git@github.com:golang/go go/.git
-cd go
-git worktree add master
-git worktree add release-branch.go1.18
-git worktree add release-branch.go1.19
+$ mkdir -p go/worktrees
+$ cd go/worktrees
+$ git clone git@github.com:golang/go master
+$ cd master
+# add the first worktree
+$ git worktree add -B release-branch.go1.19 ../go1.19
+# and the second worktree
+$ git worktree add -B release-branch.go1.18 ../go1.18
 ```
 
-This will create the following directory structure
+What we end up with is a project structure like this
 
-```
+```sh
+$ tree -L 2 go
 go
-├── .git
-├── master
-├── release-branch.go1.18
-└── release-branch.go1.19
+└── worktrees
+    ├── go1.18
+    ├── go1.19
+    └── master
 ```
 
-where each directory contains the repository at a different branch.
+where each directory below `/worktrees` contains the repository at a different branch.
 
 
 For work projects I could imagine a directory structure that looks similar to this:
 
 ```sh
 go
-├── .git
-├── work
-├── experiment
-└── review
+└── worktrees
+    ├── master
+    ├── feature
+    └── review
 ```
 
 Note that each worktree just acts like a copy of the repository, so I can switch to whatever branch I like, i.e. the worktree is not pinned to the branch it was created with.
