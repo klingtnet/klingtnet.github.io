@@ -21,7 +21,7 @@ Roy Montgomery.  [Grouper]'s 2009 [split EP](https://www.discogs.com/master/2140
 
 When [Grapefruit Record Club] announced the 40th anniversary LP series I haven't given it a second thought and pre-ordered the vinyls the same day, planning to make myself a little christmas present.  But, shipping was delayed to January 2022 because of an unprecedented backup at pressing plants ([damn you Adele!](https://www.vox.com/the-goods/2021/11/22/22797290/adele-vinyl-record-supply-chain-delays)).
 
-Roy Montgomery might be best known for his work with Dadamah, an experimental rock/shoegaze group where he sang and played guitar.  Their sole album, _This is Not a Dream_, contains two tracks that still give me goosebumps whenever I listen to them, [Too Hot to Dry](https://www.youtube.com/watch?v=MpwKdaPCcII&t=592s) and [High Tension House](https://www.youtube.com/watch?v=MpwKdaPCcII&t=1714s).  His music is melancholic while being still positive, hard to describe.  This tension might be the reason I'm so fascinated by it.
+Roy Montgomery might be best known for his work with Dadamah, an experimental rock/shoegaze group where he sang and played guitar.  Their sole album, _This is Not a Dream_, contains two tracks that still give me goosebumps whenever I listen to them, [Too Hot to Dry](https://badabingrecords.bandcamp.com/track/too-hot-to-dry-2) and [High Tension House](https://badabingrecords.bandcamp.com/track/high-tension-house-2).  His music is melancholic while being still positive, hard to describe.  This tension might be the reason I'm so fascinated by it.
 
 In an interview, I read about him, he said that he is a self-taught guitarist. This gives me hope that I can sometimes create similar atmospheres on my guitar.  One of my new year's resolutions is to finally take guitar lessons, no excuses anymore.
 
@@ -218,7 +218,7 @@ Tarika Blue's self titled album is not a 2021 release, instead its a reissue of 
 
 Too good to be just a sample source for hip hop beats, give it a spin and hear for yourself.
 
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=1278846107/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://eatingstanding.bandcamp.com/album/tarika-blue">Tarika Blue by Tarika Blue</a></iframe>
+Update: The album was removed from Bandcamp for some reason, so I'll link to its [discogs page](https://www.discogs.com/release/15700139-Tarika-Blue-Tarika-Blue) instead.
 
 ## Swami Lateplate — Doom Jazz
 
@@ -292,7 +292,7 @@ Nothing Feels Real seems to be out of time and, without a doubt, could have been
 
 An album for people who like Slowdive, My Bloody Valentine or Cocteau Twins.
 
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=907174083/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://bleachlab.com/album/nothing-feels-real-ep">Nothing Feels Real EP by Bleach Lab</a></iframe>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=907174083/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://bleachlab.bandcamp.com/album/nothing-feels-real-ep">Nothing Feels Real EP by Bleach Lab</a></iframe>
 
 ---
 
