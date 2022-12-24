@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+$(command -v lychee &>/dev/null) || {
+    echo "lychee not found"
+    echo "Installation: https://github.com/lycheeverse/lychee#installation"
+    exit 1
+}
+
+# Cloudflare returns a 520 for some links if I just use klingt.net as the user-agent :/
+lychee --user-agent "lychee:klingt.net" --base 'https://klingt.net/articles/' content/
