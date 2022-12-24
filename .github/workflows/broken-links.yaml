@@ -19,7 +19,7 @@ jobs:
         with:
           args: --user-agent "lychee:klingt.net" --base 'https://klingt.net/articles/' content/
       - name: Create Issue From File
-        if: github.repository_owner == 'golang-leipzig' && failure() && steps.brokenLinks.outcome == 'failure'
+        if: github.repository_owner == 'klingtnet' && failure() && steps.brokenLinks.outcome == 'failure'
         uses: peter-evans/create-issue-from-file@v4
         with:
           title: Broken Links Report
