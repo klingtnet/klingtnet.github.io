@@ -66,7 +66,7 @@
       <main>
         
 <h1>How to delete unreachable commits on GitHub</h1>
-<p>The dangling<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> <a href="https://github.com/klingtnet/klingtnet.github.io/blob/b2444ca54c74a7c9dde6504cf028b6c0f4729d8f/content/resume.md#L3">commit</a> shown in the screenshot below should have never been on GitHub, at least not publicly visible.  The commit was part of a branch called <code>draft</code> that I pushed to the repository when it was still private.  If I am not mistaken then I removed the file, squashed and merged the <code>draft</code> branch into <code>master</code>, deleted the branch and then pushed it onto GitHub.  After making sure that branch <code>draft</code> was gone on GitHub I made the repository public.</p>
+<p>The dangling<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> commit shown in the screenshot below should have never been on GitHub, at least not publicly visible.  The commit was part of a branch called <code>draft</code> that I pushed to the repository when it was still private.  If I am not mistaken then I removed the file, squashed and merged the <code>draft</code> branch into <code>master</code>, deleted the branch and then pushed it onto GitHub.  After making sure that branch <code>draft</code> was gone on GitHub I made the repository public.</p>
 <p><img src="unreachable-commit.png" alt="unreachable commit"></p>
 <p>As you can clearly see the commit is still there, and I only discovered this by accident when using GitHub's search.  So, the question is now how to delete this commit?  I cannot even reach the commit from my local repository:</p>
 <pre><code class="language-shell">$ git show b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
@@ -83,7 +83,7 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
 <p>If the commit would still be part of my local repository I could have removed it with this call and subsequent <code>git push</code>.</p>
 <pre><code class="language-shell">$ git reflog expire --expire-unreachable=all
 </code></pre>
-<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/ticket/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
+<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
 <blockquote>
 <p>As you mentioned, it does indeed appear to be an an unreferenced commit dangling in our cache. I went ahead and performed the garbage collection and cache clearance operations for the repository klingtnet/klingtnet.github.io. Attempting to access the commit directly now returns a 404.</p>
 </blockquote>
@@ -92,7 +92,7 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.  The dangling commit was <code>https://github.com/klingtnet/klingtnet.github.io/blob/b2444ca54c74a7c9dde6504cf028b6c0f4729d8f/content/resume.md</code>, but this will return a 404 since the commit was deleted.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
