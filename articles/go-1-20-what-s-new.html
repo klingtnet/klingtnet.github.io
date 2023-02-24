@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="An overview over the changes with Go 1.20 that are most interesting for me, and hopefully for you too">
+  
+  <title>Go 1.20, what&#39;s new</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <header>
+        
+<nav>
+  <div class="header-bar">
+    <details class="mobile-menu">
+      <summary><img class="hamburger nav-icon invert-if-dark" src='https://klingt.net/assets/hamburger.svg'>
+      </summary>
+      <div class="dropdown sm-margin-top">
+        <ul class="nav nobullets">
+          
+          <li><a class="reset-color" href='https://klingt.net/index.html'>Home</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/articles'>Articles</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/about-me.html'>About Me</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/imprint.html'>Imprint</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/privacy-policy.html'>Privacy Policy</a></li>
+          
+        </ul>
+      </div>
+    </details>
+    <div>
+      <span class="bold sm-margin-right">klingt.net</span>
+      <img class="valign nav-icon invert-if-dark" alt="website logo" src="https://klingt.net/assets/logo.svg">
+    </div>
+  </div>
+</nav>
+
+      </header>
+    </div>
+    <div class="main">
+      <main>
+        
+<ul>
+<li>Most information was taken from the <a href="https://go.dev/doc/go1.20">release notes</a>.</li>
+<li><del>Release is schedules for February 2023.  Releases happened between <a href="https://go.dev/doc/devel/release">16th and 25th in the past</a>, so I assume that 1.20 will be released end of February as well.</del> Final release was on 1st of February 2023, a little bit earlier than usual for an even version number Go release.</li>
+<li>I talked about this in our <a href="https://golangleipzig.space/posts/meetup-34-wrapup/">#34 Leipzig Gophers Meetup</a>.</li>
+</ul>
+<hr>
+<h2>Context</h2>
+<p>Package <code>context</code> received <a href="https://go.dev/pkg/context/#WithCancelCause"><code>WithCancelCause</code></a> which allows to cancel a context with a given error.  This is pretty nice to have something more meaningful than the usual <code>context.Canceled</code> error, that won't tell you anything about why something got canceled. (<a href="https://go.dev/play/p/dp-sJNfYp-Y">playground</a>)</p>
+<h2>Errors</h2>
+<p>Support for <strong>wrapping multiple errors</strong>:
+- <a href="https://pkg.go.dev/errors@go1.20rc3#Join"><code>errors.Join</code></a> to wrap multiple errors into one (error messages will be newline delimited)
+- <code>fmt.Errorf</code> now also supports multiple <code>%w</code> format verbs
+- (<a href="https://go.dev/play/p/xSsD6AF_w0p">playground</a>)</p>
+<h2>HTTP Response Controller</h2>
+<p><a href="https://pkg.go.dev/net/http@go1.20rc3#ResponseController"><strong><code>http.ResponseController</code></strong> </a> wraps an <code>http.ResponseWriter</code> and makes it more convenient to configure it in a Handler, e.g. no need to make checked-cast to an <code>http.Hijacker</code> anymore, just call <code>responseController.Hijack()</code>.  You can also easily overwrite <a href="https://github.com/golang/go/blob/7f59bea53c888605faaa46cd95aaa3ddf29219bf/src/net/http/responsecontroller.go#L84-L96">read</a> and <a href="https://github.com/golang/go/blob/7f59bea53c888605faaa46cd95aaa3ddf29219bf/src/net/http/responsecontroller.go#L104-L116">write deadlines</a> using the response controller.</p>
+<h2>Language Changes</h2>
+<p><strong>Slice to array conversions</strong> are now a bit easier to write (<a href="https://go.dev/play/p/fVXMR6m6ihu?v=gotip">playground</a>).</p>
+<pre><code class="language-go">	x := []int{1, 2, 3, 4}
+	var y [4]int
+	// Go 1.17+
+	// y = *(*[4]int)(x)
+	y = [4]int(x)
+</code></pre>
+<p>Note that this will</p>
+<ul>
+<li>copy the elements from the slice to the array</li>
+<li>conversion from array to slice works the same way</li>
+<li>array to slice conversion will run-time panic if the target slice won't fit the array (len(slice) &lt; len(array))</li>
+</ul>
+<p>Three new functions for <strong>unsafe modification fo slices</strong>, <a href="https://tip.golang.org/ref/spec/#Package_unsafe"><code>SliceData</code>, <code>String</code>, <code>StringData</code></a>.  Don't use it, except you know what you're doing.</p>
+<p>The <strong>language specification</strong> now defines that</p>
+<ul>
+<li>struct values are compared one field at a time, in the order fields were declared in the struct definition</li>
+<li><a href="https://go.dev/play/p/ovlSPbbcIrY">array values are compared one element at a time</a>, in increasing index order
+<ul>
+<li>Note that slices still cannot be checked for equality using the <code>==</code> operator!</li>
+</ul>
+</li>
+<li>comparisons stop at the first mismatch
+This will have no effect on existing programs, just a clear description in the spec what was already implemented</li>
+</ul>
+<p>The <strong><code>comparable</code> constraint</strong> is now satisfied by <a href="https://tip.golang.org/ref/spec#Comparison_operators">comparable types</a>, sound obvious, right 😅?  In practice this means that a <code>comparable</code> constrained type parameter can be instantiated with non-strictly comparable types, like <code>interface</code>s.  As an example, you can do the following from Go 1.20 (<a href="https://go.dev/play/p/lVBUwYionqs?v=gotip">playground</a>):</p>
+<pre><code class="language-go">func f[K comparable, V any](keys []K, values []V) map[K]V {
+	m := make(map[K]V, len(keys))
+	for idx, key := range keys {
+		m[key] = values[idx]
+	}
+	return m
+}
+</code></pre>
+<h2>Tools</h2>
+<ul>
+<li><strong>Go distribution will become a bit smaller</strong> because pre-compiled packages from the standard library are removed.  Instead, packages of the standard library will be compiled on the fly and then stored in the build cache (like any other package).</li>
+<li><code>go test -json</code> will <strong>emit a start <code>Action</code></strong> at the beginning of each test execution.</li>
+<li>The <code>go</code> command received a <code>-C</code> flag, to <strong>change working directory</strong>.</li>
+<li>Build related commands, <code>go build</code> and <code>go install</code>, received a <code>-cover</code> flag to <strong>build with code coverage instrumentation</strong>.
+<em>There will be a separate talk today, that is going to cover this topic in detail.</em></li>
+<li><strong><code>net</code> and <code>os/user</code> packages are now pure Go packages under macOS</strong>, i.e. they don't require <code>cgo</code> anymore.</li>
+<li><strong><code>cgo</code> is not required anymore for the race-detector under macOS</strong> (you can run those tests now without having XCode installed)</li>
+</ul>
+<h2>Runtime</h2>
+<ul>
+<li>Experimental support for arena allocations (<a href="https://github.com/golang/go/issues/51317">language proposal</a>).  Allocations from the memory arena are not considered by the GC and the arena will be freed manually all at once. (<a href="https://docs.go101.org/std/pkg/arena.html">package docs</a>).  Should be handled with care due to easy to introduce use-after-free bugs.</li>
+<li>Up to 2% less CPU usage, due to GC improvements.</li>
+</ul>
+<h2>Compiler</h2>
+<ul>
+<li>Support for <a href="https://en.wikipedia.org/wiki/Profile-guided_optimization">PGO</a>, <strong>profile guided optimization</strong>, in builds.  This means that the compiler can leverage run-time profile data to optimize the compiled code, e.g. by more aggressive inlining.  Claimed performane improvement are about 3-4%.  More PGO optimizations will be added in further releases.
+<ul>
+<li>Record a CPU profile and pass that to the compiler.</li>
+</ul>
+</li>
+<li><strong>Up to 10% faster build speeds</strong>, which brings compile times down to pre-generic levels.</li>
+<li>There's a Go blog post with more details: <a href="https://go.dev/blog/pgo-preview">https://go.dev/blog/pgo-preview</a></li>
+</ul>
+<h2>Standard Library</h2>
+<ul>
+<li><strong>New <code>crypto/ecdh</code> and <code>crypto/ecdsa</code> packages</strong> which replaces the more low-level <code>crypto/elliptic</code>.  Fillipo Valsorda wrote a deep-dive on the <a href="https://words.filippo.io/dispatches/go-1-20-cryptography/">Go 1.20 crypto changes</a>, e.g. the elliptic curve crypto packages don't rely on <code>math/big</code> anymore, which makes them constant time.</li>
+<li><a href="https://pkg.go.dev/net/http/httputil@go1.20rc3#ReverseProxy"><strong>ReverseProxy Rewrite hook</strong></a> superceeds <code>httputil.Director</code> and now receives in- and outbound requests with its <code>*httputil.ProxyRequest</code> argument (unlike a Director function which just received an outbound request).</li>
+</ul>
+<h3>Minor standard library changes</h3>
+<ul>
+<li><code>archive/tar</code> and <code>archive/zip</code> return <a href="https://go.dev/pkg/archive/zip/#ErrInsecurePath"><code>ErrInsecurePath</code></a> if an entry has an absolute path, contains invalid characters etc.  Note that this is currently behind a feature flag, <code>GODEBUG=zipinsecurepath=0</code> but might get the default in a future release.</li>
+<li>the <code>bytes</code> package received
+<ul>
+<li><a href="https://github.com/golang/go/blob/518889b35cb07f3e71963f2ccfc0f96ee26a51ce/src/bytes/bytes.go#L1352-L1360"><code>Clone</code></a>, which basically returns a clone of the given byte slice.  This is a useful utitlity with a pretty minimal implementation.</li>
+<li><code>TrimPrefix</code> and <code>TrimSuffix</code> got siblings, called <code>CutPrefix</code> and <code>CutSuffix</code>.  The difference is that the <code>Cut</code> functions will return if something was removed or not.</li>
+</ul>
+</li>
+<li><code>crypto/tls</code> TLS certificates are now shared across all clients using a certificate, which might lead to significantly less memory usage.  If a handshake fails a new <a href="https://go.dev/pkg/crypto/tls/#CertificateVerificationError"><code>CertificateVerificationError</code></a> is returned.</li>
+<li><a href="https://pkg.go.dev/io#OffsetWriter"><code>io.OffsetWriter</code></a> basically wraps an <code>io.WriterAt</code> and adds a given fixed offset to each Seek, Write etc. call.</li>
+<li>Directory trees are usually traversed using <code>fs.Walk</code>.  There's a new <code>SkipAll</code> error that can be used to immediately stop the recursion of <code>fs.Walk</code>, but this error will be consumed and the call will end successfully.  This is mostly for convenience, since you could have achieved the same before, just that the caller had to filter out the custom error that indicates the traversal stop.</li>
+<li><code>math/rand</code> will <a href="https://github.com/golang/go/blob/518889b35cb07f3e71963f2ccfc0f96ee26a51ce/src/math/rand/rand.go#L323-L334">automatically seed the global RNG</a>, this can deactivated with <code>GODEBUG=randautoseed=0</code>.  I'd argue against using the global RNG and to always instantiate a local instance.  The same applies to any other global instance.</li>
+<li>We got three new time formats:
+<ul>
+<li><code>DateTime   = &quot;2006-01-02 15:04:05&quot;</code></li>
+<li><code>DateOnly   = &quot;2006-01-02&quot;</code></li>
+<li><code>TimeOnly   = &quot;15:04:05&quot;</code></li>
+</ul>
+</li>
+<li><code>testing.B</code> can now report the <a href="https://go.dev/pkg/testing/#B.Elapsed">elapsed time</a></li>
+</ul>
+<h3>Future</h3>
+<ul>
+<li>There's a <a href="https://github.com/golang/go/issues/56345">proposal</a> to add structured logging support to the standard library with package <a href="https://go.googlesource.com/proposal/+/master/design/56345-structured-logging.md"><code>log/slog</code></a></li>
+<li>Can be used already by importing <a href="https://pkg.go.dev/golang.org/x/exp/slog"><code>golang.org/x/exp/slog</code></a></li>
+<li>Currently
+<ul>
+<li>we only have package <a href="https://pkg.go.dev/log"><code>log</code></a>,  a simple logger that has no support for levels etc.</li>
+<li>every logging library needs to define their own <code>Logger</code> interface</li>
+</ul>
+</li>
+<li>At a high level <code>slog</code> is build from three parts:
+<ul>
+<li><a href="https://pkg.go.dev/golang.org/x/exp/slog#Logger">Logger</a> is user-facing part of the API, exposing methods like <code>.Info()</code> or <code>.Error()</code>.
+<blockquote>
+<p>A Logger records structured information about each call to its Log, Debug, Info, Warn, and Error methods. For each call, it creates a Record and passes it to a Handler.</p>
+</blockquote>
+</li>
+<li><a href="https://pkg.go.dev/golang.org/x/exp/slog#Record">Record</a> contains data of a logging even.
+<blockquote>
+<p>A Record holds information about a log event. Copies of a Record share state. Do not modify a Record after handing out a copy to it.</p>
+</blockquote>
+</li>
+<li><a href="https://pkg.go.dev/golang.org/x/exp/slog#Handler">Handler</a> is a logging backend implementation, that handles records emitted from a Logger.
+<blockquote>
+<p>A Handler handles log records produced by a Logger.
+A typical handler may print log records to standard error, or write them to a file or database, or perhaps augment them with additional attributes and pass them on to another handler.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><a href="https://go.dev/play/p/FewCi4X-JSu">playground</a>, copied from this article: <a href="https://mrkaran.dev/posts/structured-logging-in-go-with-slog/">https://mrkaran.dev/posts/structured-logging-in-go-with-slog/</a></li>
+</ul>
+<hr>
+
+
+      </main>
+    </div>
+    <div class="footer">
+      <footer>
+        
+<p class="center">
+  <a href="#">Back to top.</a>
+</p>
+
+      </footer>
+    </div>
+  </div>
+</body>
+
+</html>
+
+
+
+
