@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Since git 2.34 one can use an SSH key to sign a git object.  In this post I explain how to configure git to use an SSH key to sign a git object.">
+  
+  <title>Sign git objects using your SSH key</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github.min.css"
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href="//unpkg.com/@highlightjs/cdn-assets@11.0.1/styles/github-dark.min.css"
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src="//unpkg.com/@highlightjs/cdn-assets@11.0.1/highlight.min.js"></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <header>
+        
+<nav>
+  <div class="header-bar">
+    <details class="mobile-menu">
+      <summary><img class="hamburger nav-icon invert-if-dark" src='https://klingt.net/assets/hamburger.svg'>
+      </summary>
+      <div class="dropdown sm-margin-top">
+        <ul class="nav nobullets">
+          
+          <li><a class="reset-color" href='https://klingt.net/index.html'>Home</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/articles'>Articles</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/about-me.html'>About Me</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/imprint.html'>Imprint</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/privacy-policy.html'>Privacy Policy</a></li>
+          
+        </ul>
+      </div>
+    </details>
+    <div>
+      <span class="bold sm-margin-right">klingt.net</span>
+      <img class="valign nav-icon invert-if-dark" alt="website logo" src="https://klingt.net/assets/logo.svg">
+    </div>
+  </div>
+</nav>
+
+      </header>
+    </div>
+    <div class="main">
+      <main>
+        
+<p><a href="https://github.blog/2021-11-15-highlights-from-git-2-34/">Git 2.34</a> added support for signing git objects, like commits, using an SSH key.
+Previously you could only choose between GPG and a X.509 certificate.
+Managing GPG keys is quite tedious in my experience, and every time I need to extend one my keys I cannot remember exactly how to do it.
+Lowering the bar to set up and maintain a working signing configuration could drive the adoption of git object signing, I think.
+Authenticating against a remote repository via SSH is probably the most common option, so most people who use git already have an SSH key available.
+Hence, let's use that to sign your git objects!</p>
+<p>Configuration is pretty straightforward, all you need to know is the filename of the SSH public key you want to use for signing.
+On Linux you can just run <code>ssh-add -L</code> to list the public keys with filename known to your SSH agent.
+However, on macOS you won't see filenames in the output.
+If you're unsure check your <code>~/.ssh/config</code> or the <code>*.pub</code> keys inside <code>~/.ssh</code>.</p>
+<p>After you've figured out which SSH key to use for singing just issue the following commands and you're good to go:</p>
+<pre><code class="language-shell">$ git config --global gpg.format ssh
+$ git config --global user.signingKey ~/.ssh/some_ssh_key.pub
+</code></pre>
+<p>Note that <code>~/.ssh/some_ssh_key.pub</code> must be adjusted to your setup, e.g. <code>~/.ssh/id_ed25519.pub</code>.
+There's also a <a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key#telling-git-about-your-ssh-key">GitHub Docs page</a> about the configuration process, in case you still have any questions.</p>
+<p>Here's how I check that git object signing works:</p>
+<pre><code class="language-shell">$ cd $(mktemp -d)
+$ git init
+$ git commit --allow-empty --gpg-sign -m 'A test message'
+</code></pre>
+<p>You're good to go if <code>git commit</code> exits without an error.</p>
+<p>Happy signing 🗝️</p>
+
+
+      </main>
+    </div>
+    <div class="footer">
+      <footer>
+        
+<p class="center">
+  <a href="#">Back to top.</a>
+</p>
+
+      </footer>
+    </div>
+  </div>
+</body>
+
+</html>
+
+
+
+
