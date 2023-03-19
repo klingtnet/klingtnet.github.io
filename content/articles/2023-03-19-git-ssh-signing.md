@@ -1,13 +1,13 @@
 ```json
 {
   "author": "Andreas Linz",
-  "title": "Use your SSH key to sign git object",
+  "title": "Use your SSH key to sign git objects",
   "description": "Since git 2.34 one can use an SSH key to sign a git object.  In this post I explain how to configure git to use an SSH key to sign a git object.",
   "created_at": "2023-03-19"
 }
 ```
 
-# Use your SSH key to sign git object
+# Use your SSH key to sign git objects
 
 [Git 2.34] added support for signing git objects, like commits, using an SSH key.
 Previously you could only choose between GPG and a X.509 certificate.
