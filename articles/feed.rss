@@ -4,7 +4,7 @@
     <link>https://klingt.net/articles</link>
     <description></description>
     <managingEditor> (Andreas Linz)</managingEditor>
-    <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
+    <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
     <item>
       <title>AMD Ryzen random reboots under Linux when in idle</title>
       <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
@@ -87,7 +87,87 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
+    </item>
+    <item>
+      <title>GitHub Pages DNS Setup</title>
+      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
+      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
+  
+  <title>GitHub Pages DNS Setup</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>GitHub Pages DNS Setup</h1>
+<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
+<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
+<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
+<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
+<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
+www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
+</code></pre>
+<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
+<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
+<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
+klingt.net.             929     IN      A       185.199.109.153
+klingt.net.             929     IN      A       185.199.111.153
+klingt.net.             929     IN      A       185.199.108.153
+klingt.net.             929     IN      A       185.199.110.153
+</code></pre>
+<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
+<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
+<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
+<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
+<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
     </item>
     <item>
       <title>The simplest sorting algorithm</title>
@@ -188,7 +268,7 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
     </item>
     <item>
       <title>Learning Touch Typing</title>
@@ -254,7 +334,7 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
     </item>
     <item>
       <title>Go Generics - A Quick Overview</title>
@@ -454,87 +534,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
-    </item>
-    <item>
-      <title>GitHub Pages DNS Setup</title>
-      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
-      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
-  
-  <title>GitHub Pages DNS Setup</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>GitHub Pages DNS Setup</h1>
-<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
-<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
-<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
-<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
-<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
-www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
-</code></pre>
-<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
-<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
-<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
-klingt.net.             929     IN      A       185.199.109.153
-klingt.net.             929     IN      A       185.199.111.153
-klingt.net.             929     IN      A       185.199.108.153
-klingt.net.             929     IN      A       185.199.110.153
-</code></pre>
-<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
-<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
-<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
-<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
-<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
     </item>
     <item>
       <title>My MacBook Air M1 setup</title>
@@ -730,7 +730,7 @@ $ gpgconf --kill gpg-agent
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
     </item>
     <item>
       <title>How to delete unreachable commits on GitHub</title>
@@ -811,225 +811,7 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
-    </item>
-    <item>
-      <title>(Almost) 30 Best Albums of 2021</title>
-      <link>https://klingt.net/articles/almost-30-best-albums-of-2021.html</link>
-      <description>A list of my favorite albums that were (mostly) released in 2021.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="A list of my favorite albums that were (mostly) released in 2021.">
-  
-  <title>(Almost) 30 Best Albums of 2021</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>(Almost 30) Best Albums of 2021</h1>
-<p>Without further ado I admit being a music junkie.  I love discovering new music in my journey through online record stores or whenever I am in one of the local record shops.  One of the positive side effects of Covid was that people had more time listening to music and started buying records.  Vinyl sales were already on the rise over the past years, but the last two years has given them an extra boost that lead to new record stores popping up in Leipzig and elsewhere.</p>
-<p>Stop buying crap, support your favorite artists instead!</p>
-<h2>Roy Montgomery — 40th Anniversary 2021 LP Series</h2>
-<p><img src="https://f4.bcbits.com/img/a1654242133_16.jpg" alt="Album Art of Roy Montgomery - 40th Anniversary 2021 LP Series"></p>
-<p>Roy Montgomery.  <a href="https://grouper.bandcamp.com/">Grouper</a>'s 2009 <a href="https://www.discogs.com/master/214067-Roy-Montgomery-Grouper-Roy-Montgomery-Grouper">split EP</a> introduced me to the music of the New Zealand based guitarist and it also spawned my love for drone and ambient music.  I cannot exactly say what makes me love his music so much, but somehow the layered guitar tunes together with the ethereal reverb in the background create an atmosphere that makes me comfy, and which reminds of warm and sunny summer days that I spent in the country side (or that I just imagined while daydreaming).  For me it's just the perfect music to relax and drift away with my thoughts.</p>
-<p>When <a href="https://www.grapefruitrecordclub.com/">Grapefruit Record Club</a> announced the 40th anniversary LP series I haven't given it a second thought and pre-ordered the vinyls the same day, planning to make myself a little christmas present.  But, shipping was delayed to January 2022 because of an unprecedented backup at pressing plants (<a href="https://www.vox.com/the-goods/2021/11/22/22797290/adele-vinyl-record-supply-chain-delays">damn you Adele!</a>).</p>
-<p>Roy Montgomery might be best known for his work with Dadamah, an experimental rock/shoegaze group where he sang and played guitar.  Their sole album, <em>This is Not a Dream</em>, contains two tracks that still give me goosebumps whenever I listen to them, <a href="https://badabingrecords.bandcamp.com/track/too-hot-to-dry-2">Too Hot to Dry</a> and <a href="https://badabingrecords.bandcamp.com/track/high-tension-house-2">High Tension House</a>.  His music is melancholic while being still positive, hard to describe.  This tension might be the reason I'm so fascinated by it.</p>
-<p>In an interview, I read about him, he said that he is a self-taught guitarist. This gives me hope that I can sometimes create similar atmospheres on my guitar.  One of my new year's resolutions is to finally take guitar lessons, no excuses anymore.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2966139599/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://grapefruit1.bandcamp.com/album/roy-montgomery-40th-anniversary-2021-lp-series">Roy Montgomery 40th Anniversary 2021 LP Series by Roy Montgomery</a></iframe>
-<h2>Skee Mask — Pool</h2>
-<p><img src="https://f4.bcbits.com/img/a2320122722_16.jpg" alt="Album Art of Skee Mask - Pool"></p>
-<p>Another good year for Ilian Tape, a <a href="https://taz.de/Muenchner-Technolabel-Ilian-Tape/!5654614/">munich based techno label managed by the Zenker brothers</a> who are best known for their minimal techno releases.  This is not the first album of Skee Mask but a massive one, with more than one hundred minutes of listening time.  There are no fillers on this record, every track is worth a listen.  I would describe the album as a mixture of low-speed drum and bass, breakbeat and deep techno (it's okay to disagree with that, genre borders are fluid).  Not a record to listen on your kitchen radio though, this needs some headphones or speakers capable of producing a massive amount of low end.  Highly recommended record and maybe a future classic.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=222624053/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://iliantape.bandcamp.com/album/itlp09-pool">ITLP09 - Pool by Skee Mask</a></iframe>
-<h2>Woulg - Bubblegum</h2>
-<p><img src="https://f4.bcbits.com/img/a3596139616_16.jpg" alt="Album Art of Woulg - Bubblegum"></p>
-<p>An album for the open minded electronic music lovers.  A potpourri of glitched, broken up and detuned samples sprinkled on top of blazing fast, metallic breaks with deep and earth shattering bass drums every once in a while.  Woulg is not only a talented IDM or breakcore producer, he also shows some of his producing techniques on <a href="https://www.youtube.com/user/woulg">YouTube</a>.  He released his first record on the infamous <a href="https://www.discogs.com/label/55101-illphabetik?page=2">illphabetik</a> breakcore netlabel, home of <a href="https://archive.org/details/ill030">Lisbent</a>.</p>
-<p>The album cover should leave no doubt that this is nothing for the faint-hearted.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=4125215390/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://woulg.bandcamp.com/album/bubblegum">Bubblegum by woulg</a></iframe>
-<h2>Dean McPhee - Witch's Ladder</h2>
-<p><img src="https://f4.bcbits.com/img/a0181296910_16.jpg" alt="Album Art of Dean McPhee - Witch's Ladder"></p>
-<p>Over to something completely different to the above (and below) albums.  Dean McPhee, a UK based solo ambient and folk guitarist which I discovered through his previous record called <a href="https://deanmcphee.bandcamp.com/album/four-stones">Four Stones</a>.  Witch's Ladder is inspired by folklore, mysticism and the beautiful, wide open and lonely landscapes of northern England.</p>
-<p>An album best listened to on a quiet evening with a wood fire or while watching the world fly by through a train window.  Enjoy.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3681494736/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://deanmcphee.bandcamp.com/album/witchs-ladder">Witch&#39;s Ladder by Dean McPhee</a></iframe>
-<h2>Stazma the Junglechrist</h2>
-<h3>Stazma — Leftovers</h3>
-<p><img src="https://f4.bcbits.com/img/a0248618665_16.jpg" alt="Album Art of Stazma - Leftovers"></p>
-<p>Stazma's leftovers are better than some other's best productions.  I have a soft spot for blazing breakcore beats, especially when they incorporate well versed rapping or funky Squarepusher'esque basslines on top.  There are dozens of excellent breakcore producers in France, <a href="https://rubymydear.bandcamp.com/">Ruby my Dear</a> or <a href="https://igorrr.bandcamp.com/">Igorrr</a> for example.  Still, Stazma is a master of his craft and shares his production techniques, like Woulg, with the rest of the world on <a href="https://www.youtube.com/channel/UCOiJihb6aQyKch4FDST3niw">YouTube</a>.</p>
-<p>If you haven't gotten bored by the Amen break yet, and if you like hard and fast break beats then this is something you should listen to.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=4185536392/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://stazma-the-junglechrist.bandcamp.com/album/leftovers">Leftovers by Stazma</a></iframe>
-<h3>Repeat Eater — Deep Dessert Dweller</h3>
-<p><img src="https://f4.bcbits.com/img/a0219005911_16.jpg" alt="Album Art of Repeat Eater - Deep Desert Dweller"></p>
-<p>We aren't done with Stazma yet, even though this record was released under his alter ego <em>Repeat Eater</em>.  He produces detroit style techno or electro under this moniker.  The album was inspired by Frank Herbert's Dune, a story that received a <a href="https://www.youtube.com/watch?v=n9xhJrPXop4">very fine movie remake</a> this year.</p>
-<p>Perfect music for driving on the Autobahn or to dance alone in your living room until the clubs reopen.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2268299090/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://touched.bandcamp.com/album/deep-desert-dweller">Deep Desert Dweller by Repeat Eater</a></iframe>
-<h2>Harold Budd — Abandoned Cities</h2>
-<p><img src="https://f4.bcbits.com/img/a2697139059_16.jpg" alt="Album Art of Harold Budd - Abandoned Cities"></p>
-<p>Yet another album from a master of his genre.  Not a 2021 release, strictly speaking, but a re-release of Harold Budds' 1984 record <em>Abandoned Cities</em>.  This one is much darker than his other works and reminds me a bit of the early <a href="https://www.discogs.com/artist/10343-Tangerine-Dream">Tangerine Dream</a>.  Most mystery or sci-fi movies would benefit from a soundtrack like this.</p>
-<p>A soundtrack for being outside on a starry night, but only if you're not afraid of the dark.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2344114403/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://haroldbudd.bandcamp.com/album/abandoned-cities">Abandoned Cities by Harold Budd</a></iframe>
-<h2>Clark — Playground in a Lake</h2>
-<p><img src="https://throttleclark.com/wp-content/uploads/2021/04/218911-2.png" alt="Album Art of Clark - Playground in a Lake"></p>
-<p>Playground in a Lake, released on <a href="https://www.deutschegrammophon.com/">Deutsche Grammophon</a>, is a special album for Clark's standards.  The record starts with a cello melody that reminds me of <a href="https://www.youtube.com/watch?v=xULTMMgwLuo">The Elder Scrolls: Morrowind</a><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> soundtrack, which has to be taken as a compliment, I really like that one.  Clark, previously producing IDM or braindance records on <a href="https://warp.net/">Warp</a>, releases a very solid contemporary classic album here, that involves all his experience, with epic sound walls, catchy melodies and mysterious vibes alike.</p>
-<p>This is a record for people pretending not to like classical music but are overwhelmed by good old Hollywood soundtracks.</p>
-<p><a href="https://throttleclark.com/album/playground-in-a-lake/">https://throttleclark.com/album/playground-in-a-lake/</a></p>
-<h2>Tommy Guerrero — Sunshine Radio</h2>
-<p><img src="https://f4.bcbits.com/img/a1891857574_16.jpg" alt="Album Art of Tommy Guerrero - Sunshine Radio"></p>
-<p>The californian Tommy Guerrero, former pro skateboarder, now a professional musician is living the dream (at least I hope he does &#x1f605;).  His music is best described as a fusion of Instrumental Rock, Jazz, Funk and Downtempo<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> influenced by hot shimmering air, cacti, yucca, agaves and tequila at sundown.  Okay, that's just my mental picture of his music but I still think it gives you an idea of what to expect.</p>
-<p>Hear this, or his other records, if you want to get in a good mood or if you want to relax on a hot summer evening.  Best listened to with friends, some beers and a joint &#x1f33f;.</p>
-<iframe style="border: 0; width: 560px; height: 435px;" src="https://bandcamp.com/VideoEmbed?track=374561757&bgcol=333333&linkcol=0f91ff" mozallowfullscreen="1" webkitallowfullscreen="1" allowfullscreen="1" seamless></iframe>
-<h2>Loscil — Clara</h2>
-<p><img src="https://f4.bcbits.com/img/a3445442629_16.jpg" alt="Album Art of Loscil - Clara"></p>
-<p>An ambient gem released on <a href="https://kranky.bandcamp.com/">Kranky</a>, one of the few record labels I really admire because of their consistently great output.  Loscil has a large back catalogue of great ambient albums, and this one is no different.  Sourced from a three minute record of an Hungarian twenty-two string orchestra the album has a more natural touch than ambient records produced completely inside the box, i.e. by software synths.  Nothing against software synths and artificial sounds, but sometimes sampling real instruments gives the little touch which makes a good album into a great one.</p>
-<p>Perfect album to listen to on a trip to Scandinavia or Canada in autumn or winter months.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=4149141204/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://loscil.bandcamp.com/album/clara">Clara by loscil</a></iframe>
-<h2>Simon Farintosh — Aphex Twin for Guitar</h2>
-<p><img src="https://www.thisisclassicalguitar.com/wp-content/uploads/2021/02/Aphex-Twin-Guitar-Farintosh-1024x924.png" alt="Album Art of Simon Farintosh - Aphex Twin for Guitar"></p>
-<p>There are not many artists that had a greater influence on my music taste and life in general than <a href="https://aphextwin.warp.net/">Aphex Twin</a>, <a href="https://autechre.warp.net/">Autechre</a> and <a href="https://venetiansnares.bandcamp.com/">Venetian Snares</a>.  I love everything they do and especially what they did.  In 2005 <em>Alarm Will Sound</em> released <a href="https://alarmwillsound.bandcamp.com/album/acoustica">Acoustica</a>, an orchestral interpretation of Aphex' early work.  No different is this record of Simon Farintosh, another UK based guitarist.</p>
-<p>Listen to this if you like Aphex Twin, if not listen to it as well.  You don't have a choice.</p>
-<p><a href="https://open.spotify.com/album/0mhEjBVbHDLAhwGD9ZydfY?si=HRzrCHMhRdegQ3VzXqzbVg&amp;nd=1">https://open.spotify.com/album/0mhEjBVbHDLAhwGD9ZydfY?si=HRzrCHMhRdegQ3VzXqzbVg&amp;nd=1</a></p>
-<h2>Darkthrone — Eternal Hails......</h2>
-<p><img src="https://f4.bcbits.com/img/a1849020328_16.jpg" alt="Album Art of Darkthrone - Eternal Hails......"></p>
-<p>I do not know much about Norwegian black/heavy metal institution Darkthrone, except that I like this album.  Mainly because it's rough and primitive, both in terms of sound and atmosphere.  Nothing is worse than those hipster metal bands with their crystal clear productions and triggered base drums.  A solid black metal album must be a bit filthy, and this one is filthy enough without sounding like it was recorded in a bathroom through an 80s cassette recorder (this is the other extreme).</p>
-<p>Do you hate social media as much as I do?  If so, this is the album for you.  Otherwise, just head over to Twitter and annoy like minded people with your garbage.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=1173323261/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://peaceville.bandcamp.com/album/eternal-hails">Eternal Hails...... by Darkthrone</a></iframe>
-<h2>VC-118A — Spiritual Machines</h2>
-<p><img src="https://f4.bcbits.com/img/a1898546476_16.jpg" alt="Album Art of VC-118A - Spiritual Machines"></p>
-<p>Finland based producer VC-118A makes electro that almost counts as braindance or IDM.  Groovy beats combined with rattling percussion, spheric drones, glitchy artifacts and shimmering reverb.  An album that would even make HAL-9000 <a href="https://www.youtube.com/watch?v=YjQJeMF7HM8">dance like he's selling nails</a><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>.</p>
-<p>Have you booked your first trip to space?  This is the album you should hear on your way into orbit.</p>
-<iframe style="border: 0; width: 560px; height: 435px;" src="https://bandcamp.com/VideoEmbed?track=1434495374&bgcol=333333&linkcol=0f91ff" mozallowfullscreen="1" webkitallowfullscreen="1" allowfullscreen="1" seamless></iframe>
-<h2>Savana Funk — Tindouf</h2>
-<p><img src="https://f4.bcbits.com/img/a2332196434_16.jpg" alt="Album Art of Savana Funk - Tindouf"></p>
-<p>Production on this record is not very great, the noise floor is loud enough that you can hear it even on speakers, let alone headphones.  However, the music easily makes up for this luxury problem.  With Tindouf Savana Funk has recorded a fantastic funk album that takes influences from north african music and feels timeless, in the sense that it could have been produced in the 70s as well.</p>
-<p>This could be the soundtrack for your next trip to Algeria or Morocco, or to Italy, because that's where the band is located.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=1166271148/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://savanafunk.bandcamp.com/album/tindouf">Tindouf by SAVANA FUNK</a></iframe>
-<h2>Wolff Parkinson White</h2>
-<p><a href="https://www.jochenrueckert.net/#wolff-parkinson-white">Jochen Rueckert</a>, a New York based Jazz Drummer, is releasing experimental electronic records with very complex rhythmic patterns and pretty uncommon melodies under his moniker <em>Wolff Parkinson White</em>.  I would label his music as breakcore or IDM.  Album descriptions of his Wolff Parkinson White records always state that <em>&quot;Jochen does not play drums on this recording&quot;</em>.  I would assume that no real human could play those drum patterns anyway &#x1f916;.</p>
-<h3>Veritable Rapunzel</h3>
-<p><img src="https://f4.bcbits.com/img/a1622753268_16.jpg" alt="Album Art of Wolff Parkinson White - Veritable Rapunzel"></p>
-<p>A Cambrian explosion of samples, thrown at you in supersonic speed and razor-sharp precision.  This last sentence is utter nonsense but I always wanted to include the <em>Cambrian explosion</em> into a review.  Anyways, Veritable Rapunzel is a chaotic mess that forces you into a sensory overload, if listened in full and twice in a row.  Just give it a listen and you will know what I mean.</p>
-<p>If CPUs could dream in sleep mode this would be their soundtrack.</p>
-<iframe style="border: 0; width: 560px; height: 435px;" src="https://bandcamp.com/VideoEmbed?track=3924502164&bgcol=333333&linkcol=0f91ff" mozallowfullscreen="1" webkitallowfullscreen="1" allowfullscreen="1" seamless></iframe>
-<h3>Off World</h3>
-<p><img src="https://f4.bcbits.com/img/a0162131558_16.jpg" alt="Album Art of Wolff Parkinson White &amp; Jayden Chisholm - Off World"></p>
-<p>Rueckert's second release this year.  This time featuring Hayden Chrisholm, who does vocals on this album.  The record is a bit more jazzy than <em>Veritable Rapunzel</em>, yet it still has hyper complex beats with melodic elements that sometimes feel (intentionally) out of tune.  I would say that those ultra fast polyrhythmic beats with the slightly skewed melodics are Wolff Parkinson White's signature sound.  Advanced listening material.</p>
-<p>An album to impress an artsy-fartsy person whose favorite cocktail is a cosmopolitan.</p>
-<iframe style="border: 0; width: 560px; height: 435px;" src="https://bandcamp.com/VideoEmbed?track=3696636598&bgcol=333333&linkcol=0f91ff" mozallowfullscreen="1" webkitallowfullscreen="1" allowfullscreen="1" seamless></iframe>
-<h2>Heliochrysum — We Become Mist</h2>
-<p><img src="https://f4.bcbits.com/img/a0912067017_16.jpg" alt="Album Art of Heliochrysum - We Become Mist"></p>
-<p>This is the debut album of the Los Angeles based composer and sound designer duo Heliochrysum.  When hearing this album for the first time it reminded me of Blade Runner.  Production on this album is top notch, we get a great mixture of industrial like noises, massive drones, piano sounds and sometimes a heavy bass drum hit.  Everything about this album feels cinematic, which might be because <a href="https://en.wikipedia.org/wiki/Ben_Frost">Ben Frost</a> did the final mix.  I really hope that we see another album of the duo in the near future.</p>
-<p>Have you watched the launch of the James Webb space telescope?  This is your album then!</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3755221744/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://heliochrysum.bandcamp.com/album/we-become-mist">We Become Mist by Heliochrysum</a></iframe>
-<h2>Pessimista - Ocaso</h2>
-<p><img src="https://f4.bcbits.com/img/a0718026457_16.jpg" alt="Album Art of Pessimista - Ocaso"></p>
-<p>This best of list is really a roller coaster ride of musical genres.  Ocaso is a rather simple Black Metal album and in no terms perfect, but I do like its rawness combined and the punk rock influence.  My favorite track is <em>Se Ícaro soubesse o que sei agora...</em> which translates to <em>If Icarus knew what I know now...</em> if we can trust Google translate.  The record reminds me of black metal concerts in dark, shabby and smoky clubs.  Let's hope that there will be (more) concerts again in 2022.</p>
-<p>Perfect album for one who sees the glass as half empty.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3120607925/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://pessimista.bandcamp.com/album/ocaso">Ocaso by Pessimista</a></iframe>
-<h2>Crypt Monarch — The Necronaut</h2>
-<p><img src="https://f4.bcbits.com/img/a1170320464_16.jpg" alt="Album Art of Crypt Monarch - The Necronaut"></p>
-<p>This should be the first doom metal LP in the list.  Due to their bass heavy, down tuned and slow riffs listening to doom metal is almost meditative.  Of course, the more than 10 minute runtime for every track are an important factor as well.  I do like to listen to doom, be it stoner doom or whatever sub genre, while programming because it's not obtrusive and helps to concentrate on the work.  So, what makes this album special now?  I actually do not know, there's just the fact that I listened to it multiple times and that it feels very solid, sound and production wise.</p>
-<p>&#x1f6b6; &#x1f3d9;&#xfe0f; &#x1f33f;</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=4231458351/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://cryptmonarch.bandcamp.com/album/the-necronaut">The Necronaut by Crypt Monarch</a></iframe>
-## Tarika Blue — Self Titled
-<p><img src="https://f4.bcbits.com/img/a3851404934_16.jpg" alt="Album Art of Tarika Blue - Self Titled"></p>
-<p>Tarika Blue's self titled album is not a 2021 release, instead its a reissue of the record originally released in 1974.  Their music is best described as a fusion of jazz, soul and disco.  <a href="https://www.whosampled.com/sample/8049/Erykah-Badu-Didn%27t-Cha-Know-Tarika-Blue-Dreamflower/">Erykah Badu sampled</a> the track <em>Dreamflower</em> on her 2001 hit <em>Didn't Cha Know</em>.  Super smooth record, great vocals, nice guitar licks and funky drums.</p>
-<p>Too good to be just a sample source for hip hop beats, give it a spin and hear for yourself.</p>
-<p>Update: The album was removed from Bandcamp for some reason, so I'll link to its <a href="https://www.discogs.com/release/15700139-Tarika-Blue-Tarika-Blue">discogs page</a> instead.</p>
-<h2>Swami Lateplate — Doom Jazz</h2>
-<p><img src="https://f4.bcbits.com/img/a4055416360_16.jpg" alt="Album Art of Swami Lateplate - Doom Jazz"></p>
-<p>Doom Jazz is a self describing tite and tells you exactly where to put this album.  If you know <a href="https://en.wikipedia.org/wiki/Bohren_%26_der_Club_of_Gore">Bohren &amp; der Club of Gore</a> then this sound will be familiar to you.  I really like that this albums comes without brass instruments and vocals.  It's pretty hard to find a good jazz record that is not drowned in saxophone nonsense, for some reason sax players often need to show off and give solo parts that almost sound like they're on the edge of getting a heart attack.</p>
-<p>Best played on headphones while slandering through barely lit side streets on a rainy, full moon summer night.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=718302455/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://swamilateplate.bandcamp.com/album/doom-jazz">Doom Jazz by Swami Lateplate</a></iframe>
-<h2>Worm — Foreverglade</h2>
-<p><img src="https://f4.bcbits.com/img/a1911764557_16.jpg" alt="Album Art of Worm - Foreverglade"></p>
-<p>Florida death metal outfit Worm is gifting us with a real banger on the <a href="https://listen.20buckspin.com/">20 Buck Spin</a> label<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>.  Not sure how to label this album, maybe death metal or funeral doom, does not really matter anyways because the music is absolutely excellent and miles above their previous, debut album.  Let me admit that I'm the type of guy how rates an album by its cover, and let me tell you that this method works in at least <a href="https://en.wikipedia.org/wiki/Pareto_principle">four out of five cases</a>.  This is one of those four cases, I mean just look at this cover, as if M. C. Escher and Hieronymus Bosch had a frankensteinian love child (however that could be).  A no bullshit record that keeps on giving over the whole playtime, highly recommended.</p>
-<p>Ever did a tour thorugh the Florida swamps?  Me neither, but if you do, take this album with you.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=713549408/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://listen.20buckspin.com/album/foreverglade">Foreverglade by Worm</a></iframe>
-<h2>HunoHuno — Pleasant Valley</h2>
-<p><img src="https://f4.bcbits.com/img/a1292322732_16.jpg" alt="Album Art of HunoHuno - Pleasant Valley"></p>
-<p><a href="https://detroitunderground.net/du-vhs/?v=79xpFvxFbvc">Detroit Underground</a>, a label best known for their excellent IDM and techno releases, gives us a rather hard to categorize album here.  We could just put the IDM sticker on it, but that wouldn't do the record enough justice.  A mad scientist mixture of sounds, textures and glitch hop style beats.</p>
-<blockquote>
-<p>Pleasant Valley Detour is the first part of a musical project that seeks to interpret the mystery of the daily journey into the unknown.</p>
-</blockquote>
-<p>Above sentence stems from the Bandcamp record description and gives me hope that there will be subsequent releases to this album.  For some reason they labeled it Pleasant Valley <em>Detour</em>, which might indicates that there will be follow ups as well.</p>
-<p>Not recommended for driving (judging by its album art).</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3772356991/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://detund.bandcamp.com/album/pleasant-valley">Pleasant Valley by HunoHuno</a></iframe>
-<h2>MC Solaar - Prose Combat</h2>
-<p><img src="https://img.discogs.com/VrvsVa9uPArdXgNzAg4PVexWlzU=/fit-in/600x600/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-20348713-1632585572-9925.jpeg.jpg" alt="Album Art of MC Solaar - Prose Combat"></p>
-<p>Yet another reissue, this time a french hip hop classic originally put out in 1994 and that I managed to miss in my teenage years, much later, where I thought to have discovered everything there is rap-wise<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>.  <a href="https://en.wikipedia.org/wiki/Boom_bap">Boom bap</a> beats are totally my thing and luckily this style has seen a revival in recent years, even though mostly in the undergroud.  I just can't stand those rattling hi-hat trap beats every mumbling rapper uses nowadays, especially since they all sound the same.  No, this is not <em>old man yelling at couds</em>, I am allowed to hate things!  <a href="https://www.imdb.com/title/tt0113247/">La Haine</a>, a movie about youth life in french suburbs of the 90s, features <em>Comme Dans Un Film</em> (like in a movie) which was an outtake of Prose Combat.  A record that perfectly captures the aestehtics of the time, which makes it sound a bit dated but sometimes this is desired and must not be seen as a disadvantage.</p>
-<p>No need to speak french to listen to this one, a record made for summer evenings.</p>
-<p><a href="https://www.discogs.com/release/20348713-MC-Solaar-Prose-Combat">https://www.discogs.com/release/20348713-MC-Solaar-Prose-Combat</a></p>
-<h2>Submotion Orchestra — Finest Hour</h2>
-<p><img src="https://f4.bcbits.com/img/a2343263499_16.jpg" alt="Album Art of Submotion Orchestra - Finest Hour"></p>
-<p>I am sorry for having another reissue in the list, but that's how it is.  Actually I'm not sorry at all because this album is a bloody gem and your life will be worse if you have never listened to it!  Submotion Orchestra are a seven piece band from England that are influenced by soul, dub(step), electronica and trip-hop.  I have no idea how this record, released in 2009, could fly under my radar until this year.</p>
-<p>A record so versatile that it fits any time and moment, ideally the more mellow ones.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3033307561/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://submotionorchestra.bandcamp.com/album/finest-hour">Finest Hour by Submotion Orchestra</a></iframe>
-<h2>Otto A Totland - Companion</h2>
-<p><img src="https://f4.bcbits.com/img/a3487084709_16.jpg" alt="Album Art of Otto A Totland - Companion"></p>
-<p>Already bored by Nils Frahm?  Then this could be something for you.  With <em>Companion</em> norwegian composer Otto A. Totland, one half of the legendary ambient duo <a href="https://www.discogs.com/artist/170843-Deaf-Center">Deaf Center</a>, put out an album of piano compositions recorded at Nils Frahm's Berlin studio (that brings us right back to the start).  Despite most piano records I heard this has a very positive tone, that makes it special for me.  When you're done listening to this album you can continue with Totland's previous two albums, <em>The Lost</em> and <em>Pinô</em>, both not as cheerful as this one.</p>
-<p>When everything is fine listen to this album.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2805599072/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://ottoatotland.bandcamp.com/album/companion">Companion by Otto A Totland</a></iframe>
-<h2>Bleach Lab — Nothing Feels Real</h2>
-<p><img src="https://f4.bcbits.com/img/a0705886315_16.jpg" alt="Album Art of Bleach Lab - Nothing Feels Real"></p>
-<p>Nothing Feels Real seems to be out of time and, without a doubt, could have been an early 90s shoegaze album.  I was really on the fence with adding this one to the list but eventually decided to put it in anyways.  No further description.</p>
-<p>An album for people who like Slowdive, My Bloody Valentine or Cocteau Twins.</p>
-<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=907174083/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://bleachlab.bandcamp.com/album/nothing-feels-real-ep">Nothing Feels Real EP by Bleach Lab</a></iframe>
-<hr>
-<p>Writing those short reviews was much fun and is something I should do more regularly, even though in smaller batches and not for almost 30 albums at a time.  Also, note that the albums were added in no particular order or relevance.  There were tons of other records I could have added but they did not fit because they either weren't released in 2021 nor reissued.</p>
-<section class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1" role="doc-endnote">
-<p>I think that's the last video game I played for hours non-stop.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:2" role="doc-endnote">
-<p>Better known as Balearic. (Sorry, that was an insider joke.)&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:3" role="doc-endnote">
-<p>When did planet-mu stop releasing good music?  Everything they put out in recent years is embarrassing garbage that is just a bit to edgy to be released on Stones Throw.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:4" role="doc-endnote">
-<p>You should follow this label, they have a very solid track record of album releases.&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:5" role="doc-endnote">
-<p>A foolish thought, there is always some great album left to discover.&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</section>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
     </item>
     <item>
       <title>Go 1.18 with some fuzzing and a focus on generics</title>
@@ -1229,222 +1011,7 @@ func Write(w io.Writer) error {}
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
-    </item>
-    <item>
-      <title>Reading the last bytes of a stream in Go</title>
-      <link>https://klingt.net/articles/reading-the-last-bytes-of-a-stream-in-go.html</link>
-      <description>In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.">
-  
-  <title>Reading the last bytes of a stream in Go</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Reading the last bytes of a stream in Go</h1>
-<p>It's about half a year since my last blog post, so it's about time to write another one.</p>
-<p>Yesterday I was working on a private project that required to read a block of bytes from the end of an <code>io.Reader</code>.
-On a first glance that sounds like a trivial problem, but doing this <em>efficiently</em> turned out to be more complicated than initially thought.</p>
-<p>If your <code>io.Reader</code> stems from a file you're lucky, because regular files allow random access through the system <a href="https://man7.org/linux/man-pages/man2/lseek.2.html">seek call</a> that is exposed on a <code>os.File</code> with its <a href="https://pkg.go.dev/os#File.Seek"><code>Seek</code> method</a>.  However, my function only accepts a plain <code>io.Reader</code> and not an <code>os.File</code>, so this option is out of question.</p>
-<p>How can we read the last N bytes of a <em>finite</em> stream of some kind?</p>
-<h2>Naïve solution</h2>
-<p>A naïve solution would be to <a href="https://pkg.go.dev/io#ReadAll">read the whole file into memory</a> and then discard everything except for some slice of bytes at the end.</p>
-<pre><code class="language-go">func readTail(r io.Reader, N int) ([]byte, error) {
-	data, err := io.ReadAll(r)
-	if err != nil {
-		return nil, err
-	}
-
-	return data[len(data)-N:], nil
-}
-</code></pre>
-<p>This is pretty wasteful and might require huge amounts of memory, depending on how long the stream you want to consume is.</p>
-<h2>Two interleaved buffers</h2>
-<p>The next idea I had was to read the stream in chunks of size N, and discarding every chunk except the last one.
-But this won't work because of a variety of reasons, first and foremost if the stream length is not an integer multiple of N then the last chunk might be incomplete since it is only the remainder of file size divided by chunk size (N).</p>
-<p><img src="unalinged-end-of-file-read.png" alt="illustration of an unaligned read"></p>
-<p>So, why not maintain two buffers, one for the previous read and another one for the current read.
-When reaching EOF we can then concatenate the second last read with the last and return an slice of size N, right?
-This might work, but turns out to be pretty complicated because of how <code>io.Read</code> might behave.
-A call to <code>Read</code> is not guaranteed to return <code>N</code> bytes, instead it might fill only a <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=60-61">part of the given buffer</a>:</p>
-<pre><code class="language-go">// If some data is available but not len(p) bytes, Read conventionally
-// returns what is available instead of waiting for more.
-</code></pre>
-<p>So, we can't easily fill the two buffers in an interleaved manner because a single read might not fill a whole buffer.
-Of course, there's <a href="https://pkg.go.dev/io#ReadFull"><code>io.ReadFull</code></a> which takes care of reading exactly N bytes if available, but the logic would still be quite convoluted.</p>
-<h2>Ring buffer</h2>
-<p>After dabbling around for a while with the solution I had, I realized that what I wrote looked almost like a <a href="https://en.wikipedia.org/wiki/Circular_buffer">ring buffer</a>.
-With a ring buffer, sometimes also called circular buffer, we only need O(n) space instead of O(2n) as required with the previous concept.
-The gist is to store each chunk in a ring buffer, wrapping around if it exceeds the end of the ring buffers internal array.</p>
-<p><img src="ring-buffer-end-of-file-read.png" alt="illustration of reading chunks with a ring buffer"></p>
-<p>After we reached the end of the stream we can just return a slice from the ring buffer, starting from the write head and reaching back N bytes.
-Those are two operations if we need to wrap around</p>
-<pre><code class="language-go">copy(dst[:N-wpos], ringbuf[wpos:])
-copy(dst[N-wpos:], ringbuf[:wpos])
-</code></pre>
-<p>where <code>wpos</code> is the index of the write head.</p>
-<p>One thing that bit me was that <code>io.Read</code> might return <code>io.EOF</code> together with a non-zero amount of bytes read, <em>or</em> it could return <code>0, io.EOF</code> after the last call that returned a non-zero amount of bytes and a <code>nil</code> error.
-This is <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=83">documented behavior</a> but could still be surprising.</p>
-<pre><code class="language-go">// An instance of this general case is that a Reader returning
-// a non-zero number of bytes at the end of the input stream may
-// return either err == EOF or err == nil. The next Read should
-// return 0, EOF.
-</code></pre>
-<p>You can find an ugly example in <a href="https://go.dev/play/p/M-WcpkVviGV">this playground</a> but be aware that you need to run it locally, since external URLs might not be resolved in the playground.</p>
-<p>There are a number of performance considerations that arise from this implementation, e.g. a very small <code>N</code> might lead to a huge number of read calls if the ring buffer's size is equal to <code>N</code>.
-Technically they are independent, the only condition is that the ring buffer must at least have a size of <code>N</code>.</p>
-<p>You might've guessed it already but the good old <code>tail</code> utility serves the same purpose.  I haven't had a look in <a href="https://github.com/coreutils/coreutils/blob/master/src/tail.c">GNU tail's source code</a> yet, but I'm curious to see how they achieved this.</p>
-<p>I hope that helped someone.
-Please let me know if you've an even more efficient solution or there is any other feedback for me.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
-    </item>
-    <item>
-      <title>Git Worktrees (Update)</title>
-      <link>https://klingt.net/articles/git-worktrees-update.html</link>
-      <description>Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.">
-  
-  <title>Git Worktrees (Update)</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Git Worktrees</h1>
-<p>At work I often face the situation that I want to locally review some feature branch of a colleague.
-In general that's easy, one <code>git switch --track origin/branch-name</code> later and you have the changes in your local repository.
-However, most of the time I was currently working in my own feature branch where I had unstaged changes.
-This means I needed to commit my local changes before I could switch to the colleague's branch.
-Wouldn't it be nice if I could work on multiple branches of a repository at the same time?</p>
-<p>You might be tempted to say, I know how to do that, just make a second clone of the repository and call it a day.
-That would work, of course, but it'd also be very wasteful since the whole repository needs to be cloned twice.
-For large repositories this could mean duplicating hundreds or thousands of megabytes.
-But guess what, git got you covered!  There's a lesser known command that handles exactly this use case, it's <a href="https://git-scm.com/docs/git-worktree">git worktree</a>.</p>
-<p>There's a variety of ways how to use git worktrees.</p>
-<h2>Existing repository</h2>
-<p>Let's assume that you're in some repository that you cloned a while a go and now you want to switch to a different branch without having to commit your local changes.
-We can do that by creating a new <em>worktree</em> like this:</p>
-<pre><code class="language-sh">$ git worktree add ../repository.feat-x origin/feat-x
-</code></pre>
-<p>This will create a copy, which shares the same <code>.git</code> data, in <code>../repository.feat-x</code> at branch <code>origin/feat-x</code>.
-It's sensible to not add the worktree inside the existing repository because then you would need to ignore the worktree directory.</p>
-<p>Checking out a new branch when creating a worktree is also very easy, just pass <code>-b my-branch-name</code>, that's it.</p>
-<p>If you're done with your work you can remove your worktree like</p>
-<pre><code class="language-sh">$ rm -rf ../repository.feat-x
-</code></pre>
-<p>or run</p>
-<pre><code class="language-sh">$ git worktree remove repository.feat-x
-</code></pre>
-<p>instead.
-But <code>git worktree remove</code> should be preferred, otherwise some metadata will not be removed until a <code>git gc</code> or <code>git worktree prune</code> was run.</p>
-<p>All worktrees of a repository can be listed with <code>git worktree list</code>.</p>
-<h2>New repository layout</h2>
-<p><strong>Update</strong>: In the <a href="https://github.com/klingtnet/klingtnet.github.io/blob/c800968678ffda04ec8a0cab04f28b7774dcefef/content/articles/2022-10-07-git-worktree.md">previous version of this article</a> I used a <a href="https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---bare">bare repository</a> but this will lead to problems since this type of repository is not intended to be updated or track remote changes.  I did found another simple solution that I will explain below.</p>
-<p>Let's say we want to patch something in the Go compiler on <code>master</code>, <code>1.19</code> and <code>1.18</code> branches.
-We can setup the project like this:</p>
-<pre><code class="language-sh">$ mkdir -p go/worktrees
-$ cd go/worktrees
-$ git clone git@github.com:golang/go master
-$ cd master
-# add the first worktree
-$ git worktree add -B release-branch.go1.19 ../go1.19
-# and the second worktree
-$ git worktree add -B release-branch.go1.18 ../go1.18
-</code></pre>
-<p>What we end up with is a project structure like this</p>
-<pre><code class="language-sh">$ tree -L 2 go
-go
-└── worktrees
-    ├── go1.18
-    ├── go1.19
-    └── master
-</code></pre>
-<p>where each directory below <code>/worktrees</code> contains the repository at a different branch.</p>
-<p>For work projects I could imagine a directory structure that looks similar to this:</p>
-<pre><code class="language-sh">go
-└── worktrees
-    ├── master
-    ├── feature
-    └── review
-</code></pre>
-<p>Note that each worktree just acts like a copy of the repository, so I can switch to whatever branch I like, i.e. the worktree is not pinned to the branch it was created with.
-In the example above I would use <code>work/</code> for my local feature development, <code>experiment/</code> for trying out some ideas, and <code>review/</code> whenever I need to checkout and review some feature of a colleague locally.</p>
-<p>Let me know what your experience with git worktree is and if and how you use it.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
     </item>
     <item>
       <title>How I Detected and Removed Malware from a Wordpress Installation</title>
@@ -1874,7 +1441,222 @@ if (empty($_COOKIE['ssl_message'])) {
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
+    </item>
+    <item>
+      <title>Reading the last bytes of a stream in Go</title>
+      <link>https://klingt.net/articles/reading-the-last-bytes-of-a-stream-in-go.html</link>
+      <description>In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.">
+  
+  <title>Reading the last bytes of a stream in Go</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Reading the last bytes of a stream in Go</h1>
+<p>It's about half a year since my last blog post, so it's about time to write another one.</p>
+<p>Yesterday I was working on a private project that required to read a block of bytes from the end of an <code>io.Reader</code>.
+On a first glance that sounds like a trivial problem, but doing this <em>efficiently</em> turned out to be more complicated than initially thought.</p>
+<p>If your <code>io.Reader</code> stems from a file you're lucky, because regular files allow random access through the system <a href="https://man7.org/linux/man-pages/man2/lseek.2.html">seek call</a> that is exposed on a <code>os.File</code> with its <a href="https://pkg.go.dev/os#File.Seek"><code>Seek</code> method</a>.  However, my function only accepts a plain <code>io.Reader</code> and not an <code>os.File</code>, so this option is out of question.</p>
+<p>How can we read the last N bytes of a <em>finite</em> stream of some kind?</p>
+<h2>Naïve solution</h2>
+<p>A naïve solution would be to <a href="https://pkg.go.dev/io#ReadAll">read the whole file into memory</a> and then discard everything except for some slice of bytes at the end.</p>
+<pre><code class="language-go">func readTail(r io.Reader, N int) ([]byte, error) {
+	data, err := io.ReadAll(r)
+	if err != nil {
+		return nil, err
+	}
+
+	return data[len(data)-N:], nil
+}
+</code></pre>
+<p>This is pretty wasteful and might require huge amounts of memory, depending on how long the stream you want to consume is.</p>
+<h2>Two interleaved buffers</h2>
+<p>The next idea I had was to read the stream in chunks of size N, and discarding every chunk except the last one.
+But this won't work because of a variety of reasons, first and foremost if the stream length is not an integer multiple of N then the last chunk might be incomplete since it is only the remainder of file size divided by chunk size (N).</p>
+<p><img src="unalinged-end-of-file-read.png" alt="illustration of an unaligned read"></p>
+<p>So, why not maintain two buffers, one for the previous read and another one for the current read.
+When reaching EOF we can then concatenate the second last read with the last and return an slice of size N, right?
+This might work, but turns out to be pretty complicated because of how <code>io.Read</code> might behave.
+A call to <code>Read</code> is not guaranteed to return <code>N</code> bytes, instead it might fill only a <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=60-61">part of the given buffer</a>:</p>
+<pre><code class="language-go">// If some data is available but not len(p) bytes, Read conventionally
+// returns what is available instead of waiting for more.
+</code></pre>
+<p>So, we can't easily fill the two buffers in an interleaved manner because a single read might not fill a whole buffer.
+Of course, there's <a href="https://pkg.go.dev/io#ReadFull"><code>io.ReadFull</code></a> which takes care of reading exactly N bytes if available, but the logic would still be quite convoluted.</p>
+<h2>Ring buffer</h2>
+<p>After dabbling around for a while with the solution I had, I realized that what I wrote looked almost like a <a href="https://en.wikipedia.org/wiki/Circular_buffer">ring buffer</a>.
+With a ring buffer, sometimes also called circular buffer, we only need O(n) space instead of O(2n) as required with the previous concept.
+The gist is to store each chunk in a ring buffer, wrapping around if it exceeds the end of the ring buffers internal array.</p>
+<p><img src="ring-buffer-end-of-file-read.png" alt="illustration of reading chunks with a ring buffer"></p>
+<p>After we reached the end of the stream we can just return a slice from the ring buffer, starting from the write head and reaching back N bytes.
+Those are two operations if we need to wrap around</p>
+<pre><code class="language-go">copy(dst[:N-wpos], ringbuf[wpos:])
+copy(dst[N-wpos:], ringbuf[:wpos])
+</code></pre>
+<p>where <code>wpos</code> is the index of the write head.</p>
+<p>One thing that bit me was that <code>io.Read</code> might return <code>io.EOF</code> together with a non-zero amount of bytes read, <em>or</em> it could return <code>0, io.EOF</code> after the last call that returned a non-zero amount of bytes and a <code>nil</code> error.
+This is <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=83">documented behavior</a> but could still be surprising.</p>
+<pre><code class="language-go">// An instance of this general case is that a Reader returning
+// a non-zero number of bytes at the end of the input stream may
+// return either err == EOF or err == nil. The next Read should
+// return 0, EOF.
+</code></pre>
+<p>You can find an ugly example in <a href="https://go.dev/play/p/M-WcpkVviGV">this playground</a> but be aware that you need to run it locally, since external URLs might not be resolved in the playground.</p>
+<p>There are a number of performance considerations that arise from this implementation, e.g. a very small <code>N</code> might lead to a huge number of read calls if the ring buffer's size is equal to <code>N</code>.
+Technically they are independent, the only condition is that the ring buffer must at least have a size of <code>N</code>.</p>
+<p>You might've guessed it already but the good old <code>tail</code> utility serves the same purpose.  I haven't had a look in <a href="https://github.com/coreutils/coreutils/blob/master/src/tail.c">GNU tail's source code</a> yet, but I'm curious to see how they achieved this.</p>
+<p>I hope that helped someone.
+Please let me know if you've an even more efficient solution or there is any other feedback for me.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
+    </item>
+    <item>
+      <title>Git Worktrees (Update)</title>
+      <link>https://klingt.net/articles/git-worktrees-update.html</link>
+      <description>Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.">
+  
+  <title>Git Worktrees (Update)</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Git Worktrees</h1>
+<p>At work I often face the situation that I want to locally review some feature branch of a colleague.
+In general that's easy, one <code>git switch --track origin/branch-name</code> later and you have the changes in your local repository.
+However, most of the time I was currently working in my own feature branch where I had unstaged changes.
+This means I needed to commit my local changes before I could switch to the colleague's branch.
+Wouldn't it be nice if I could work on multiple branches of a repository at the same time?</p>
+<p>You might be tempted to say, I know how to do that, just make a second clone of the repository and call it a day.
+That would work, of course, but it'd also be very wasteful since the whole repository needs to be cloned twice.
+For large repositories this could mean duplicating hundreds or thousands of megabytes.
+But guess what, git got you covered!  There's a lesser known command that handles exactly this use case, it's <a href="https://git-scm.com/docs/git-worktree">git worktree</a>.</p>
+<p>There's a variety of ways how to use git worktrees.</p>
+<h2>Existing repository</h2>
+<p>Let's assume that you're in some repository that you cloned a while a go and now you want to switch to a different branch without having to commit your local changes.
+We can do that by creating a new <em>worktree</em> like this:</p>
+<pre><code class="language-sh">$ git worktree add ../repository.feat-x origin/feat-x
+</code></pre>
+<p>This will create a copy, which shares the same <code>.git</code> data, in <code>../repository.feat-x</code> at branch <code>origin/feat-x</code>.
+It's sensible to not add the worktree inside the existing repository because then you would need to ignore the worktree directory.</p>
+<p>Checking out a new branch when creating a worktree is also very easy, just pass <code>-b my-branch-name</code>, that's it.</p>
+<p>If you're done with your work you can remove your worktree like</p>
+<pre><code class="language-sh">$ rm -rf ../repository.feat-x
+</code></pre>
+<p>or run</p>
+<pre><code class="language-sh">$ git worktree remove repository.feat-x
+</code></pre>
+<p>instead.
+But <code>git worktree remove</code> should be preferred, otherwise some metadata will not be removed until a <code>git gc</code> or <code>git worktree prune</code> was run.</p>
+<p>All worktrees of a repository can be listed with <code>git worktree list</code>.</p>
+<h2>New repository layout</h2>
+<p><strong>Update</strong>: In the <a href="https://github.com/klingtnet/klingtnet.github.io/blob/c800968678ffda04ec8a0cab04f28b7774dcefef/content/articles/2022-10-07-git-worktree.md">previous version of this article</a> I used a <a href="https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---bare">bare repository</a> but this will lead to problems since this type of repository is not intended to be updated or track remote changes.  I did found another simple solution that I will explain below.</p>
+<p>Let's say we want to patch something in the Go compiler on <code>master</code>, <code>1.19</code> and <code>1.18</code> branches.
+We can setup the project like this:</p>
+<pre><code class="language-sh">$ mkdir -p go/worktrees
+$ cd go/worktrees
+$ git clone git@github.com:golang/go master
+$ cd master
+# add the first worktree
+$ git worktree add -B release-branch.go1.19 ../go1.19
+# and the second worktree
+$ git worktree add -B release-branch.go1.18 ../go1.18
+</code></pre>
+<p>What we end up with is a project structure like this</p>
+<pre><code class="language-sh">$ tree -L 2 go
+go
+└── worktrees
+    ├── go1.18
+    ├── go1.19
+    └── master
+</code></pre>
+<p>where each directory below <code>/worktrees</code> contains the repository at a different branch.</p>
+<p>For work projects I could imagine a directory structure that looks similar to this:</p>
+<pre><code class="language-sh">go
+└── worktrees
+    ├── master
+    ├── feature
+    └── review
+</code></pre>
+<p>Note that each worktree just acts like a copy of the repository, so I can switch to whatever branch I like, i.e. the worktree is not pinned to the branch it was created with.
+In the example above I would use <code>work/</code> for my local feature development, <code>experiment/</code> for trying out some ideas, and <code>review/</code> whenever I need to checkout and review some feature of a colleague locally.</p>
+<p>Let me know what your experience with git worktree is and if and how you use it.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
     </item>
     <item>
       <title>Git Worktrees</title>
@@ -1925,7 +1707,411 @@ if (empty($_COOKIE['ssl_message'])) {
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
+    </item>
+    <item>
+      <title>(Almost) 30 Best Albums of 2021</title>
+      <link>https://klingt.net/articles/almost-30-best-albums-of-2021.html</link>
+      <description>A list of my favorite albums that were (mostly) released in 2021.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="A list of my favorite albums that were (mostly) released in 2021.">
+  
+  <title>(Almost) 30 Best Albums of 2021</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>(Almost 30) Best Albums of 2021</h1>
+<p>Without further ado I admit being a music junkie.  I love discovering new music in my journey through online record stores or whenever I am in one of the local record shops.  One of the positive side effects of Covid was that people had more time listening to music and started buying records.  Vinyl sales were already on the rise over the past years, but the last two years has given them an extra boost that lead to new record stores popping up in Leipzig and elsewhere.</p>
+<p>Stop buying crap, support your favorite artists instead!</p>
+<h2>Roy Montgomery — 40th Anniversary 2021 LP Series</h2>
+<p><img src="https://f4.bcbits.com/img/a1654242133_16.jpg" alt="Album Art of Roy Montgomery - 40th Anniversary 2021 LP Series"></p>
+<p>Roy Montgomery.  <a href="https://grouper.bandcamp.com/">Grouper</a>'s 2009 <a href="https://www.discogs.com/master/214067-Roy-Montgomery-Grouper-Roy-Montgomery-Grouper">split EP</a> introduced me to the music of the New Zealand based guitarist and it also spawned my love for drone and ambient music.  I cannot exactly say what makes me love his music so much, but somehow the layered guitar tunes together with the ethereal reverb in the background create an atmosphere that makes me comfy, and which reminds of warm and sunny summer days that I spent in the country side (or that I just imagined while daydreaming).  For me it's just the perfect music to relax and drift away with my thoughts.</p>
+<p>When <a href="https://www.grapefruitrecordclub.com/">Grapefruit Record Club</a> announced the 40th anniversary LP series I haven't given it a second thought and pre-ordered the vinyls the same day, planning to make myself a little christmas present.  But, shipping was delayed to January 2022 because of an unprecedented backup at pressing plants (<a href="https://www.vox.com/the-goods/2021/11/22/22797290/adele-vinyl-record-supply-chain-delays">damn you Adele!</a>).</p>
+<p>Roy Montgomery might be best known for his work with Dadamah, an experimental rock/shoegaze group where he sang and played guitar.  Their sole album, <em>This is Not a Dream</em>, contains two tracks that still give me goosebumps whenever I listen to them, <a href="https://badabingrecords.bandcamp.com/track/too-hot-to-dry-2">Too Hot to Dry</a> and <a href="https://badabingrecords.bandcamp.com/track/high-tension-house-2">High Tension House</a>.  His music is melancholic while being still positive, hard to describe.  This tension might be the reason I'm so fascinated by it.</p>
+<p>In an interview, I read about him, he said that he is a self-taught guitarist. This gives me hope that I can sometimes create similar atmospheres on my guitar.  One of my new year's resolutions is to finally take guitar lessons, no excuses anymore.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2966139599/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://grapefruit1.bandcamp.com/album/roy-montgomery-40th-anniversary-2021-lp-series">Roy Montgomery 40th Anniversary 2021 LP Series by Roy Montgomery</a></iframe>
+<h2>Skee Mask — Pool</h2>
+<p><img src="https://f4.bcbits.com/img/a2320122722_16.jpg" alt="Album Art of Skee Mask - Pool"></p>
+<p>Another good year for Ilian Tape, a <a href="https://taz.de/Muenchner-Technolabel-Ilian-Tape/!5654614/">munich based techno label managed by the Zenker brothers</a> who are best known for their minimal techno releases.  This is not the first album of Skee Mask but a massive one, with more than one hundred minutes of listening time.  There are no fillers on this record, every track is worth a listen.  I would describe the album as a mixture of low-speed drum and bass, breakbeat and deep techno (it's okay to disagree with that, genre borders are fluid).  Not a record to listen on your kitchen radio though, this needs some headphones or speakers capable of producing a massive amount of low end.  Highly recommended record and maybe a future classic.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=222624053/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://iliantape.bandcamp.com/album/itlp09-pool">ITLP09 - Pool by Skee Mask</a></iframe>
+<h2>Woulg - Bubblegum</h2>
+<p><img src="https://f4.bcbits.com/img/a3596139616_16.jpg" alt="Album Art of Woulg - Bubblegum"></p>
+<p>An album for the open minded electronic music lovers.  A potpourri of glitched, broken up and detuned samples sprinkled on top of blazing fast, metallic breaks with deep and earth shattering bass drums every once in a while.  Woulg is not only a talented IDM or breakcore producer, he also shows some of his producing techniques on <a href="https://www.youtube.com/user/woulg">YouTube</a>.  He released his first record on the infamous <a href="https://www.discogs.com/label/55101-illphabetik?page=2">illphabetik</a> breakcore netlabel, home of <a href="https://archive.org/details/ill030">Lisbent</a>.</p>
+<p>The album cover should leave no doubt that this is nothing for the faint-hearted.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=4125215390/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://woulg.bandcamp.com/album/bubblegum">Bubblegum by woulg</a></iframe>
+<h2>Dean McPhee - Witch's Ladder</h2>
+<p><img src="https://f4.bcbits.com/img/a0181296910_16.jpg" alt="Album Art of Dean McPhee - Witch's Ladder"></p>
+<p>Over to something completely different to the above (and below) albums.  Dean McPhee, a UK based solo ambient and folk guitarist which I discovered through his previous record called <a href="https://deanmcphee.bandcamp.com/album/four-stones">Four Stones</a>.  Witch's Ladder is inspired by folklore, mysticism and the beautiful, wide open and lonely landscapes of northern England.</p>
+<p>An album best listened to on a quiet evening with a wood fire or while watching the world fly by through a train window.  Enjoy.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3681494736/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://deanmcphee.bandcamp.com/album/witchs-ladder">Witch&#39;s Ladder by Dean McPhee</a></iframe>
+<h2>Stazma the Junglechrist</h2>
+<h3>Stazma — Leftovers</h3>
+<p><img src="https://f4.bcbits.com/img/a0248618665_16.jpg" alt="Album Art of Stazma - Leftovers"></p>
+<p>Stazma's leftovers are better than some other's best productions.  I have a soft spot for blazing breakcore beats, especially when they incorporate well versed rapping or funky Squarepusher'esque basslines on top.  There are dozens of excellent breakcore producers in France, <a href="https://rubymydear.bandcamp.com/">Ruby my Dear</a> or <a href="https://igorrr.bandcamp.com/">Igorrr</a> for example.  Still, Stazma is a master of his craft and shares his production techniques, like Woulg, with the rest of the world on <a href="https://www.youtube.com/channel/UCOiJihb6aQyKch4FDST3niw">YouTube</a>.</p>
+<p>If you haven't gotten bored by the Amen break yet, and if you like hard and fast break beats then this is something you should listen to.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=4185536392/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://stazma-the-junglechrist.bandcamp.com/album/leftovers">Leftovers by Stazma</a></iframe>
+<h3>Repeat Eater — Deep Dessert Dweller</h3>
+<p><img src="https://f4.bcbits.com/img/a0219005911_16.jpg" alt="Album Art of Repeat Eater - Deep Desert Dweller"></p>
+<p>We aren't done with Stazma yet, even though this record was released under his alter ego <em>Repeat Eater</em>.  He produces detroit style techno or electro under this moniker.  The album was inspired by Frank Herbert's Dune, a story that received a <a href="https://www.youtube.com/watch?v=n9xhJrPXop4">very fine movie remake</a> this year.</p>
+<p>Perfect music for driving on the Autobahn or to dance alone in your living room until the clubs reopen.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2268299090/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://touched.bandcamp.com/album/deep-desert-dweller">Deep Desert Dweller by Repeat Eater</a></iframe>
+<h2>Harold Budd — Abandoned Cities</h2>
+<p><img src="https://f4.bcbits.com/img/a2697139059_16.jpg" alt="Album Art of Harold Budd - Abandoned Cities"></p>
+<p>Yet another album from a master of his genre.  Not a 2021 release, strictly speaking, but a re-release of Harold Budds' 1984 record <em>Abandoned Cities</em>.  This one is much darker than his other works and reminds me a bit of the early <a href="https://www.discogs.com/artist/10343-Tangerine-Dream">Tangerine Dream</a>.  Most mystery or sci-fi movies would benefit from a soundtrack like this.</p>
+<p>A soundtrack for being outside on a starry night, but only if you're not afraid of the dark.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2344114403/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://haroldbudd.bandcamp.com/album/abandoned-cities">Abandoned Cities by Harold Budd</a></iframe>
+<h2>Clark — Playground in a Lake</h2>
+<p><img src="https://throttleclark.com/wp-content/uploads/2021/04/218911-2.png" alt="Album Art of Clark - Playground in a Lake"></p>
+<p>Playground in a Lake, released on <a href="https://www.deutschegrammophon.com/">Deutsche Grammophon</a>, is a special album for Clark's standards.  The record starts with a cello melody that reminds me of <a href="https://www.youtube.com/watch?v=xULTMMgwLuo">The Elder Scrolls: Morrowind</a><sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> soundtrack, which has to be taken as a compliment, I really like that one.  Clark, previously producing IDM or braindance records on <a href="https://warp.net/">Warp</a>, releases a very solid contemporary classic album here, that involves all his experience, with epic sound walls, catchy melodies and mysterious vibes alike.</p>
+<p>This is a record for people pretending not to like classical music but are overwhelmed by good old Hollywood soundtracks.</p>
+<p><a href="https://throttleclark.com/album/playground-in-a-lake/">https://throttleclark.com/album/playground-in-a-lake/</a></p>
+<h2>Tommy Guerrero — Sunshine Radio</h2>
+<p><img src="https://f4.bcbits.com/img/a1891857574_16.jpg" alt="Album Art of Tommy Guerrero - Sunshine Radio"></p>
+<p>The californian Tommy Guerrero, former pro skateboarder, now a professional musician is living the dream (at least I hope he does &#x1f605;).  His music is best described as a fusion of Instrumental Rock, Jazz, Funk and Downtempo<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> influenced by hot shimmering air, cacti, yucca, agaves and tequila at sundown.  Okay, that's just my mental picture of his music but I still think it gives you an idea of what to expect.</p>
+<p>Hear this, or his other records, if you want to get in a good mood or if you want to relax on a hot summer evening.  Best listened to with friends, some beers and a joint &#x1f33f;.</p>
+<iframe style="border: 0; width: 560px; height: 435px;" src="https://bandcamp.com/VideoEmbed?track=374561757&bgcol=333333&linkcol=0f91ff" mozallowfullscreen="1" webkitallowfullscreen="1" allowfullscreen="1" seamless></iframe>
+<h2>Loscil — Clara</h2>
+<p><img src="https://f4.bcbits.com/img/a3445442629_16.jpg" alt="Album Art of Loscil - Clara"></p>
+<p>An ambient gem released on <a href="https://kranky.bandcamp.com/">Kranky</a>, one of the few record labels I really admire because of their consistently great output.  Loscil has a large back catalogue of great ambient albums, and this one is no different.  Sourced from a three minute record of an Hungarian twenty-two string orchestra the album has a more natural touch than ambient records produced completely inside the box, i.e. by software synths.  Nothing against software synths and artificial sounds, but sometimes sampling real instruments gives the little touch which makes a good album into a great one.</p>
+<p>Perfect album to listen to on a trip to Scandinavia or Canada in autumn or winter months.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=4149141204/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://loscil.bandcamp.com/album/clara">Clara by loscil</a></iframe>
+<h2>Simon Farintosh — Aphex Twin for Guitar</h2>
+<p><img src="https://www.thisisclassicalguitar.com/wp-content/uploads/2021/02/Aphex-Twin-Guitar-Farintosh-1024x924.png" alt="Album Art of Simon Farintosh - Aphex Twin for Guitar"></p>
+<p>There are not many artists that had a greater influence on my music taste and life in general than <a href="https://aphextwin.warp.net/">Aphex Twin</a>, <a href="https://autechre.warp.net/">Autechre</a> and <a href="https://venetiansnares.bandcamp.com/">Venetian Snares</a>.  I love everything they do and especially what they did.  In 2005 <em>Alarm Will Sound</em> released <a href="https://alarmwillsound.bandcamp.com/album/acoustica">Acoustica</a>, an orchestral interpretation of Aphex' early work.  No different is this record of Simon Farintosh, another UK based guitarist.</p>
+<p>Listen to this if you like Aphex Twin, if not listen to it as well.  You don't have a choice.</p>
+<p><a href="https://open.spotify.com/album/0mhEjBVbHDLAhwGD9ZydfY?si=HRzrCHMhRdegQ3VzXqzbVg&amp;nd=1">https://open.spotify.com/album/0mhEjBVbHDLAhwGD9ZydfY?si=HRzrCHMhRdegQ3VzXqzbVg&amp;nd=1</a></p>
+<h2>Darkthrone — Eternal Hails......</h2>
+<p><img src="https://f4.bcbits.com/img/a1849020328_16.jpg" alt="Album Art of Darkthrone - Eternal Hails......"></p>
+<p>I do not know much about Norwegian black/heavy metal institution Darkthrone, except that I like this album.  Mainly because it's rough and primitive, both in terms of sound and atmosphere.  Nothing is worse than those hipster metal bands with their crystal clear productions and triggered base drums.  A solid black metal album must be a bit filthy, and this one is filthy enough without sounding like it was recorded in a bathroom through an 80s cassette recorder (this is the other extreme).</p>
+<p>Do you hate social media as much as I do?  If so, this is the album for you.  Otherwise, just head over to Twitter and annoy like minded people with your garbage.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=1173323261/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://peaceville.bandcamp.com/album/eternal-hails">Eternal Hails...... by Darkthrone</a></iframe>
+<h2>VC-118A — Spiritual Machines</h2>
+<p><img src="https://f4.bcbits.com/img/a1898546476_16.jpg" alt="Album Art of VC-118A - Spiritual Machines"></p>
+<p>Finland based producer VC-118A makes electro that almost counts as braindance or IDM.  Groovy beats combined with rattling percussion, spheric drones, glitchy artifacts and shimmering reverb.  An album that would even make HAL-9000 <a href="https://www.youtube.com/watch?v=YjQJeMF7HM8">dance like he's selling nails</a><sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>.</p>
+<p>Have you booked your first trip to space?  This is the album you should hear on your way into orbit.</p>
+<iframe style="border: 0; width: 560px; height: 435px;" src="https://bandcamp.com/VideoEmbed?track=1434495374&bgcol=333333&linkcol=0f91ff" mozallowfullscreen="1" webkitallowfullscreen="1" allowfullscreen="1" seamless></iframe>
+<h2>Savana Funk — Tindouf</h2>
+<p><img src="https://f4.bcbits.com/img/a2332196434_16.jpg" alt="Album Art of Savana Funk - Tindouf"></p>
+<p>Production on this record is not very great, the noise floor is loud enough that you can hear it even on speakers, let alone headphones.  However, the music easily makes up for this luxury problem.  With Tindouf Savana Funk has recorded a fantastic funk album that takes influences from north african music and feels timeless, in the sense that it could have been produced in the 70s as well.</p>
+<p>This could be the soundtrack for your next trip to Algeria or Morocco, or to Italy, because that's where the band is located.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=1166271148/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://savanafunk.bandcamp.com/album/tindouf">Tindouf by SAVANA FUNK</a></iframe>
+<h2>Wolff Parkinson White</h2>
+<p><a href="https://www.jochenrueckert.net/#wolff-parkinson-white">Jochen Rueckert</a>, a New York based Jazz Drummer, is releasing experimental electronic records with very complex rhythmic patterns and pretty uncommon melodies under his moniker <em>Wolff Parkinson White</em>.  I would label his music as breakcore or IDM.  Album descriptions of his Wolff Parkinson White records always state that <em>&quot;Jochen does not play drums on this recording&quot;</em>.  I would assume that no real human could play those drum patterns anyway &#x1f916;.</p>
+<h3>Veritable Rapunzel</h3>
+<p><img src="https://f4.bcbits.com/img/a1622753268_16.jpg" alt="Album Art of Wolff Parkinson White - Veritable Rapunzel"></p>
+<p>A Cambrian explosion of samples, thrown at you in supersonic speed and razor-sharp precision.  This last sentence is utter nonsense but I always wanted to include the <em>Cambrian explosion</em> into a review.  Anyways, Veritable Rapunzel is a chaotic mess that forces you into a sensory overload, if listened in full and twice in a row.  Just give it a listen and you will know what I mean.</p>
+<p>If CPUs could dream in sleep mode this would be their soundtrack.</p>
+<iframe style="border: 0; width: 560px; height: 435px;" src="https://bandcamp.com/VideoEmbed?track=3924502164&bgcol=333333&linkcol=0f91ff" mozallowfullscreen="1" webkitallowfullscreen="1" allowfullscreen="1" seamless></iframe>
+<h3>Off World</h3>
+<p><img src="https://f4.bcbits.com/img/a0162131558_16.jpg" alt="Album Art of Wolff Parkinson White &amp; Jayden Chisholm - Off World"></p>
+<p>Rueckert's second release this year.  This time featuring Hayden Chrisholm, who does vocals on this album.  The record is a bit more jazzy than <em>Veritable Rapunzel</em>, yet it still has hyper complex beats with melodic elements that sometimes feel (intentionally) out of tune.  I would say that those ultra fast polyrhythmic beats with the slightly skewed melodics are Wolff Parkinson White's signature sound.  Advanced listening material.</p>
+<p>An album to impress an artsy-fartsy person whose favorite cocktail is a cosmopolitan.</p>
+<iframe style="border: 0; width: 560px; height: 435px;" src="https://bandcamp.com/VideoEmbed?track=3696636598&bgcol=333333&linkcol=0f91ff" mozallowfullscreen="1" webkitallowfullscreen="1" allowfullscreen="1" seamless></iframe>
+<h2>Heliochrysum — We Become Mist</h2>
+<p><img src="https://f4.bcbits.com/img/a0912067017_16.jpg" alt="Album Art of Heliochrysum - We Become Mist"></p>
+<p>This is the debut album of the Los Angeles based composer and sound designer duo Heliochrysum.  When hearing this album for the first time it reminded me of Blade Runner.  Production on this album is top notch, we get a great mixture of industrial like noises, massive drones, piano sounds and sometimes a heavy bass drum hit.  Everything about this album feels cinematic, which might be because <a href="https://en.wikipedia.org/wiki/Ben_Frost">Ben Frost</a> did the final mix.  I really hope that we see another album of the duo in the near future.</p>
+<p>Have you watched the launch of the James Webb space telescope?  This is your album then!</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3755221744/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://heliochrysum.bandcamp.com/album/we-become-mist">We Become Mist by Heliochrysum</a></iframe>
+<h2>Pessimista - Ocaso</h2>
+<p><img src="https://f4.bcbits.com/img/a0718026457_16.jpg" alt="Album Art of Pessimista - Ocaso"></p>
+<p>This best of list is really a roller coaster ride of musical genres.  Ocaso is a rather simple Black Metal album and in no terms perfect, but I do like its rawness combined and the punk rock influence.  My favorite track is <em>Se Ícaro soubesse o que sei agora...</em> which translates to <em>If Icarus knew what I know now...</em> if we can trust Google translate.  The record reminds me of black metal concerts in dark, shabby and smoky clubs.  Let's hope that there will be (more) concerts again in 2022.</p>
+<p>Perfect album for one who sees the glass as half empty.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3120607925/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://pessimista.bandcamp.com/album/ocaso">Ocaso by Pessimista</a></iframe>
+<h2>Crypt Monarch — The Necronaut</h2>
+<p><img src="https://f4.bcbits.com/img/a1170320464_16.jpg" alt="Album Art of Crypt Monarch - The Necronaut"></p>
+<p>This should be the first doom metal LP in the list.  Due to their bass heavy, down tuned and slow riffs listening to doom metal is almost meditative.  Of course, the more than 10 minute runtime for every track are an important factor as well.  I do like to listen to doom, be it stoner doom or whatever sub genre, while programming because it's not obtrusive and helps to concentrate on the work.  So, what makes this album special now?  I actually do not know, there's just the fact that I listened to it multiple times and that it feels very solid, sound and production wise.</p>
+<p>&#x1f6b6; &#x1f3d9;&#xfe0f; &#x1f33f;</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=4231458351/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://cryptmonarch.bandcamp.com/album/the-necronaut">The Necronaut by Crypt Monarch</a></iframe>
+## Tarika Blue — Self Titled
+<p><img src="https://f4.bcbits.com/img/a3851404934_16.jpg" alt="Album Art of Tarika Blue - Self Titled"></p>
+<p>Tarika Blue's self titled album is not a 2021 release, instead its a reissue of the record originally released in 1974.  Their music is best described as a fusion of jazz, soul and disco.  <a href="https://www.whosampled.com/sample/8049/Erykah-Badu-Didn%27t-Cha-Know-Tarika-Blue-Dreamflower/">Erykah Badu sampled</a> the track <em>Dreamflower</em> on her 2001 hit <em>Didn't Cha Know</em>.  Super smooth record, great vocals, nice guitar licks and funky drums.</p>
+<p>Too good to be just a sample source for hip hop beats, give it a spin and hear for yourself.</p>
+<p>Update: The album was removed from Bandcamp for some reason, so I'll link to its <a href="https://www.discogs.com/release/15700139-Tarika-Blue-Tarika-Blue">discogs page</a> instead.</p>
+<h2>Swami Lateplate — Doom Jazz</h2>
+<p><img src="https://f4.bcbits.com/img/a4055416360_16.jpg" alt="Album Art of Swami Lateplate - Doom Jazz"></p>
+<p>Doom Jazz is a self describing tite and tells you exactly where to put this album.  If you know <a href="https://en.wikipedia.org/wiki/Bohren_%26_der_Club_of_Gore">Bohren &amp; der Club of Gore</a> then this sound will be familiar to you.  I really like that this albums comes without brass instruments and vocals.  It's pretty hard to find a good jazz record that is not drowned in saxophone nonsense, for some reason sax players often need to show off and give solo parts that almost sound like they're on the edge of getting a heart attack.</p>
+<p>Best played on headphones while slandering through barely lit side streets on a rainy, full moon summer night.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=718302455/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://swamilateplate.bandcamp.com/album/doom-jazz">Doom Jazz by Swami Lateplate</a></iframe>
+<h2>Worm — Foreverglade</h2>
+<p><img src="https://f4.bcbits.com/img/a1911764557_16.jpg" alt="Album Art of Worm - Foreverglade"></p>
+<p>Florida death metal outfit Worm is gifting us with a real banger on the <a href="https://listen.20buckspin.com/">20 Buck Spin</a> label<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>.  Not sure how to label this album, maybe death metal or funeral doom, does not really matter anyways because the music is absolutely excellent and miles above their previous, debut album.  Let me admit that I'm the type of guy how rates an album by its cover, and let me tell you that this method works in at least <a href="https://en.wikipedia.org/wiki/Pareto_principle">four out of five cases</a>.  This is one of those four cases, I mean just look at this cover, as if M. C. Escher and Hieronymus Bosch had a frankensteinian love child (however that could be).  A no bullshit record that keeps on giving over the whole playtime, highly recommended.</p>
+<p>Ever did a tour thorugh the Florida swamps?  Me neither, but if you do, take this album with you.</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=713549408/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://listen.20buckspin.com/album/foreverglade">Foreverglade by Worm</a></iframe>
+<h2>HunoHuno — Pleasant Valley</h2>
+<p><img src="https://f4.bcbits.com/img/a1292322732_16.jpg" alt="Album Art of HunoHuno - Pleasant Valley"></p>
+<p><a href="https://detroitunderground.net/du-vhs/?v=79xpFvxFbvc">Detroit Underground</a>, a label best known for their excellent IDM and techno releases, gives us a rather hard to categorize album here.  We could just put the IDM sticker on it, but that wouldn't do the record enough justice.  A mad scientist mixture of sounds, textures and glitch hop style beats.</p>
+<blockquote>
+<p>Pleasant Valley Detour is the first part of a musical project that seeks to interpret the mystery of the daily journey into the unknown.</p>
+</blockquote>
+<p>Above sentence stems from the Bandcamp record description and gives me hope that there will be subsequent releases to this album.  For some reason they labeled it Pleasant Valley <em>Detour</em>, which might indicates that there will be follow ups as well.</p>
+<p>Not recommended for driving (judging by its album art).</p>
+<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=3772356991/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://detund.bandcamp.com/album/pleasant-valley">Pleasant Valley by HunoHuno</a></iframe>
+<h2>MC Solaar - Prose Combat</h2>
+<p><img src="https://img.discogs.com/VrvsVa9uPArdXgNzAg4PVexWlzU=/fit-in/600x600/filters:strip_icc():format(jpeg):mode_rgb():quality(90)/discogs-images/R-20348713-1632585572-9925.jpeg.jpg" alt="Album Art of MC Solaar - Prose Combat"></p>
+<p>Yet another reissue, this time a french hip hop classic originally put out in 1994 and that I managed to miss in my teenage years, much later, where I thought to have discovered everything there is rap-wise<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>.  <a href="https://en.wikipedia.org/wiki/Boom_bap">Boom bap</a> beats are totally my thing and luckily this style has seen a revival in recent years, even though mostly in the undergroud.  I just can't stand those rattling hi-hat trap beats every mumbling rapper uses nowadays, especially since they all sound the same.  No, this is not <em>old man yelling at couds</em>, I am allowed to hate things!  <a href="https://www.imdb.com/title/tt0113247/">La Haine</a>, a movie about youth life in french suut there's something missing which will make the cron job fail.
+Cron job errors will be reported to your local mail account, yes there's a local mail account for you user account.
+To read those mail just run <code>mail</code> in a terminal.
+You'll see the following error:</p>
+<pre><code>~/Documents/Obsidian ~
+fatal: Unable to read current working directory: Operation not permitted
+</code></pre>
+<p>We need to give <code>/usr/sbin/cron</code> full disk access in order to fix the issue.
+Please let me know if there's a way to restrict access of <code>cron</code> just to a particular directory.
+Open <code>system settings.app</code>, then <em>Privacy &amp; Security</em> and under <em>Full Disk Access</em> click the <code>+</code> button at the bottom to add <code>/usr/sbin/cron</code>.
+Note that you can use <code>Cmd+Shift+G</code> to enter a particular location in the file select dialog (this also works in Finder).</p>
+<p>Et voila, you now know how to setup and debug a cron job on macOS.</p>
+<p>PS: If your git is configured to automatically sign a commit add <code>--no-gpg-sign</code> to the <code>git commit</code> call or otherwise the cron job will fail because it cannot unlock your signing key.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
+    </item>
+    <item>
+      <title>How I Detected and Removed Malware from a Wordpress Installation</title>
+      <link>https://klingt.net/articles/how-i-detected-and-removed-malware-from-a-wordpress-installation.html</link>
+      <description>Wordpress is the major target for malware, mainly because it&#39;s so widespread, often unmaintained, and plugins add additional loopholes to the already fragile CMS.  Even with auto updates enabled, your Wordpress instance will not be safe from getting infected with malware.  In this article I will describe how I removed a malware from an up-to-date wordpress instance and describe what I found there.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Wordpress is the major target for malware, mainly because it&#39;s so widespread, often unmaintained, and plugins add additional loopholes to the already fragile CMS.  Even with auto updates enabled, your Wordpress instance will not be safe from getting infected with malware.  In this article I will describe how I removed a malware from an up-to-date wordpress instance and describe what I found there.">
+  
+  <title>How I Detected and Removed Malware from a Wordpress Installation</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>How I Detected and Removed Malware from a Wordpress Installation</h1>
+<p>This week a friend of mine reached out to me, telling me te-backref" role="doc-backlink">&#x21aand asking if I could have a look and see if I can fix it.  Of course they didn't got hacked, instead their Wordpress installation caught a malware.  The only indication I got was that those redirects started about three weeks ago.</p>
+<h2>Reproduce the Issue</h2>
+<p>First step was visiting their website with developer tools open, trying to reproduce the issue.  It didn't took me long to get redirected, I think the second link I clicked resulted in the scammer website being loaded.</p>
+<p><img src="scammer-website-family-drugs-net.png" alt="screenshot showing the scammer website family-drugs.net"></p>
+<p>Not a surprise that <code>family-drugs.net</code> accepts Bitcoin, fraud is the only use case of cryptocurrencies<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>.  The network tab wasn't showing any suspicious requests so I copied the request as cURL statement that resulted in the redirect.  Then I ran the cURL request and, voila, the server responded with a 302 redirect.  This]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
+    </item>
+    <item>
+      <title>Use your SSH key to sign git objects</title>
+      <link>https://klingt.net/articles/use-your-ssh-key-to-sign-git-objects.html</link>
+      <description>Since git 2.34 one can use an SSH key to sign a git object.  In this post I explain how to configure git to use an SSH key to sign a git object.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Since git 2.34 one can use an SSH key to sign a git object.  In this post I explain how to configure git to use an SSH key to sign a git object.">
+  
+  <title>Use your SSH key to sign git objects</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Use your SSH key to sign git objects</h1>
+<p><a href="https://github.blog/2021-11-15-highlights-from-git-2-34/">Git 2.34</a> added support for signing git objects, like commits, using an SSH key.
+Previously you could only choose between GPG and a X.509 certificate.
+Managing GPG keys is quite tedious in my experience, and every time I need to extend one my keys I cannot remember exactly how to do it.
+Lowering the bar to set up and maintain a working signing configuration could drive the adoption of git object signing, I think.
+Authenticating against a remote repository via SSH is probably the most common option, so most people who use git already have an SSH key available.
+Hence, let's use that to sign your git objects!</p>
+<p>Configuration is pretty straightforward, all you need to know is the filename of the SSH public key you want to use for signing.
+On Linux you can just run <code>ssh-add -L</code> to list the public keys with filename known to your SSH agent.
+However, on macOS you won't see filenames in the output.
+If you're unsure check your <code>~/.ssh/config</code> or the <code>*.pub</code> keys inside <code>~/.ssh</code>.</p>
+<p>After you've figured out which SSH key to use for singing just issue the following commands and you're good to go:</p>
+<pre><code class="language-shell">$ git config --global gpg.format ssh
+$ git config --global user.signingKey ~/.ssh/some_ssh_key.pub
+</code></pre>
+<p>Note that <code>~/.ssh/some_ssh_key.pub</code> must be adjusted to your setup, e.g. <code>~/.ssh/id_ed25519.pub</code>.
+There's also a <a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key#telling-git-about-your-ssh-key">GitHub Docs page</a> about the configuration process, in case you still have any questions.</p>
+<p>Here's how I check that git object signing works:</p>
+<pre><code class="language-shell">$ cd $(mktemp -d)
+$ git init
+$ git commit --allow-empty --gpg-sign -m 'A test message'
+</code></pre>
+<p>You're good to go if <code>git commit</code> exits without an error.</p>
+<p>Happy signing 🗝️</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
+    </item>
+    <item>
+      <title>How to setup and debug a cronjob in macOS</title>
+      <link>https://klingt.net/articles/how-to-setup-and-debug-a-cronjob-in-macos.html</link>
+      <description>A macOS installation comes with cron, so a regular can setup cronjobs.  How to setup a new cron job and how to debug a failing one will be explained in this article.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="A macOS installation comes with cron, so a regular can setup cronjobs.  How to setup a new cron job and how to debug a failing one will be explained in this article.">
+  
+  <title>How to setup and debug a cronjob in macOS</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>How to setup and debug a cronjob in macOS</h1>
+<p>I was surprised to see that macOS comes with cron pre-installed.
+A cron job is basically a recurring scheduled task, e.g. a script or command that is run every Tuesday on 2pm.
+To check if there any existing cron jobs run:</p>
+<pre><code class="language-sh">$ crontab -l
+crontab: no crontab for alinz - using an empty one
+crontab: no changes made to crontab
+</code></pre>
+<p>Let's say I want to commit my <a href="https://obsidian.md">Obsidian</a> notes once a day.
+First I write a small script that contains the commit logic before I setup the cron job.</p>
+<pre><code class="language-bash">$ cat &lt;&lt;&quot;EOD&quot;&gt;~/.local/bin/commit-obsidian-notes.sh &amp;&amp; chmod +x ~/.local/bin/commit-obsidian-notes.sh
+#!/usr/bin/env bash
+
+set -eu
+
+pushd ~/Documents/Obsidian
+git add --all
+git commit -m &quot;Obsidian notes from $(date -Idate)&quot;
+popd
+EOD
+</code></pre>
+<p>Note that the script above contains quite a bit of bash magic.
+It's perfectly fine to write the script file and set the executable flag in two separate commands.
+Also, if you quote the delimiter in a <code>HEREDOC</code> statement, like <code>&quot;EOD&quot;</code> in the example above, then no evaluation happens in the content.
+Otherwise the <code>$(date -Idate)</code> would've been evaluated to 2023-04-23 in the script.</p>
+<p>Since we have the script our only remaining step is to setup the cron job.
+Cron's syntax is a bit intricate and I'd recommend to use an online tool like <a href="https://crontab.guru">crontab.guru</a> to define the desired cron schedule expression.
+Running the job every day at 8pm can be expressed as <a href="https://crontab.guru/#0_20_*_*_*"><code>0 20 * * *</code></a>.</p>
+<p>To define the job run <code>crontab -e</code> and enter <code>0 20 * * * ~/.local/bin/commit-obsidian-notes.sh</code>.
+But there's something missing which will make the cron job fail.
+Cron job errors will be reported to your local mail account, yes there's a local mail account for you user account.
+To read those mail just run <code>mail</code> in a terminal.
+You'll see the following error:</p>
+<pre><code>~/Documents/Obsidian ~
+fatal: Unable to read current working directory: Operation not permitted
+</code></pre>
+<p>We need to give <code>/usr/sbin/cron</code> full disk access in order to fix the issue.
+Please let me know if there's a way to restrict access of <code>cron</code> just to a particular directory.
+Open <code>system settings.app</code>, then <em>Privacy &amp; Security</em> and under <em>Full Disk Access</em> click the <code>+</code> button at the bottom to add <code>/usr/sbin/cron</code>.
+Note that you can use <code>Cmd+Shift+G</code> to enter a particular location in the file select dialog (this also works in Finder).</p>
+<p>Et voila, you now know how to setup and debug a cron job on macOS.</p>
+<p>PS: If your git is configured to automatically sign a commit add <code>--no-gpg-sign</code> to the <code>git commit</code> call or otherwise the cron job will fail because it cannot unlock your signing key.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
     </item>
     <item>
       <title>Go 1.20, what&#39;s new</title>
@@ -2110,173 +2296,7 @@ A typical handler may print log records to standard error, or write them to a fi
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
-    </item>
-    <item>
-      <title>How to setup a cronjob in macOS</title>
-      <link>https://klingt.net/articles/how-to-setup-a-cronjob-in-macos.html</link>
-      <description>A macOS installation comes with cron, so a regular can setup cronjobs.  How to setup a new cron job and how to debug a failing one will be explained in this article.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="A macOS installation comes with cron, so a regular can setup cronjobs.  How to setup a new cron job and how to debug a failing one will be explained in this article.">
-  
-  <title>How to setup a cronjob in macOS</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>How to setup and debug a cronjob in macOS</h1>
-<p>I was surprised to see that macOS comes with cron pre-installed.
-A cron job is basically a recurring scheduled task, e.g. a script or command that is run every Tuesday on 2pm.
-To check if there any existing cron jobs run:</p>
-<pre><code class="language-sh">$ crontab -l
-crontab: no crontab for alinz - using an empty one
-crontab: no changes made to crontab
-</code></pre>
-<p>Let's say I want to commit my <a href="https://obsidian.md">Obsidian</a> notes once a day.
-First I write a small script that contains the commit logic before I setup the cron job.</p>
-<pre><code class="language-bash">$ cat &lt;&lt;&quot;EOD&quot;&gt;~/.local/bin/commit-obsidian-notes.sh &amp;&amp; chmod +x ~/.local/bin/commit-obsidian-notes.sh
-#!/usr/bin/env bash
-
-set -eu
-
-pushd ~/Documents/Obsidian
-git add --all
-git commit -m &quot;Obsidian notes from $(date -Idate)&quot;
-popd
-EOD
-</code></pre>
-<p>Note that the script above contains quite a bit of bash magic.
-It's perfectly fine to write the script file and set the executable flag in two separate commands.
-Also, if you quote the delimiter in a <code>HEREDOC</code> statement, like <code>&quot;EOD&quot;</code> in the example above, then no evaluation happens in the content.
-Otherwise the <code>$(date -Idate)</code> would've been evaluated to 2023-04-23 in the script.</p>
-<p>Since we have the script our only remaining step is to setup the cron job.
-Cron's syntax is a bit intricate and I'd recommend to use an online tool like <a href="https://crontab.guru">crontab.guru</a> to define the desired cron schedule expression.
-Running the job every day at 8pm can be expressed as <a href="https://crontab.guru/#0_20_*_*_*"><code>0 20 * * *</code></a>.</p>
-<p>To define the job run <code>crontab -e</code> and enter <code>0 20 * * * ~/.local/bin/commit-obsidian-notes.sh</code>.
-But there's something missing which will make the cron job fail.
-Cron job errors will be reported to your local mail account, yes there's a local mail account for you user account.
-To read those mail just run <code>mail</code> in a terminal.
-You'll see the following error:</p>
-<pre><code>~/Documents/Obsidian ~
-fatal: Unable to read current working directory: Operation not permitted
-</code></pre>
-<p>We need to give <code>/usr/sbin/cron</code> full disk access in order to fix the issue.
-Please let me know if there's a way to restrict access of <code>cron</code> just to a particular directory.
-Open <code>system settings.app</code>, then <em>Privacy &amp; Security</em> and under <em>Full Disk Access</em> click the <code>+</code> button at the bottom to add <code>/usr/sbin/cron</code>.
-Note that you can use <code>Cmd+Shift+G</code> to enter a particular location in the file select dialog (this also works in Finder).</p>
-<p>Et voila, you now know how to setup and debug a cron job on macOS.</p>
-<p>PS: If your git is configured to automatically sign a commit add <code>--no-gpg-sign</code> to the <code>git commit</code> call or otherwise the cron job will fail because it cannot unlock your signing key.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
-    </item>
-    <item>
-      <title>Use your SSH key to sign git objects</title>
-      <link>https://klingt.net/articles/use-your-ssh-key-to-sign-git-objects.html</link>
-      <description>Since git 2.34 one can use an SSH key to sign a git object.  In this post I explain how to configure git to use an SSH key to sign a git object.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="Since git 2.34 one can use an SSH key to sign a git object.  In this post I explain how to configure git to use an SSH key to sign a git object.">
-  
-  <title>Use your SSH key to sign git objects</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Use your SSH key to sign git objects</h1>
-<p><a href="https://github.blog/2021-11-15-highlights-from-git-2-34/">Git 2.34</a> added support for signing git objects, like commits, using an SSH key.
-Previously you could only choose between GPG and a X.509 certificate.
-Managing GPG keys is quite tedious in my experience, and every time I need to extend one my keys I cannot remember exactly how to do it.
-Lowering the bar to set up and maintain a working signing configuration could drive the adoption of git object signing, I think.
-Authenticating against a remote repository via SSH is probably the most common option, so most people who use git already have an SSH key available.
-Hence, let's use that to sign your git objects!</p>
-<p>Configuration is pretty straightforward, all you need to know is the filename of the SSH public key you want to use for signing.
-On Linux you can just run <code>ssh-add -L</code> to list the public keys with filename known to your SSH agent.
-However, on macOS you won't see filenames in the output.
-If you're unsure check your <code>~/.ssh/config</code> or the <code>*.pub</code> keys inside <code>~/.ssh</code>.</p>
-<p>After you've figured out which SSH key to use for singing just issue the following commands and you're good to go:</p>
-<pre><code class="language-shell">$ git config --global gpg.format ssh
-$ git config --global user.signingKey ~/.ssh/some_ssh_key.pub
-</code></pre>
-<p>Note that <code>~/.ssh/some_ssh_key.pub</code> must be adjusted to your setup, e.g. <code>~/.ssh/id_ed25519.pub</code>.
-There's also a <a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key#telling-git-about-your-ssh-key">GitHub Docs page</a> about the configuration process, in case you still have any questions.</p>
-<p>Here's how I check that git object signing works:</p>
-<pre><code class="language-shell">$ cd $(mktemp -d)
-$ git init
-$ git commit --allow-empty --gpg-sign -m 'A test message'
-</code></pre>
-<p>You're good to go if <code>git commit</code> exits without an error.</p>
-<p>Happy signing 🗝️</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sun, 23 Apr 2023 12:24:06 +0000</pubDate>
+      <pubDate>Sun, 23 Apr 2023 12:29:38 +0000</pubDate>
     </item>
   </channel>
 </rss>
