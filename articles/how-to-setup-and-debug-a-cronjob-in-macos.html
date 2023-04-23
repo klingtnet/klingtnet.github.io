@@ -95,7 +95,7 @@ Cron's syntax is a bit intricate and I'd recommend to use an online tool like <a
 Running the job every day at 8pm can be expressed as <a href="https://crontab.guru/#0_20_*_*_*"><code>0 20 * * *</code></a>.</p>
 <p>To define the job run <code>crontab -e</code> and enter <code>0 20 * * * ~/.local/bin/commit-obsidian-notes.sh</code>.
 But there's something missing which will make the cron job fail.
-Cron job errors will be reported to your local mail account, yes there's a local mail account for you user account.
+Cron job errors will be reported to your local mail account, yes there's a local mail account for your user account.
 To read those mail just run <code>mail</code> in a terminal.
 You'll see the following error:</p>
 <pre><code>~/Documents/Obsidian ~
