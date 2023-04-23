@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="A macOS installation comes with cron, so a regular can setup cronjobs.  How to setup a new cron job and how to debug a failing one will be explained in this article.">
+  
+  <title>How to setup a cronjob in macOS</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <header>
+        
+<nav>
+  <div class="header-bar">
+    <details class="mobile-menu">
+      <summary><img class="hamburger nav-icon invert-if-dark" src='https://klingt.net/assets/hamburger.svg'>
+      </summary>
+      <div class="dropdown sm-margin-top">
+        <ul class="nav nobullets">
+          
+          <li><a class="reset-color" href='https://klingt.net/index.html'>Home</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/articles'>Articles</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/about-me.html'>About Me</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/imprint.html'>Imprint</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/privacy-policy.html'>Privacy Policy</a></li>
+          
+        </ul>
+      </div>
+    </details>
+    <div>
+      <span class="bold sm-margin-right">klingt.net</span>
+      <img class="valign nav-icon invert-if-dark" alt="website logo" src="https://klingt.net/assets/logo.svg">
+    </div>
+  </div>
+</nav>
+
+      </header>
+    </div>
+    <div class="main">
+      <main>
+        
+<h1>How to setup and debug a cronjob in macOS</h1>
+<p>I was surprised to see that macOS comes with cron pre-installed.
+A cron job is basically a recurring scheduled task, e.g. a script or command that is run every Tuesday on 2pm.
+To check if there any existing cron jobs run:</p>
+<pre><code class="language-sh">$ crontab -l
+crontab: no crontab for alinz - using an empty one
+crontab: no changes made to crontab
+</code></pre>
+<p>Let's say I want to commit my <a href="https://obsidian.md">Obsidian</a> notes once a day.
+First I write a small script that contains the commit logic before I setup the cron job.</p>
+<pre><code class="language-bash">$ cat &lt;&lt;&quot;EOD&quot;&gt;~/.local/bin/commit-obsidian-notes.sh &amp;&amp; chmod +x ~/.local/bin/commit-obsidian-notes.sh
+#!/usr/bin/env bash
+
+set -eu
+
+pushd ~/Documents/Obsidian
+git add --all
+git commit -m &quot;Obsidian notes from $(date -Idate)&quot;
+popd
+EOD
+</code></pre>
+<p>Note that the script above contains quite a bit of bash magic.
+It's perfectly fine to write the script file and set the executable flag in two separate commands.
+Also, if you quote the delimiter in a <code>HEREDOC</code> statement, like <code>&quot;EOD&quot;</code> in the example above, then no evaluation happens in the content.
+Otherwise the <code>$(date -Idate)</code> would've been evaluated to 2023-04-23 in the script.</p>
+<p>Since we have the script our only remaining step is to setup the cron job.
+Cron's syntax is a bit intricate and I'd recommend to use an online tool like <a href="https://crontab.guru">crontab.guru</a> to define the desired cron schedule expression.
+Running the job every day at 8pm can be expressed as <a href="https://crontab.guru/#0_20_*_*_*"><code>0 20 * * *</code></a>.</p>
+<p>To define the job run <code>crontab -e</code> and enter <code>0 20 * * * ~/.local/bin/commit-obsidian-notes.sh</code>.
+But there's something missing which will make the cron job fail.
+Cron job errors will be reported to your local mail account, yes there's a local mail account for you user account.
+To read those mail just run <code>mail</code> in a terminal.
+You'll see the following error:</p>
+<pre><code>~/Documents/Obsidian ~
+fatal: Unable to read current working directory: Operation not permitted
+</code></pre>
+<p>We need to give <code>/usr/sbin/cron</code> full disk access in order to fix the issue.
+Please let me know if there's a way to restrict access of <code>cron</code> just to a particular directory.
+Open <code>system settings.app</code>, then <em>Privacy &amp; Security</em> and under <em>Full Disk Access</em> click the <code>+</code> button at the bottom to add <code>/usr/sbin/cron</code>.
+Note that you can use <code>Cmd+Shift+G</code> to enter a particular location in the file select dialog (this also works in Finder).</p>
+<p>Et voila, you now know how to setup and debug a cron job on macOS.</p>
+<p>PS: If your git is configured to automatically sign a commit add <code>--no-gpg-sign</code> to the <code>git commit</code> call or otherwise the cron job will fail because it cannot unlock your signing key.</p>
+
+
+      </main>
+    </div>
+    <div class="footer">
+      <footer>
+        
+<p class="center">
+  <a href="#">Back to top.</a>
+</p>
+
+      </footer>
+    </div>
+  </div>
+</body>
+
+</html>
+
+
+
+
