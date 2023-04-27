@@ -88,17 +88,17 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
 <p>The latter one disables certain processor <a href="https://www.thomas-krenn.com/en/wiki/Processor_P-states_and_C-states#C-states">c-states</a> which are basically sleep levels a processor can reach when idling, where C0 is the active state and Cn is the <em>lowest level of activity</em> or <em>power consumption</em>.  Disabling c-states is actually wasting energy and thus not very desirable.  I then set both kernel parameters and tried the latest kernel and the LTS variant, but spontaneous reboots still occured.  For a moment I ran out of ideas and suspected that either my Ryzen CPU was defective.</p>
 <p>A couple of weeks passed and after some UEFI update I had to reset BIOS settings to <em>optimized defaults</em>.  With default settings no random reboots happened anymore!  Problem solved?  Not yet.  In default settings memory is not running at full speed and Ryzen CPUs scale quite well with memory bandwidth.  Enabling the <a href="https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html">XMP memory profile</a> is, except the a different boot order, the only thing I change from defaults.  This made me curious and after some googling I stumbled over a <a href="https://linustechtips.com/topic/1298348-ryzen-reboot-at-idle-solved-rma/">linustechtips forum thread</a> where someone suggested to disable memory <em>power down mode</em>.  Because BIOS settings are often undocumented I cannot exactly say what this settings does, except from the obviously disabling some memory power saving feature.  Anyways, this setting was located under <code>AI Tweaker -&gt; Memory Timing Controls</code> which is kind of hidden.</p>
 <p>To make a long story short, disabling memory <em>power down mode</em> made the random reboots disappear, even when if the memory XMP profile is activated.</p>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
+<li id="fn:1">
 <p>dmidecode to the rescue, god knows which RAM I had installed: <code>$ sudo dmidecode --type memory | grep -i part</code>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
+<li id="fn:2">
 <p><code>$ journalctl --priority 0..3 --boot=-1</code>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
 
       </main>

@@ -201,20 +201,20 @@ func Write(w io.Writer) error {}
 <p>Generics are no panacea and there are limitations with the current implementation of this feature.  Most notably type parameters cannot be used in methods.  This limitation might be lifted with Go 1.19 and there is also a workaround the <a href="https://rakyll.org/generics-facilititators/">facilitator pattern</a>.</p>
 <p>No type parameters will be used in the standard library with Go 1.18.  I think it's a sensible decision of the Go team to first gather some experience with how the feature is used and then in a later release introduce generics to the standard library.  However, there are already some generic utility functions for <a href="https://pkg.go.dev/golang.org/x/exp/slices">slices</a> and <a href="https://pkg.go.dev/golang.org/x/exp/maps">maps</a>.  What I anticipate is a library that provides Rust iterator like functionality for slices, maps and sets.</p>
 <p>I hope I could give you some viable insights into the features and changes that Go 1.18 will bring.  Now <em>go</em> and write some, potentially generic, code!</p>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
+<li id="fn:1">
 <p>For this article <a href="https://go.dev/dl/#go1.18rc10">Go 1.18 release candidate 1</a> was used.  This release can be installed by running <code>go install golang.org/dl/go1.18rc1@latest &amp;&amp; go1.18rc1 download</code>.  Any other details were mostly found in the <a href="https://tip.golang.org/doc/go1.18#library">preliminary release notes</a>.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
+<li id="fn:2">
 <p>Also for PowerPC, but I don't know anyone targeting those CPUs.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
+<li id="fn:3">
 <p>Someone took the opportunity to implement a <a href="https://github.com/carlmjohnson/new"><code>new</code> package</a>.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
 
       </main>
