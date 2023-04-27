@@ -4,7 +4,7 @@
     <link>https://klingt.net/articles</link>
     <description></description>
     <managingEditor> (Andreas Linz)</managingEditor>
-    <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
+    <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
     <item>
       <title>AMD Ryzen random reboots under Linux when in idle</title>
       <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
@@ -87,7 +87,87 @@ Checking <code>journalctl</code> for errors did not reveal anything suspicious <
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
+    </item>
+    <item>
+      <title>GitHub Pages DNS Setup</title>
+      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
+      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
+  
+  <title>GitHub Pages DNS Setup</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>GitHub Pages DNS Setup</h1>
+<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
+<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
+<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
+<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
+<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
+www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
+</code></pre>
+<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
+<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
+<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
+klingt.net.             929     IN      A       185.199.109.153
+klingt.net.             929     IN      A       185.199.111.153
+klingt.net.             929     IN      A       185.199.108.153
+klingt.net.             929     IN      A       185.199.110.153
+</code></pre>
+<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
+<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
+<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
+<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
+<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
     </item>
     <item>
       <title>The simplest sorting algorithm</title>
@@ -188,73 +268,7 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
-    </item>
-    <item>
-      <title>Learning Touch Typing</title>
-      <link>https://klingt.net/articles/learning-touch-typing.html</link>
-      <description>My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.">
-  
-  <title>Learning Touch Typing</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Learning Touch Typing</h1>
-<p>Lately two articles about developer productivity appeared in my news feed.  The first was <a href="https://scattered-thoughts.net/writing/speed-matters/">speed matters</a>, which is part of the great <a href="https://scattered-thoughts.net/writing/reflections-on-a-decade-of-coding/">reflections on a decade of coding</a> article series, and second is <a href="https://danluu.com/productivity-velocity/">some reasons to work on productivity and velocity</a> by Dan Luu.  Both articles stated that <a href="https://en.wikipedia.org/wiki/Touch_typing">touch typing</a> improved their productivity.  The productivity boost was not limited to a bare increase in word per minute that one can type, instead the greater leverage comes from an increased accuracy.  Making less typing errors improves the writing flow because every typo requires a context switch in order to fix the mistake.  Jamie Brandon wrote:</p>
-<blockquote>
-<p>If you compare two coders, one who can touch type and one who has to hunt and peck, the difference between them is not just down to typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.</p>
-</blockquote>
-<p>Dan Luu  wrote this about typing speed:</p>
-<blockquote>
-<p>I've actually looked at where my time goes and a lot of it goes to things that are canonical examples of things that you shouldn't waste time improving because people don't spend much time doing them.</p>
-<p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
-</blockquote>
-<p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
-<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower than my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
-<p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
-<p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
-<p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
-<p>Now it's all about practicing and getting back to speed.  For this reason I forced myself to write this article using touch typing which went okay but could have been a bit smoother 🙄  Anyways, if you now decide to learn this skill as well I wish you all the best 💪.  It's not as hard to learn as you might think and it should only take a month of typing to become fast and accurate.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
     </item>
     <item>
       <title>Go Generics - A Quick Overview</title>
@@ -454,7 +468,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
     </item>
     <item>
       <title>(Almost) 30 Best Albums of 2021</title>
@@ -672,168 +686,7 @@ Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> acc
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
-    </item>
-    <item>
-      <title>GitHub Pages DNS Setup</title>
-      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
-      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
-  
-  <title>GitHub Pages DNS Setup</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>GitHub Pages DNS Setup</h1>
-<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
-<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
-<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
-<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
-<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
-www.klingt.net.         3600    IN      CNAME   klingtnet.github.io.
-</code></pre>
-<p>If you do not have a shell available, e.g. because you're reading this article from a phone or from a Windows machine &#x1f644;, you can use online tools liks <a href="https://dns-lookup.jvns.ca">https://dns-lookup.jvns.ca</a>.</p>
-<p>Setting up the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#using-an-apex-domain-for-your-github-pages-site">apex domain</a> is a bit more complicated because there are no <code>CNAME</code> records for this type of domain.  Instead, you can just define an <a href="https://support.dnsimple.com/articles/alias-record/"><code>ALIAS</code></a> record that—as the name suggests—alias <code>klingt.net</code> with <code>www.klingt.net</code>.  Let's do a DNS query using <code>dig</code> for the <code>ALIAS</code> record:</p>
-<pre><code class="language-sh">$ dig +noall +answer klingt.net ALIAS
-klingt.net.             929     IN      A       185.199.109.153
-klingt.net.             929     IN      A       185.199.111.153
-klingt.net.             929     IN      A       185.199.108.153
-klingt.net.             929     IN      A       185.199.110.153
-</code></pre>
-<p>You might wonder why the <code>ALIAS</code> record is not showing up in the result.  This is perfectly fine because the name server resolves an ALIAS directly into A (IPv4) or AAAA (IPv6) records.</p>
-<p>The last thing you need to do is to set the default domain under which your domain should be served, again in the Pages settings dialog of the GitHub repository:</p>
-<p><img src="/articles/github-pages-settings-domain-dialog.png" alt="GitHub Pages settings domain dialog"></p>
-<p>Doing this will create a <a href="https://github.com/klingtnet/klingtnet.github.io/blob/4bd965fa2772ccfc3c69bc5d22ed76d2b9fc65f0/static/CNAME"><code>CNAME</code> file</a> in the source branch that you've initially configured.  Make sure to pull the commit that created this file or manually add it to your website contents.</p>
-<p>Et Voilà!  Your website should now be served under your custom domain with a valid HTTPS certificate.</p>
-<div class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1">
-<p>Configuring the source branch and directory is something I always forget to do and then I'm wondering why my website does not show up &#x1f605;&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</div>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
-    </item>
-    <item>
-      <title>How to delete unreachable commits on GitHub</title>
-      <link>https://klingt.net/articles/how-to-delete-unreachable-commits-on-github.html</link>
-      <description>GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.">
-  
-  <title>How to delete unreachable commits on GitHub</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>How to delete unreachable commits on GitHub</h1>
-<p>The dangling<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> commit shown in the screenshot below should have never been on GitHub, at least not publicly visible.  The commit was part of a branch called <code>draft</code> that I pushed to the repository when it was still private.  If I am not mistaken then I removed the file, squashed and merged the <code>draft</code> branch into <code>master</code>, deleted the branch and then pushed it onto GitHub.  After making sure that branch <code>draft</code> was gone on GitHub I made the repository public.</p>
-<p><img src="unreachable-commit.png" alt="unreachable commit"></p>
-<p>As you can clearly see the commit is still there, and I only discovered this by accident when using GitHub's search.  So, the question is now how to delete this commit?  I cannot even reach the commit from my local repository:</p>
-<pre><code class="language-shell">$ git show b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
-fatal: bad object b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
-</code></pre>
-<p>Its parent commit is reachable though:</p>
-<pre><code class="language-shell">$ git show 01aea0c8e1bdceb7869403814a4ebb87e25883b2
-commit 01aea0c8e1bdceb7869403814a4ebb87e25883b2
-Author: Andreas Linz &lt;klingt.net@gmail.com&gt;
-Date:   Sun Jul 25 16:18:10 2021 +0200
-
-    Initial commit
-</code></pre>
-<p>If the commit would still be part of my local repository I could have removed it with this call and subsequent <code>git push</code>.</p>
-<pre><code class="language-shell">$ git reflog expire --expire-unreachable=all
-</code></pre>
-<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
-<blockquote>
-<p>As you mentioned, it does indeed appear to be an an unreferenced commit dangling in our cache. I went ahead and performed the garbage collection and cache clearance operations for the repository klingtnet/klingtnet.github.io. Attempting to access the commit directly now returns a 404.</p>
-</blockquote>
-<p>Luckily the commit contained no secrets, but what I learned from this lesson is that I need to double or triple check the contents of my repository before making it public on GitHub.  A simple deletion of a branch might not be sufficient.</p>
-<div class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1">
-<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.  The dangling commit was <code>https://github.com/klingtnet/klingtnet.github.io/blob/b2444ca54c74a7c9dde6504cf028b6c0f4729d8f/content/resume.md</code>, but this will return a 404 since the commit was deleted.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</div>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
     </item>
     <item>
       <title>My MacBook Air M1 setup</title>
@@ -1029,7 +882,88 @@ $ gpgconf --kill gpg-agent
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
+    </item>
+    <item>
+      <title>How to delete unreachable commits on GitHub</title>
+      <link>https://klingt.net/articles/how-to-delete-unreachable-commits-on-github.html</link>
+      <description>GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.">
+  
+  <title>How to delete unreachable commits on GitHub</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>How to delete unreachable commits on GitHub</h1>
+<p>The dangling<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> commit shown in the screenshot below should have never been on GitHub, at least not publicly visible.  The commit was part of a branch called <code>draft</code> that I pushed to the repository when it was still private.  If I am not mistaken then I removed the file, squashed and merged the <code>draft</code> branch into <code>master</code>, deleted the branch and then pushed it onto GitHub.  After making sure that branch <code>draft</code> was gone on GitHub I made the repository public.</p>
+<p><img src="unreachable-commit.png" alt="unreachable commit"></p>
+<p>As you can clearly see the commit is still there, and I only discovered this by accident when using GitHub's search.  So, the question is now how to delete this commit?  I cannot even reach the commit from my local repository:</p>
+<pre><code class="language-shell">$ git show b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
+fatal: bad object b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
+</code></pre>
+<p>Its parent commit is reachable though:</p>
+<pre><code class="language-shell">$ git show 01aea0c8e1bdceb7869403814a4ebb87e25883b2
+commit 01aea0c8e1bdceb7869403814a4ebb87e25883b2
+Author: Andreas Linz &lt;klingt.net@gmail.com&gt;
+Date:   Sun Jul 25 16:18:10 2021 +0200
+
+    Initial commit
+</code></pre>
+<p>If the commit would still be part of my local repository I could have removed it with this call and subsequent <code>git push</code>.</p>
+<pre><code class="language-shell">$ git reflog expire --expire-unreachable=all
+</code></pre>
+<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
+<blockquote>
+<p>As you mentioned, it does indeed appear to be an an unreferenced commit dangling in our cache. I went ahead and performed the garbage collection and cache clearance operations for the repository klingtnet/klingtnet.github.io. Attempting to access the commit directly now returns a 404.</p>
+</blockquote>
+<p>Luckily the commit contained no secrets, but what I learned from this lesson is that I need to double or triple check the contents of my repository before making it public on GitHub.  A simple deletion of a branch might not be sufficient.</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.  The dangling commit was <code>https://github.com/klingtnet/klingtnet.github.io/blob/b2444ca54c74a7c9dde6504cf028b6c0f4729d8f/content/resume.md</code>, but this will return a 404 since the commit was deleted.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
     </item>
     <item>
       <title>Go 1.18 with some fuzzing and a focus on generics</title>
@@ -1093,6 +1027,50 @@ hello: go1.18rc1
         build   GOOS=darwin
         build   vcs=git
         build   vcs.revision=9b40c4e23a9f695c5f2adb7886d7d45f3e395eb7
+        build   vcs.time=2022-02-19T11:59:45Z
+        build   vcs.modified=true
+</code></pre>
+<h2><code>net/netip</code></h2>
+<p><a href="https://tailscale.com/blog/netaddr-new-ip-type-for-go/">Tailscales' custom IP address struct</a> landed in the standard library.  In contrast to <a href="https://pkg.go.dev/net#IPAddr"><code>net.IPAddr</code></a> this type is immutable, takes less memory and is comparable making it usable as a map key.  Brad Fitzpatrick did a talk about <a href="https://archive.fosdem.org/2021/schedule/event/gotailscale/">Go at Tailscale</a> in FOSDEM 2021 where he goes into the details why they needed a new IP type.</p>
+<h2>Miscellaneous changes</h2>
+<p>With <code>strings.Cut()</code> you can cut a string around the first instance of a separator, e.g. <code>strings.Cut(&quot;a,b,c&quot;, &quot;,&quot;)</code> will result in <code>&quot;a&quot;, &quot;b,c&quot;, true</code>, where the last argument indicates if the separator was found or not.  The <code>strings.Title()</code> function for making a string title-case is now deprecated because it doesn't handle unicode properly, use <a href="https://pkg.go.dev/golang.org/x/text/cases#Title"><code>x/test/cases.Title</code></a> instead.</p>
+<p>Iteration in range pipelines of <code>html/template</code> or <code>text/template</code> templates can now be ended with <code>{{break}}</code> or the next iteration can be started immediately with <code>{{continue}}</code>.</p>
+<p>Mutexes from <code>sync</code> now have non blocking <code>TryLock/TryRLock</code> methods that try to acquire the lock if it's not currently held.</p>
+<blockquote>
+<p>Note that while correct uses of TryLock do exist, they are rare, and use of TryLock is often a sign of a deeper problem in a particular use of mutexes.</p>
+</blockquote>
+<p>A small <a href="https://pkg.go.dev/net/http@master#MaxBytesHandler">MaxBytesHandler</a> middleware was added to the <code>http</code> package.  This middleware limits the amount of data read from a request body or written in a response.  Most Go HTTP routers and web frameworks already provide such a middleware, often to prevent denial-of-service attacks.</p>
+<p>The <code>go vet</code> linting tool was updated to work with generic functions and types.  Did you know that <code>go vet</code> is automatically run when you <code>go test</code> your application?</p>
+<p>Our beloved formatting tool <code>gofmt</code> now reads and formats source code files concurrently making it significantly faster.  To be honest, formatting speed was never an issue for any Go code base I worked with.</p>
+<p>TLS 1.0 and TLS 1.1 are disabled by default now for <em>client</em> connections, the server side still allows TLS 1.0.</p>
+<h2>Compiler</h2>
+<p>Go now supports <a href="https://github.com/golang/go/wiki/MinimumRequirements#amd64">four microarchitecture levels</a> for the <code>amd64</code> target.  A specific level can be selected using the <code>GOAMD64=&lt;level&gt;</code> environment variable.  To compile a binary for a recent x86-64 CPU that supports AVX instructions run <code>GOAMD64=v3 GOARCH=amd64 go build my/application</code>.  A higher/newer microarchitecture version does not necessarily result in better performance, which means you need to benchmark.  The actual performance benefit should be negligible for most web servers.</p>
+<!-- TODO: Use github.com/golang/benchmarks or a small tool that applies image transformations to benchmark architecture levels  -->
+<p>In the <a href="https://tip.golang.org/doc/go1.17#compiler">previous release</a> the calling convention for functions on x86-64 targets switched from stack to register based, resulting in a minor speedup and slightly smaller binaries.  Support for register based calling convention is now expanded to arm64<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> and amd64 on all operating systems.</p>
+<h2>Workspace Mode</h2>
+<p>The <a href="https://go.googlesource.com/proposal/+/master/design/45713-workspace.md">module workspace proposal</a> was accepted and implemented.  Workspace mode is activated if the <code>go</code> tool finds a <code>go.work</code> file in the current directory or any of its parents.  A <code>go.work</code> file might look like this:</p>
+<pre><code>go 1.18
+
+use ../foo/bar
+use ./baz
+
+replace example.com/foo v1.2.3 =&gt; example.com/bar v1.4.5
+</code></pre>
+<p>Note that, as for any other <code>go.*</code> file, there is a subcommand that should be used to create or edit its contents.  In this case the command is <code>go work</code>.  In workspace mode you can easily use development versions of a library for many go modules, without having to write a <code>replace</code> directives in each of every <code>go.mod</code> files.  In the example above, that was copied from <code>go help work</code>, <code>./baz</code> could be a fork of <code>github.com/go-redis/redis</code> or any other dependency you need to modify locally.</p>
+<h2>Fuzzing</h2>
+<p>Regular unit tests use a fixed set of inputs to test a function, this often includes simple success cases and inputs that represent corner cases, e.g. the empty string, <code>nil</code> so on and so forth.</p>
+<p>Fuzz testing, or fuzzing, on the other hand generates random inputs to test functions with the goal to trigger bugs.  You can imagine that the search space, from which random inputs are taken, gets  huge very quickly.  Hence, fuzz testing implementations often use techniques to reduce the search space, e.g. instrumenting your code or some form of heuristics like starting with extreme values of an input type, those could be <code>NaN</code>, <code>-/+inf</code> for a float type or invalid unicode strings.</p>
+<p>Anyways, we don't have to care about the implementation details since the Go team did all the hard work of implementing a fuzzing framework for us and we can just use it.  A starting point to learn about fuzz testing in Go is the <a href="https://go.dev/doc/fuzz/">fuzzing landing page</a> that also links to the official tutorial.</p>
+<pre><code class="language-go">// copied from https://pkg.go.dev/testing@master#hdr-Fuzzing
+func FuzzHex(f *testing.F) {
+  for _, seed := range [][]byte{{}, {0}, {9}, {0xa}, {0xf}, {1, 2, 3, 4}} {
+    f.Add(seed)
+  }
+  f.Fuzz(func(t *testing.T, in []byte) {
+    enc := hex.EncodeToString(in)
+    out, err := hex.DecodeString(enc)
+    if err != nil {
+  
         build   vcs.time=2022-02-19T11:59:45Z
         build   vcs.modified=true
 </code></pre>
@@ -1229,7 +1207,7 @@ func Write(w io.Writer) error {}
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
     </item>
     <item>
       <title>Reading the last bytes of a stream in Go</title>
@@ -1334,519 +1312,7 @@ Please let me know if you've an even more efficient solution or there is any oth
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
-    </item>
-    <item>
-      <title>Git Worktrees (Update)</title>
-      <link>https://klingt.net/articles/git-worktrees-update.html</link>
-      <description>Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.">
-  
-  <title>Git Worktrees (Update)</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Git Worktrees</h1>
-<p>At work I often face the situation that I want to locally review some feature branch of a colleague.
-In general that's easy, one <code>git switch --track origin/branch-name</code> later and you have the changes in your local repository.
-However, most of the time I was currently working in my own feature branch where I had unstaged changes.
-This means I needed to commit my local changes before I could switch to the colleague's branch.
-Wouldn't it be nice if I could work on multiple branches of a repository at the same time?</p>
-<p>You might be tempted to say, I know how to do that, just make a second clone of the repository and call it a day.
-That would work, of course, but it'd also be very wasteful since the whole repository needs to be cloned twice.
-For large repositories this could mean duplicating hundreds or thousands of megabytes.
-But guess what, git got you covered!  There's a lesser known command that handles exactly this use case, it's <a href="https://git-scm.com/docs/git-worktree">git worktree</a>.</p>
-<p>There's a variety of ways how to use git worktrees.</p>
-<h2>Existing repository</h2>
-<p>Let's assume that you're in some repository that you cloned a while a go and now you want to switch to a different branch without having to commit your local changes.
-We can do that by creating a new <em>worktree</em> like this:</p>
-<pre><code class="language-sh">$ git worktree add ../repository.feat-x origin/feat-x
-</code></pre>
-<p>This will create a copy, which shares the same <code>.git</code> data, in <code>../repository.feat-x</code> at branch <code>origin/feat-x</code>.
-It's sensible to not add the worktree inside the existing repository because then you would need to ignore the worktree directory.</p>
-<p>Checking out a new branch when creating a worktree is also very easy, just pass <code>-b my-branch-name</code>, that's it.</p>
-<p>If you're done with your work you can remove your worktree like</p>
-<pre><code class="language-sh">$ rm -rf ../repository.feat-x
-</code></pre>
-<p>or run</p>
-<pre><code class="language-sh">$ git worktree remove repository.feat-x
-</code></pre>
-<p>instead.
-But <code>git worktree remove</code> should be preferred, otherwise some metadata will not be removed until a <code>git gc</code> or <code>git worktree prune</code> was run.</p>
-<p>All worktrees of a repository can be listed with <code>git worktree list</code>.</p>
-<h2>New repository layout</h2>
-<p><strong>Update</strong>: In the <a href="https://github.com/klingtnet/klingtnet.github.io/blob/c800968678ffda04ec8a0cab04f28b7774dcefef/content/articles/2022-10-07-git-worktree.md">previous version of this article</a> I used a <a href="https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---bare">bare repository</a> but this will lead to problems since this type of repository is not intended to be updated or track remote changes.  I did found another simple solution that I will explain below.</p>
-<p>Let's say we want to patch something in the Go compiler on <code>master</code>, <code>1.19</code> and <code>1.18</code> branches.
-We can setup the project like this:</p>
-<pre><code class="language-sh">$ mkdir -p go/worktrees
-$ cd go/worktrees
-$ git clone git@github.com:golang/go master
-$ cd master
-# add the first worktree
-$ git worktree add -B release-branch.go1.19 ../go1.19
-# and the second worktree
-$ git worktree add -B release-branch.go1.18 ../go1.18
-</code></pre>
-<p>What we end up with is a project structure like this</p>
-<pre><code class="language-sh">$ tree -L 2 go
-go
-└── worktrees
-    ├── go1.18
-    ├── go1.19
-    └── master
-</code></pre>
-<p>where each directory below <code>/worktrees</code> contains the repository at a different branch.</p>
-<p>For work projects I could imagine a directory structure that looks similar to this:</p>
-<pre><code class="language-sh">go
-└── worktrees
-    ├── master
-    ├── feature
-    └── review
-</code></pre>
-<p>Note that each worktree just acts like a copy of the repository, so I can switch to whatever branch I like, i.e. the worktree is not pinned to the branch it was created with.
-In the example above I would use <code>work/</code> for my local feature development, <code>experiment/</code> for trying out some ideas, and <code>review/</code> whenever I need to checkout and review some feature of a colleague locally.</p>
-<p>Let me know what your experience with git worktree is and if and how you use it.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
-    </item>
-    <item>
-      <title>Git Worktrees</title>
-      <link>https://klingt.net/articles/git-worktrees.html</link>
-      <description>Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.">
-  
-  <title>Git Worktrees</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<p>Please see the <a href="./git-worktrees-update.html">updated version of this article</a>.  On GitHub you can still find the <a href="https://github.com/klingtnet/klingtnet.github.io/blob/c800968678ffda04ec8a0cab04f28b7774dcefef/content/articles/2022-10-07-git-worktree.md">original version</a>.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
-    </item>
-    <item>
-      <title>Go 1.20, what&#39;s new</title>
-      <link>https://klingt.net/articles/go-1-20-what-s-new.html</link>
-      <description>An overview over the changes with Go 1.20 that are most interesting for me, and hopefully for you too</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="An overview over the changes with Go 1.20 that are most interesting for me, and hopefully for you too">
-  
-  <title>Go 1.20, what&#39;s new</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<ul>
-<li>Most information was taken from the <a href="https://go.dev/doc/go1.20">release notes</a>.</li>
-<li><del>Release is schedules for February 2023.  Releases happened between <a href="https://go.dev/doc/devel/release">16th and 25th in the past</a>, so I assume that 1.20 will be released end of February as well.</del> Final release was on 1st of February 2023, a little bit earlier than usual for an even version number Go release.</li>
-<li>I talked about this in our <a href="https://golangleipzig.space/posts/meetup-34-wrapup/">#34 Leipzig Gophers Meetup</a>.</li>
-</ul>
-<hr>
-<h2>Context</h2>
-<p>Package <code>context</code> received <a href="https://go.dev/pkg/context/#WithCancelCause"><code>WithCancelCause</code></a> which allows to cancel a context with a given error.  This is pretty nice to have something more meaningful than the usual <code>context.Canceled</code> error, that won't tell you anything about why something got canceled. (<a href="https://go.dev/play/p/dp-sJNfYp-Y">playground</a>)</p>
-<h2>Errors</h2>
-<p>Support for <strong>wrapping multiple errors</strong>:
-- <a href="https://pkg.go.dev/errors@go1.20rc3#Join"><code>errors.Join</code></a> to wrap multiple errors into one (error messages will be newline delimited)
-- <code>fmt.Errorf</code> now also supports multiple <code>%w</code> format verbs
-- (<a href="https://go.dev/play/p/xSsD6AF_w0p">playground</a>)</p>
-<h2>HTTP Response Controller</h2>
-<p><a href="https://pkg.go.dev/net/http@go1.20rc3#ResponseController"><strong><code>http.ResponseController</code></strong> </a> wraps an <code>http.ResponseWriter</code> and makes it more convenient to configure it in a Handler, e.g. no need to make checked-cast to an <code>http.Hijacker</code> anymore, just call <code>responseController.Hijack()</code>.  You can also easily overwrite <a href="https://github.com/golang/go/blob/7f59bea53c888605faaa46cd95aaa3ddf29219bf/src/net/http/responsecontroller.go#L84-L96">read</a> and <a href="https://github.com/golang/go/blob/7f59bea53c888605faaa46cd95aaa3ddf29219bf/src/net/http/responsecontroller.go#L104-L116">write deadlines</a> using the response controller.</p>
-<h2>Language Changes</h2>
-<p><strong>Slice to array conversions</strong> are now a bit easier to write (<a href="https://go.dev/play/p/fVXMR6m6ihu?v=gotip">playground</a>).</p>
-<pre><code class="language-go">	x := []int{1, 2, 3, 4}
-	var y [4]int
-	// Go 1.17+
-	// y = *(*[4]int)(x)
-	y = [4]int(x)
-</code></pre>
-<p>Note that this will</p>
-<ul>
-<li>copy the elements from the slice to the array</li>
-<li>conversion from array to slice works the same way</li>
-<li>array to slice conversion will run-time panic if the target slice won't fit the array (len(slice) &lt; len(array))</li>
-</ul>
-<p>Three new functions for <strong>unsafe modification fo slices</strong>, <a href="https://tip.golang.org/ref/spec/#Package_unsafe"><code>SliceData</code>, <code>String</code>, <code>StringData</code></a>.  Don't use it, except you know what you're doing.</p>
-<p>The <strong>language specification</strong> now defines that</p>
-<ul>
-<li>struct values are compared one field at a time, in the order fields were declared in the struct definition</li>
-<li><a href="https://go.dev/play/p/ovlSPbbcIrY">array values are compared one element at a time</a>, in increasing index order
-<ul>
-<li>Note that slices still cannot be checked for equality using the <code>==</code> operator!</li>
-</ul>
-</li>
-<li>comparisons stop at the first mismatch
-This will have no effect on existing programs, just a clear description in the spec what was already implemented</li>
-</ul>
-<p>The <strong><code>comparable</code> constraint</strong> is now satisfied by <a href="https://tip.golang.org/ref/spec#Comparison_operators">comparable types</a>, sound obvious, right 😅?  In practice this means that a <code>comparable</code> constrained type parameter can be instantiated with non-strictly comparable types, like <code>interface</code>s.  As an example, you can do the following from Go 1.20 (<a href="https://go.dev/play/p/lVBUwYionqs?v=gotip">playground</a>):</p>
-<pre><code class="language-go">func f[K comparable, V any](keys []K, values []V) map[K]V {
-	m := make(map[K]V, len(keys))
-	for idx, key := range keys {
-		m[key] = values[idx]
-	}
-	return m
-}
-</code></pre>
-<h2>Tools</h2>
-<ul>
-<li><strong>Go distribution will become a bit smaller</strong> because pre-compiled packages from the standard library are removed.  Instead, packages of the standard library will be compiled on the fly and then stored in the build cache (like any other package).</li>
-<li><code>go test -json</code> will <strong>emit a start <code>Action</code></strong> at the beginning of each test execution.</li>
-<li>The <code>go</code> command received a <code>-C</code> flag, to <strong>change working directory</strong>.</li>
-<li>Build related commands, <code>go build</code> and <code>go install</code>, received a <code>-cover</code> flag to <strong>build with code coverage instrumentation</strong>.
-<em>There will be a separate talk today, that is going to cover this topic in detail.</em></li>
-<li><strong><code>net</code> and <code>os/user</code> packages are now pure Go packages under macOS</strong>, i.e. they don't require <code>cgo</code> anymore.</li>
-<li><strong><code>cgo</code> is not required anymore for the race-detector under macOS</strong> (you can run those tests now without having XCode installed)</li>
-</ul>
-<h2>Runtime</h2>
-<ul>
-<li>Experimental support for arena allocations (<a href="https://github.com/golang/go/issues/51317">language proposal</a>).  Allocations from the memory arena are not considered by the GC and the arena will be freed manually all at once. (<a href="https://docs.go101.org/std/pkg/arena.html">package docs</a>).  Should be handled with care due to easy to introduce use-after-free bugs.</li>
-<li>Up to 2% less CPU usage, due to GC improvements.</li>
-</ul>
-<h2>Compiler</h2>
-<ul>
-<li>Support for <a href="https://en.wikipedia.org/wiki/Profile-guided_optimization">PGO</a>, <strong>profile guided optimization</strong>, in builds.  This means that the compiler can leverage run-time profile data to optimize the compiled code, e.g. by more aggressive inlining.  Claimed performane improvement are about 3-4%.  More PGO optimizations will be added in further releases.
-<ul>
-<li>Record a CPU profile and pass that to the compiler.</li>
-</ul>
-</li>
-<li><strong>Up to 10% faster build speeds</strong>, which brings compile times down to pre-generic levels.</li>
-<li>There's a Go blog post with more details: <a href="https://go.dev/blog/pgo-preview">https://go.dev/blog/pgo-preview</a></li>
-</ul>
-<h2>Standard Library</h2>
-<ul>
-<li><strong>New <code>crypto/ecdh</code> and <code>crypto/ecdsa</code> packages</strong> which replaces the more low-level <code>crypto/elliptic</code>.  Fillipo Valsorda wrote a deep-dive on the <a href="https://words.filippo.io/dispatches/go-1-20-cryptography/">Go 1.20 crypto changes</a>, e.g. the elliptic curve crypto packages don't rely on <code>math/big</code> anymore, which makes them constant time.</li>
-<li><a href="https://pkg.go.dev/net/http/httputil@go1.20rc3#ReverseProxy"><strong>ReverseProxy Rewrite hook</strong></a> superceeds <code>httputil.Director</code> and now receives in- and outbound requests with its <code>*httputil.ProxyRequest</code> argument (unlike a Director function which just received an outbound request).</li>
-</ul>
-<h3>Minor standard library changes</h3>
-<ul>
-<li><code>archive/tar</code> and <code>archive/zip</code> return <a href="https://go.dev/pkg/archive/zip/#ErrInsecurePath"><code>ErrInsecurePath</code></a> if an entry has an absolute path, contains invalid characters etc.  Note that this is currently behind a feature flag, <code>GODEBUG=zipinsecurepath=0</code> but might get the default in a future release.</li>
-<li>the <code>bytes</code> package received
-<ul>
-<li><a href="https://github.com/golang/go/blob/518889b35cb07f3e71963f2ccfc0f96ee26a51ce/src/bytes/bytes.go#L1352-L1360"><code>Clone</code></a>, which basically returns a clone of the given byte slice.  This is a useful utitlity with a pretty minimal implementation.</li>
-<li><code>TrimPrefix</code> and <code>TrimSuffix</code> got siblings, called <code>CutPrefix</code> and <code>CutSuffix</code>.  The difference is that the <code>Cut</code> functions will return if something was removed or not.</li>
-</ul>
-</li>
-<li><code>crypto/tls</code> TLS certificates are now shared across all clients using a certificate, which might lead to significantly less memory usage.  If a handshake fails a new <a href="https://go.dev/pkg/crypto/tls/#CertificateVerificationError"><code>CertificateVerificationError</code></a> is returned.</li>
-<li><a href="https://pkg.go.dev/io#OffsetWriter"><code>io.OffsetWriter</code></a> basically wraps an <code>io.WriterAt</code> and adds a given fixed offset to each Seek, Write etc. call.</li>
-<li>Directory trees are usually traversed using <code>fs.Walk</code>.  There's a new <code>SkipAll</code> error that can be used to immediately stop the recursion of <code>fs.Walk</code>, but this error will be consumed and the call will end successfully.  This is mostly for convenience, since you could have achieved the same before, just that the caller had to filter out the custom error that indicates the traversal stop.</li>
-<li><code>math/rand</code> will <a href="https://github.com/golang/go/blob/518889b35cb07f3e71963f2ccfc0f96ee26a51ce/src/math/rand/rand.go#L323-L334">automatically seed the global RNG</a>, this can deactivated with <code>GODEBUG=randautoseed=0</code>.  I'd argue against using the global RNG and to always instantiate a local instance.  The same applies to any other global instance.</li>
-<li>We got three new time formats:
-<ul>
-<li><code>DateTime   = &quot;2006-01-02 15:04:05&quot;</code></li>
-<li><code>DateOnly   = &quot;2006-01-02&quot;</code></li>
-<li><code>TimeOnly   = &quot;15:04:05&quot;</code></li>
-</ul>
-</li>
-<li><code>testing.B</code> can now report the <a href="https://go.dev/pkg/testing/#B.Elapsed">elapsed time</a></li>
-</ul>
-<h3>Future</h3>
-<ul>
-<li>There's a <a href="https://github.com/golang/go/issues/56345">proposal</a> to add structured logging support to the standard library with package <a href="https://go.googlesource.com/proposal/+/master/design/56345-structured-logging.md"><code>log/slog</code></a></li>
-<li>Can be used already by importing <a href="https://pkg.go.dev/golang.org/x/exp/slog"><code>golang.org/x/exp/slog</code></a></li>
-<li>Currently
-<ul>
-<li>we only have package <a href="https://pkg.go.dev/log"><code>log</code></a>,  a simple logger that has no support for levels etc.</li>
-<li>every logging library needs to define their own <code>Logger</code> interface</li>
-</ul>
-</li>
-<li>At a high level <code>slog</code> is build from three parts:
-<ul>
-<li><a href="https://pkg.go.dev/golang.org/x/exp/slog#Logger">Logger</a> is user-facing part of the API, exposing methods like <code>.Info()</code> or <code>.Error()</code>.
-<blockquote>
-<p>A Logger records structured information about each call to its Log, Debug, Info, Warn, and Error methods. For each call, it creates a Record and passes it to a Handler.</p>
-</blockquote>
-</li>
-<li><a href="https://pkg.go.dev/golang.org/x/exp/slog#Record">Record</a> contains data of a logging even.
-<blockquote>
-<p>A Record holds information about a log event. Copies of a Record share state. Do not modify a Record after handing out a copy to it.</p>
-</blockquote>
-</li>
-<li><a href="https://pkg.go.dev/golang.org/x/exp/slog#Handler">Handler</a> is a logging backend implementation, that handles records emitted from a Logger.
-<blockquote>
-<p>A Handler handles log records produced by a Logger.
-A typical handler may print log records to standard error, or write them to a file or database, or perhaps augment them with additional attributes and pass them on to another handler.</p>
-</blockquote>
-</li>
-</ul>
-</li>
-<li><a href="https://go.dev/play/p/FewCi4X-JSu">playground</a>, copied from this article: <a href="https://mrkaran.dev/posts/structured-logging-in-go-with-slog/">https://mrkaran.dev/posts/structured-logging-in-go-with-slog/</a></li>
-</ul>
-<hr>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
-    </item>
-    <item>
-      <title>Use your SSH key to sign git objects</title>
-      <link>https://klingt.net/articles/use-your-ssh-key-to-sign-git-objects.html</link>
-      <description>Since git 2.34 one can use an SSH key to sign a git object.  In this post I explain how to configure git to use an SSH key to sign a git object.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="Since git 2.34 one can use an SSH key to sign a git object.  In this post I explain how to configure git to use an SSH key to sign a git object.">
-  
-  <title>Use your SSH key to sign git objects</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Use your SSH key to sign git objects</h1>
-<p><a href="https://github.blog/2021-11-15-highlights-from-git-2-34/">Git 2.34</a> added support for signing git objects, like commits, using an SSH key.
-Previously you could only choose between GPG and a X.509 certificate.
-Managing GPG keys is quite tedious in my experience, and every time I need to extend one my keys I cannot remember exactly how to do it.
-Lowering the bar to set up and maintain a working signing configuration could drive the adoption of git object signing, I think.
-Authenticating against a remote repository via SSH is probably the most common option, so most people who use git already have an SSH key available.
-Hence, let's use that to sign your git objects!</p>
-<p>Configuration is pretty straightforward, all you need to know is the filename of the SSH public key you want to use for signing.
-On Linux you can just run <code>ssh-add -L</code> to list the public keys with filename known to your SSH agent.
-However, on macOS you won't see filenames in the output.
-If you're unsure check your <code>~/.ssh/config</code> or the <code>*.pub</code> keys inside <code>~/.ssh</code>.</p>
-<p>After you've figured out which SSH key to use for singing just issue the following commands and you're good to go:</p>
-<pre><code class="language-shell">$ git config --global gpg.format ssh
-$ git config --global user.signingKey ~/.ssh/some_ssh_key.pub
-</code></pre>
-<p>Note that <code>~/.ssh/some_ssh_key.pub</code> must be adjusted to your setup, e.g. <code>~/.ssh/id_ed25519.pub</code>.
-There's also a <a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key#telling-git-about-your-ssh-key">GitHub Docs page</a> about the configuration process, in case you still have any questions.</p>
-<p>Here's how I check that git object signing works:</p>
-<pre><code class="language-shell">$ cd $(mktemp -d)
-$ git init
-$ git commit --allow-empty --gpg-sign -m 'A test message'
-</code></pre>
-<p>You're good to go if <code>git commit</code> exits without an error.</p>
-<p>Happy signing 🗝️</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
-    </item>
-    <item>
-      <title>How to setup and debug a cronjob in macOS</title>
-      <link>https://klingt.net/articles/how-to-setup-and-debug-a-cronjob-in-macos.html</link>
-      <description>A macOS installation comes with cron, so a regular can setup cronjobs.  How to setup a new cron job and how to debug a failing one will be explained in this article.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="A macOS installation comes with cron, so a regular can setup cronjobs.  How to setup a new cron job and how to debug a failing one will be explained in this article.">
-  
-  <title>How to setup and debug a cronjob in macOS</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>How to setup and debug a cronjob in macOS</h1>
-<p>I was surprised to see that macOS comes with cron pre-installed.
-A cron job is basically a recurring scheduled task, e.g. a script or command that is run every Tuesday on 2pm.
-To check if there any existing cron jobs run:</p>
-<pre><code class="language-sh">$ crontab -l
-crontab: no crontab for alinz - using an empty one
-crontab: no changes made to crontab
-</code></pre>
-<p>Let's say I want to commit my <a href="https://obsidian.md">Obsidian</a> notes once a day.
-First I write a small script that contains the commit logic before I setup the cron job.</p>
-<pre><code class="language-bash">$ cat &lt;&lt;&quot;EOD&quot;&gt;~/.local/bin/commit-obsidian-notes.sh &amp;&amp; chmod +x ~/.local/bin/commit-obsidian-notes.sh
-#!/usr/bin/env bash
-
-set -eu
-
-pushd ~/Documents/Obsidian
-git add --all
-git commit -m &quot;Obsidian notes from $(date -Idate)&quot;
-popd
-EOD
-</code></pre>
-<p>Note that the script above contains quite a bit of bash magic.
-It's perfectly fine to write the script file and set the executable flag in two separate commands.
-Also, if you quote the delimiter in a <code>HEREDOC</code> statement, like <code>&quot;EOD&quot;</code> in the example above, then no evaluation happens in the content.
-Otherwise the <code>$(date -Idate)</code> would've been evaluated to 2023-04-23 in the script.</p>
-<p>Since we have the script our only remaining step is to setup the cron job.
-Cron's syntax is a bit intricate and I'd recommend to use an online tool like <a href="https://crontab.guru">crontab.guru</a> to define the desired cron schedule expression.
-Running the job every day at 8pm can be expressed as <a href="https://crontab.guru/#0_20_*_*_*"><code>0 20 * * *</code></a>.</p>
-<p>To define the job run <code>crontab -e</code> and enter <code>0 20 * * * ~/.local/bin/commit-obsidian-notes.sh</code>.
-But there's something missing which will make the cron job fail.
-Cron job errors will be reported to your local mail account, yes there's a local mail account for your user account.
-To read those mail just run <code>mail</code> in a terminal.
-You'll see the following error:</p>
-<pre><code>~/Documents/Obsidian ~
-fatal: Unable to read current working directory: Operation not permitted
-</code></pre>
-<p>We need to give <code>/usr/sbin/cron</code> full disk access in order to fix the issue.
-Please let me know if there's a way to restrict access of <code>cron</code> just to a particular directory.
-Open <code>system settings.app</code>, then <em>Privacy &amp; Security</em> and under <em>Full Disk Access</em> click the <code>+</code> button at the bottom to add <code>/usr/sbin/cron</code>.
-Note that you can use <code>Cmd+Shift+G</code> to enter a particular location in the file select dialog (this also works in Finder).</p>
-<p>Et voila, you now know how to setup and debug a cron job on macOS.</p>
-<p>PS: If your git is configured to automatically sign a commit add <code>--no-gpg-sign</code> to the <code>git commit</code> call or otherwise the cron job will fail because it cannot unlock your signing key.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
     </item>
     <item>
       <title>How I Detected and Removed Malware from a Wordpress Installation</title>
@@ -2276,7 +1742,519 @@ if (empty($_COOKIE['ssl_message'])) {
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Thu, 27 Apr 2023 20:53:12 +0000</pubDate>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
+    </item>
+    <item>
+      <title>Git Worktrees</title>
+      <link>https://klingt.net/articles/git-worktrees.html</link>
+      <description>Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.">
+  
+  <title>Git Worktrees</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<p>Please see the <a href="./git-worktrees-update.html">updated version of this article</a>.  On GitHub you can still find the <a href="https://github.com/klingtnet/klingtnet.github.io/blob/c800968678ffda04ec8a0cab04f28b7774dcefef/content/articles/2022-10-07-git-worktree.md">original version</a>.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
+    </item>
+    <item>
+      <title>Git Worktrees (Update)</title>
+      <link>https://klingt.net/articles/git-worktrees-update.html</link>
+      <description>Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Git Worktrees are a lesser known utility of git and I want to show how to use them and also motivate why I think they&#39;re useful.">
+  
+  <title>Git Worktrees (Update)</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Git Worktrees</h1>
+<p>At work I often face the situation that I want to locally review some feature branch of a colleague.
+In general that's easy, one <code>git switch --track origin/branch-name</code> later and you have the changes in your local repository.
+However, most of the time I was currently working in my own feature branch where I had unstaged changes.
+This means I needed to commit my local changes before I could switch to the colleague's branch.
+Wouldn't it be nice if I could work on multiple branches of a repository at the same time?</p>
+<p>You might be tempted to say, I know how to do that, just make a second clone of the repository and call it a day.
+That would work, of course, but it'd also be very wasteful since the whole repository needs to be cloned twice.
+For large repositories this could mean duplicating hundreds or thousands of megabytes.
+But guess what, git got you covered!  There's a lesser known command that handles exactly this use case, it's <a href="https://git-scm.com/docs/git-worktree">git worktree</a>.</p>
+<p>There's a variety of ways how to use git worktrees.</p>
+<h2>Existing repository</h2>
+<p>Let's assume that you're in some repository that you cloned a while a go and now you want to switch to a different branch without having to commit your local changes.
+We can do that by creating a new <em>worktree</em> like this:</p>
+<pre><code class="language-sh">$ git worktree add ../repository.feat-x origin/feat-x
+</code></pre>
+<p>This will create a copy, which shares the same <code>.git</code> data, in <code>../repository.feat-x</code> at branch <code>origin/feat-x</code>.
+It's sensible to not add the worktree inside the existing repository because then you would need to ignore the worktree directory.</p>
+<p>Checking out a new branch when creating a worktree is also very easy, just pass <code>-b my-branch-name</code>, that's it.</p>
+<p>If you're done with your work you can remove your worktree like</p>
+<pre><code class="language-sh">$ rm -rf ../repository.feat-x
+</code></pre>
+<p>or run</p>
+<pre><code class="language-sh">$ git worktree remove repository.feat-x
+</code></pre>
+<p>instead.
+But <code>git worktree remove</code> should be preferred, otherwise some metadata will not be removed until a <code>git gc</code> or <code>git worktree prune</code> was run.</p>
+<p>All worktrees of a repository can be listed with <code>git worktree list</code>.</p>
+<h2>New repository layout</h2>
+<p><strong>Update</strong>: In the <a href="https://github.com/klingtnet/klingtnet.github.io/blob/c800968678ffda04ec8a0cab04f28b7774dcefef/content/articles/2022-10-07-git-worktree.md">previous version of this article</a> I used a <a href="https://git-scm.com/docs/git-clone#Documentation/git-clone.txt---bare">bare repository</a> but this will lead to problems since this type of repository is not intended to be updated or track remote changes.  I did found another simple solution that I will explain below.</p>
+<p>Let's say we want to patch something in the Go compiler on <code>master</code>, <code>1.19</code> and <code>1.18</code> branches.
+We can setup the project like this:</p>
+<pre><code class="language-sh">$ mkdir -p go/worktrees
+$ cd go/worktrees
+$ git clone git@github.com:golang/go master
+$ cd master
+# add the first worktree
+$ git worktree add -B release-branch.go1.19 ../go1.19
+# and the second worktree
+$ git worktree add -B release-branch.go1.18 ../go1.18
+</code></pre>
+<p>What we end up with is a project structure like this</p>
+<pre><code class="language-sh">$ tree -L 2 go
+go
+└── worktrees
+    ├── go1.18
+    ├── go1.19
+    └── master
+</code></pre>
+<p>where each directory below <code>/worktrees</code> contains the repository at a different branch.</p>
+<p>For work projects I could imagine a directory structure that looks similar to this:</p>
+<pre><code class="language-sh">go
+└── worktrees
+    ├── master
+    ├── feature
+    └── review
+</code></pre>
+<p>Note that each worktree just acts like a copy of the repository, so I can switch to whatever branch I like, i.e. the worktree is not pinned to the branch it was created with.
+In the example above I would use <code>work/</code> for my local feature development, <code>experiment/</code> for trying out some ideas, and <code>review/</code> whenever I need to checkout and review some feature of a colleague locally.</p>
+<p>Let me know what your experience with git worktree is and if and how you use it.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
+    </item>
+    <item>
+      <title>Use your SSH key to sign git objects</title>
+      <link>https://klingt.net/articles/use-your-ssh-key-to-sign-git-objects.html</link>
+      <description>Since git 2.34 one can use an SSH key to sign a git object.  In this post I explain how to configure git to use an SSH key to sign a git object.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="Since git 2.34 one can use an SSH key to sign a git object.  In this post I explain how to configure git to use an SSH key to sign a git object.">
+  
+  <title>Use your SSH key to sign git objects</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Use your SSH key to sign git objects</h1>
+<p><a href="https://github.blog/2021-11-15-highlights-from-git-2-34/">Git 2.34</a> added support for signing git objects, like commits, using an SSH key.
+Previously you could only choose between GPG and a X.509 certificate.
+Managing GPG keys is quite tedious in my experience, and every time I need to extend one my keys I cannot remember exactly how to do it.
+Lowering the bar to set up and maintain a working signing configuration could drive the adoption of git object signing, I think.
+Authenticating against a remote repository via SSH is probably the most common option, so most people who use git already have an SSH key available.
+Hence, let's use that to sign your git objects!</p>
+<p>Configuration is pretty straightforward, all you need to know is the filename of the SSH public key you want to use for signing.
+On Linux you can just run <code>ssh-add -L</code> to list the public keys with filename known to your SSH agent.
+However, on macOS you won't see filenames in the output.
+If you're unsure check your <code>~/.ssh/config</code> or the <code>*.pub</code> keys inside <code>~/.ssh</code>.</p>
+<p>After you've figured out which SSH key to use for singing just issue the following commands and you're good to go:</p>
+<pre><code class="language-shell">$ git config --global gpg.format ssh
+$ git config --global user.signingKey ~/.ssh/some_ssh_key.pub
+</code></pre>
+<p>Note that <code>~/.ssh/some_ssh_key.pub</code> must be adjusted to your setup, e.g. <code>~/.ssh/id_ed25519.pub</code>.
+There's also a <a href="https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key#telling-git-about-your-ssh-key">GitHub Docs page</a> about the configuration process, in case you still have any questions.</p>
+<p>Here's how I check that git object signing works:</p>
+<pre><code class="language-shell">$ cd $(mktemp -d)
+$ git init
+$ git commit --allow-empty --gpg-sign -m 'A test message'
+</code></pre>
+<p>You're good to go if <code>git commit</code> exits without an error.</p>
+<p>Happy signing 🗝️</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
+    </item>
+    <item>
+      <title>Go 1.20, what&#39;s new</title>
+      <link>https://klingt.net/articles/go-1-20-what-s-new.html</link>
+      <description>An overview over the changes with Go 1.20 that are most interesting for me, and hopefully for you too</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="An overview over the changes with Go 1.20 that are most interesting for me, and hopefully for you too">
+  
+  <title>Go 1.20, what&#39;s new</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<ul>
+<li>Most information was taken from the <a href="https://go.dev/doc/go1.20">release notes</a>.</li>
+<li><del>Release is schedules for February 2023.  Releases happened between <a href="https://go.dev/doc/devel/release">16th and 25th in the past</a>, so I assume that 1.20 will be released end of February as well.</del> Final release was on 1st of February 2023, a little bit earlier than usual for an even version number Go release.</li>
+<li>I talked about this in our <a href="https://golangleipzig.space/posts/meetup-34-wrapup/">#34 Leipzig Gophers Meetup</a>.</li>
+</ul>
+<hr>
+<h2>Context</h2>
+<p>Package <code>context</code> received <a href="https://go.dev/pkg/context/#WithCancelCause"><code>WithCancelCause</code></a> which allows to cancel a context with a given error.  This is pretty nice to have something more meaningful than the usual <code>context.Canceled</code> error, that won't tell you anything about why something got canceled. (<a href="https://go.dev/play/p/dp-sJNfYp-Y">playground</a>)</p>
+<h2>Errors</h2>
+<p>Support for <strong>wrapping multiple errors</strong>:
+- <a href="https://pkg.go.dev/errors@go1.20rc3#Join"><code>errors.Join</code></a> to wrap multiple errors into one (error messages will be newline delimited)
+- <code>fmt.Errorf</code> now also supports multiple <code>%w</code> format verbs
+- (<a href="https://go.dev/play/p/xSsD6AF_w0p">playground</a>)</p>
+<h2>HTTP Response Controller</h2>
+<p><a href="https://pkg.go.dev/net/http@go1.20rc3#ResponseController"><strong><code>http.ResponseController</code></strong> </a> wraps an <code>http.ResponseWriter</code> and makes it more convenient to configure it in a Handler, e.g. no need to make checked-cast to an <code>http.Hijacker</code> anymore, just call <code>responseController.Hijack()</code>.  You can also easily overwrite <a href="https://github.com/golang/go/blob/7f59bea53c888605faaa46cd95aaa3ddf29219bf/src/net/http/responsecontroller.go#L84-L96">read</a> and <a href="https://github.com/golang/go/blob/7f59bea53c888605faaa46cd95aaa3ddf29219bf/src/net/http/responsecontroller.go#L104-L116">write deadlines</a> using the response controller.</p>
+<h2>Language Changes</h2>
+<p><strong>Slice to array conversions</strong> are now a bit easier to write (<a href="https://go.dev/play/p/fVXMR6m6ihu?v=gotip">playground</a>).</p>
+<pre><code class="language-go">	x := []int{1, 2, 3, 4}
+	var y [4]int
+	// Go 1.17+
+	// y = *(*[4]int)(x)
+	y = [4]int(x)
+</code></pre>
+<p>Note that this will</p>
+<ul>
+<li>copy the elements from the slice to the array</li>
+<li>conversion from array to slice works the same way</li>
+<li>array to slice conversion will run-time panic if the target slice won't fit the array (len(slice) &lt; len(array))</li>
+</ul>
+<p>Three new functions for <strong>unsafe modification fo slices</strong>, <a href="https://tip.golang.org/ref/spec/#Package_unsafe"><code>SliceData</code>, <code>String</code>, <code>StringData</code></a>.  Don't use it, except you know what you're doing.</p>
+<p>The <strong>language specification</strong> now defines that</p>
+<ul>
+<li>struct values are compared one field at a time, in the order fields were declared in the struct definition</li>
+<li><a href="https://go.dev/play/p/ovlSPbbcIrY">array values are compared one element at a time</a>, in increasing index order
+<ul>
+<li>Note that slices still cannot be checked for equality using the <code>==</code> operator!</li>
+</ul>
+</li>
+<li>comparisons stop at the first mismatch
+This will have no effect on existing programs, just a clear description in the spec what was already implemented</li>
+</ul>
+<p>The <strong><code>comparable</code> constraint</strong> is now satisfied by <a href="https://tip.golang.org/ref/spec#Comparison_operators">comparable types</a>, sound obvious, right 😅?  In practice this means that a <code>comparable</code> constrained type parameter can be instantiated with non-strictly comparable types, like <code>interface</code>s.  As an example, you can do the following from Go 1.20 (<a href="https://go.dev/play/p/lVBUwYionqs?v=gotip">playground</a>):</p>
+<pre><code class="language-go">func f[K comparable, V any](keys []K, values []V) map[K]V {
+	m := make(map[K]V, len(keys))
+	for idx, key := range keys {
+		m[key] = values[idx]
+	}
+	return m
+}
+</code></pre>
+<h2>Tools</h2>
+<ul>
+<li><strong>Go distribution will become a bit smaller</strong> because pre-compiled packages from the standard library are removed.  Instead, packages of the standard library will be compiled on the fly and then stored in the build cache (like any other package).</li>
+<li><code>go test -json</code> will <strong>emit a start <code>Action</code></strong> at the beginning of each test execution.</li>
+<li>The <code>go</code> command received a <code>-C</code> flag, to <strong>change working directory</strong>.</li>
+<li>Build related commands, <code>go build</code> and <code>go install</code>, received a <code>-cover</code> flag to <strong>build with code coverage instrumentation</strong>.
+<em>There will be a separate talk today, that is going to cover this topic in detail.</em></li>
+<li><strong><code>net</code> and <code>os/user</code> packages are now pure Go packages under macOS</strong>, i.e. they don't require <code>cgo</code> anymore.</li>
+<li><strong><code>cgo</code> is not required anymore for the race-detector under macOS</strong> (you can run those tests now without having XCode installed)</li>
+</ul>
+<h2>Runtime</h2>
+<ul>
+<li>Experimental support for arena allocations (<a href="https://github.com/golang/go/issues/51317">language proposal</a>).  Allocations from the memory arena are not considered by the GC and the arena will be freed manually all at once. (<a href="https://docs.go101.org/std/pkg/arena.html">package docs</a>).  Should be handled with care due to easy to introduce use-after-free bugs.</li>
+<li>Up to 2% less CPU usage, due to GC improvements.</li>
+</ul>
+<h2>Compiler</h2>
+<ul>
+<li>Support for <a href="https://en.wikipedia.org/wiki/Profile-guided_optimization">PGO</a>, <strong>profile guided optimization</strong>, in builds.  This means that the compiler can leverage run-time profile data to optimize the compiled code, e.g. by more aggressive inlining.  Claimed performane improvement are about 3-4%.  More PGO optimizations will be added in further releases.
+<ul>
+<li>Record a CPU profile and pass that to the compiler.</li>
+</ul>
+</li>
+<li><strong>Up to 10% faster build speeds</strong>, which brings compile times down to pre-generic levels.</li>
+<li>There's a Go blog post with more details: <a href="https://go.dev/blog/pgo-preview">https://go.dev/blog/pgo-preview</a></li>
+</ul>
+<h2>Standard Library</h2>
+<ul>
+<li><strong>New <code>crypto/ecdh</code> and <code>crypto/ecdsa</code> packages</strong> which replaces the more low-level <code>crypto/elliptic</code>.  Fillipo Valsorda wrote a deep-dive on the <a href="https://words.filippo.io/dispatches/go-1-20-cryptography/">Go 1.20 crypto changes</a>, e.g. the elliptic curve crypto packages don't rely on <code>math/big</code> anymore, which makes them constant time.</li>
+<li><a href="https://pkg.go.dev/net/http/httputil@go1.20rc3#ReverseProxy"><strong>ReverseProxy Rewrite hook</strong></a> superceeds <code>httputil.Director</code> and now receives in- and outbound requests with its <code>*httputil.ProxyRequest</code> argument (unlike a Director function which just received an outbound request).</li>
+</ul>
+<h3>Minor standard library changes</h3>
+<ul>
+<li><code>archive/tar</code> and <code>archive/zip</code> return <a href="https://go.dev/pkg/archive/zip/#ErrInsecurePath"><code>ErrInsecurePath</code></a> if an entry has an absolute path, contains invalid characters etc.  Note that this is currently behind a feature flag, <code>GODEBUG=zipinsecurepath=0</code> but might get the default in a future release.</li>
+<li>the <code>bytes</code> package received
+<ul>
+<li><a href="https://github.com/golang/go/blob/518889b35cb07f3e71963f2ccfc0f96ee26a51ce/src/bytes/bytes.go#L1352-L1360"><code>Clone</code></a>, which basically returns a clone of the given byte slice.  This is a useful utitlity with a pretty minimal implementation.</li>
+<li><code>TrimPrefix</code> and <code>TrimSuffix</code> got siblings, called <code>CutPrefix</code> and <code>CutSuffix</code>.  The difference is that the <code>Cut</code> functions will return if something was removed or not.</li>
+</ul>
+</li>
+<li><code>crypto/tls</code> TLS certificates are now shared across all clients using a certificate, which might lead to significantly less memory usage.  If a handshake fails a new <a href="https://go.dev/pkg/crypto/tls/#CertificateVerificationError"><code>CertificateVerificationError</code></a> is returned.</li>
+<li><a href="https://pkg.go.dev/io#OffsetWriter"><code>io.OffsetWriter</code></a> basically wraps an <code>io.WriterAt</code> and adds a given fixed offset to each Seek, Write etc. call.</li>
+<li>Directory trees are usually traversed using <code>fs.Walk</code>.  There's a new <code>SkipAll</code> error that can be used to immediately stop the recursion of <code>fs.Walk</code>, but this error will be consumed and the call will end successfully.  This is mostly for convenience, since you could have achieved the same before, just that the caller had to filter out the custom error that indicates the traversal stop.</li>
+<li><code>math/rand</code> will <a href="https://github.com/golang/go/blob/518889b35cb07f3e71963f2ccfc0f96ee26a51ce/src/math/rand/rand.go#L323-L334">automatically seed the global RNG</a>, this can deactivated with <code>GODEBUG=randautoseed=0</code>.  I'd argue against using the global RNG and to always instantiate a local instance.  The same applies to any other global instance.</li>
+<li>We got three new time formats:
+<ul>
+<li><code>DateTime   = &quot;2006-01-02 15:04:05&quot;</code></li>
+<li><code>DateOnly   = &quot;2006-01-02&quot;</code></li>
+<li><code>TimeOnly   = &quot;15:04:05&quot;</code></li>
+</ul>
+</li>
+<li><code>testing.B</code> can now report the <a href="https://go.dev/pkg/testing/#B.Elapsed">elapsed time</a></li>
+</ul>
+<h3>Future</h3>
+<ul>
+<li>There's a <a href="https://github.com/golang/go/issues/56345">proposal</a> to add structured logging support to the standard library with package <a href="https://go.googlesource.com/proposal/+/master/design/56345-structured-logging.md"><code>log/slog</code></a></li>
+<li>Can be used already by importing <a href="https://pkg.go.dev/golang.org/x/exp/slog"><code>golang.org/x/exp/slog</code></a></li>
+<li>Currently
+<ul>
+<li>we only have package <a href="https://pkg.go.dev/log"><code>log</code></a>,  a simple logger that has no support for levels etc.</li>
+<li>every logging library needs to define their own <code>Logger</code> interface</li>
+</ul>
+</li>
+<li>At a high level <code>slog</code> is build from three parts:
+<ul>
+<li><a href="https://pkg.go.dev/golang.org/x/exp/slog#Logger">Logger</a> is user-facing part of the API, exposing methods like <code>.Info()</code> or <code>.Error()</code>.
+<blockquote>
+<p>A Logger records structured information about each call to its Log, Debug, Info, Warn, and Error methods. For each call, it creates a Record and passes it to a Handler.</p>
+</blockquote>
+</li>
+<li><a href="https://pkg.go.dev/golang.org/x/exp/slog#Record">Record</a> contains data of a logging even.
+<blockquote>
+<p>A Record holds information about a log event. Copies of a Record share state. Do not modify a Record after handing out a copy to it.</p>
+</blockquote>
+</li>
+<li><a href="https://pkg.go.dev/golang.org/x/exp/slog#Handler">Handler</a> is a logging backend implementation, that handles records emitted from a Logger.
+<blockquote>
+<p>A Handler handles log records produced by a Logger.
+A typical handler may print log records to standard error, or write them to a file or database, or perhaps augment them with additional attributes and pass them on to another handler.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><a href="https://go.dev/play/p/FewCi4X-JSu">playground</a>, copied from this article: <a href="https://mrkaran.dev/posts/structured-logging-in-go-with-slog/">https://mrkaran.dev/posts/structured-logging-in-go-with-slog/</a></li>
+</ul>
+<hr>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
+    </item>
+    <item>
+      <title>How to setup and debug a cronjob in macOS</title>
+      <link>https://klingt.net/articles/how-to-setup-and-debug-a-cronjob-in-macos.html</link>
+      <description>A macOS installation comes with cron, so a regular can setup cronjobs.  How to setup a new cron job and how to debug a failing one will be explained in this article.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="A macOS installation comes with cron, so a regular can setup cronjobs.  How to setup a new cron job and how to debug a failing one will be explained in this article.">
+  
+  <title>How to setup and debug a cronjob in macOS</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>How to setup and debug a cronjob in macOS</h1>
+<p>I was surprised to see that macOS comes with cron pre-installed.
+A cron job is basically a recurring scheduled task, e.g. a script or command that is run every Tuesday on 2pm.
+To check if there any existing cron jobs run:</p>
+<pre><code class="language-sh">$ crontab -l
+crontab: no crontab for alinz - using an empty one
+crontab: no changes made to crontab
+</code></pre>
+<p>Let's say I want to commit my <a href="https://obsidian.md">Obsidian</a> notes once a day.
+First I write a small script that contains the commit logic before I setup the cron job.</p>
+<pre><code class="language-bash">$ cat &lt;&lt;&quot;EOD&quot;&gt;~/.local/bin/commit-obsidian-notes.sh &amp;&amp; chmod +x ~/.local/bin/commit-obsidian-notes.sh
+#!/usr/bin/env bash
+
+set -eu
+
+pushd ~/Documents/Obsidian
+git add --all
+git commit -m &quot;Obsidian notes from $(date -Idate)&quot;
+popd
+EOD
+</code></pre>
+<p>Note that the script above contains quite a bit of bash magic.
+It's perfectly fine to write the script file and set the executable flag in two separate commands.
+Also, if you quote the delimiter in a <code>HEREDOC</code> statement, like <code>&quot;EOD&quot;</code> in the example above, then no evaluation happens in the content.
+Otherwise the <code>$(date -Idate)</code> would've been evaluated to 2023-04-23 in the script.</p>
+<p>Since we have the script our only remaining step is to setup the cron job.
+Cron's syntax is a bit intricate and I'd recommend to use an online tool like <a href="https://crontab.guru">crontab.guru</a> to define the desired cron schedule expression.
+Running the job every day at 8pm can be expressed as <a href="https://crontab.guru/#0_20_*_*_*"><code>0 20 * * *</code></a>.</p>
+<p>To define the job run <code>crontab -e</code> and enter <code>0 20 * * * ~/.local/bin/commit-obsidian-notes.sh</code>.
+But there's something missing which will make the cron job fail.
+Cron job errors will be reported to your local mail account, yes there's a local mail account for your user account.
+To read those mail just run <code>mail</code> in a terminal.
+You'll see the following error:</p>
+<pre><code>~/Documents/Obsidian ~
+fatal: Unable to read current working directory: Operation not permitted
+</code></pre>
+<p>We need to give <code>/usr/sbin/cron</code> full disk access in order to fix the issue.
+Please let me know if there's a way to restrict access of <code>cron</code> just to a particular directory.
+Open <code>system settings.app</code>, then <em>Privacy &amp; Security</em> and under <em>Full Disk Access</em> click the <code>+</code> button at the bottom to add <code>/usr/sbin/cron</code>.
+Note that you can use <code>Cmd+Shift+G</code> to enter a particular location in the file select dialog (this also works in Finder).</p>
+<p>Et voila, you now know how to setup and debug a cron job on macOS.</p>
+<p>PS: If your git is configured to automatically sign a commit add <code>--no-gpg-sign</code> to the <code>git commit</code> call or otherwise the cron job will fail because it cannot unlock your signing key.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Thu, 27 Apr 2023 21:09:45 +0000</pubDate>
     </item>
   </channel>
 </rss>
