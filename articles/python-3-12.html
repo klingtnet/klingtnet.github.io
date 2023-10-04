@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="My summary of the Python 3.12 release highlights.">
+  
+  <title>Python 3.12</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <header>
+        
+<nav>
+  <div class="header-bar">
+    <details class="mobile-menu">
+      <summary><img class="hamburger nav-icon invert-if-dark" src='https://klingt.net/assets/hamburger.svg'>
+      </summary>
+      <div class="dropdown sm-margin-top">
+        <ul class="nav nobullets">
+          
+          <li><a class="reset-color" href='https://klingt.net/index.html'>Home</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/articles'>Articles</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/about-me.html'>About Me</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/imprint.html'>Imprint</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/privacy-policy.html'>Privacy Policy</a></li>
+          
+        </ul>
+      </div>
+    </details>
+    <div>
+      <span class="bold sm-margin-right">klingt.net</span>
+      <img class="valign nav-icon invert-if-dark" alt="website logo" src="https://klingt.net/assets/logo.svg">
+    </div>
+  </div>
+</nav>
+
+      </header>
+    </div>
+    <div class="main">
+      <main>
+        
+<h1>Yet another Python 3.12 release highlight summary</h1>
+<p>I'm doing a fair bit of Python lately, and thus need to stay up-to-date with the language releases.  Some days ago Python 3.12 was released.  The <a href="https://www.python.org/downloads/release/python-3120/">release note overview</a>, and the detailed <a href="https://docs.python.org/3.12/whatsnew/3.12.html">release notes</a> in particular, are worth a read.  Other articles I can recommend are <a href="https://www.bitecode.dev/p/python-312-what-didnt-make-the-headlines">What didn't make the headlines</a> and <a href="https://realpython.com/python312-typing/">Static typing improvements</a>.</p>
+<ul>
+<li><a href="https://peps.python.org/pep-0701/">PEP-701</a> formalisation of f-strings will lift some limitations, like nested f-strings, use of the quotation delimiter of the f-strings inside an expression, comments in multi-line f-strings. Examples are listed in the PEP.</li>
+</ul>
+<pre><code class="language-python">&gt;&gt;&gt; m = {'a': 'b'}
+# This wasn't possible in prior versions.
+&gt;&gt;&gt; f'm={m['a']}'
+'m=b'
+</code></pre>
+<p>Since Python3.8 there's also a debug format in f-strings, that is used when post-fixing a variable with <code>=</code>:</p>
+<pre><code class="language-python">&gt;&gt;&gt; f'{m=}'
+&quot;m={'a': 'b'}&quot;
+# or as nested f-string
+&gt;&gt;&gt; f'Debug output {f'{m=}'}'
+&quot;Debug output m={'a': 'b'}&quot;
+</code></pre>
+<ul>
+<li><a href="https://docs.python.org/3.12/whatsnew/3.12.html#pep-688-making-the-buffer-protocol-accessible-in-python">PEP 688</a> exposes the <em>Buffer protocol</em> (interface) to Python code.  This was limited to CPython before. I'm not sure what this is useful for.</li>
+<li><a href="https://peps.python.org/pep-0669/">PEP 669</a> introduces a new, low-overhead debugging and profiling API.</li>
+<li><a href="https://peps.python.org/pep-0684">PEP 684</a> adds support for isolated sub-interpreters with separate GILs, and is only available through the C-API. So, not of any particular use for me.</li>
+<li><a href="https://docs.python.org/3.12/whatsnew/3.12.html#improved-error-messages">Improved error messages</a>.</li>
+<li>Large and small <a href="https://docs.python.org/3.12/whatsnew/3.12.html#optimizations">performance improvements</a>, enhanced <a href="https://docs.python.org/3.12/howto/perf_profiling.html">Linux <code>perf</code> support</a>.</li>
+<li><a href="https://peps.python.org/pep-0695/">PEP 695</a> adds a new type annotation syntax.</li>
+</ul>
+<p>More compact way to create generic functions and classes:</p>
+<pre><code class="language-python">def max[T](args: Iterable[T]) -&gt; T:
+	...
+</code></pre>
+<p>Type aliases can be generic:</p>
+<pre><code class="language-python">type Point[T] = tuple[T, T]
+</code></pre>
+<ul>
+<li><a href="https://docs.python.org/3.12/whatsnew/3.12.html#pep-698-override-decorator-for-static-typing">PEP 698</a> adds a <code>@override</code> decorator to indicate methods that should be overridden in a sub-class.</li>
+<li>The <code>sqlite3</code> module received a <a href="https://docs.python.org/3.12/library/sqlite3.html#sqlite3-cli">command-line interface</a>.  This might be useful as a simple SQLite interface on systems that only have Python available.</li>
+</ul>
+<pre><code class="language-bash"># python -m sqlite3 [-h] [-v] [filename] [sql]
+$ python -m sqlite3
+sqlite3 shell, running on SQLite version 3.39.5
+Connected to a transient in-memory database
+
+Each command will be run using execute() on the cursor.
+Type &quot;.help&quot; for more information; type &quot;.quit&quot; or CTRL-D to quit.
+sqlite&gt;
+</code></pre>
+<ul>
+<li>The <code>uuid</code> package receive a <a href="https://docs.python.org/3.12/library/uuid.html#uuid-cli">CLI</a> as well. Now there's an easy cross-platform way to create UUIDs!</li>
+</ul>
+<pre><code class="language-python3"># python -m uuid [-h] [-u {uuid1,uuid3,uuid4,uuid5}] [-n NAMESPACE] [-N NAME]
+$ python -m uuid -u uuid4
+6ebeb0e2-6257-4eba-a638-97a20a222bed
+</code></pre>
+<ul>
+<li><a href="https://docs.python.org/3.12/library/itertools.html#itertools.batched"><code>itertools.batched</code></a> will be very useful for splitting workloads into even sized chunks.</li>
+</ul>
+<pre><code class="language-python">&gt;&gt;&gt; from itertools import batched
+&gt;&gt;&gt; files = [f'{i}.txt' for i in range(1,11)]
+&gt;&gt;&gt; list(batched(files, 3))
+[('1.txt', '2.txt', '3.txt'), ('4.txt', '5.txt', '6.txt'), ('7.txt', '8.txt', '9.txt'), ('10.txt',)]
+</code></pre>
+<ul>
+<li>There's now <code>pathlib.Path</code> directory traversal function <a href="https://docs.python.org/3.12/library/pathlib.html#pathlib.Path.walk"><code>pathlib.Path.walk</code></a>.</li>
+<li><a href="https://docs.python.org/3.12/library/os.path.html#os.path.splitroot"><code>os.path.splitroot</code></a> splits a path into a three tuple of <code>(drive, root, tail)</code> where <code>drive</code> is always empty on POSIX systems.</li>
+</ul>
+<pre><code class="language-python"># POSIX
+&gt;&gt;&gt; os.path.splitroot(os.getcwd())
+('', '/', 'Users/someuser')
+# Windows
+('C:', '\\', 'Users\\someuser\\AppData\\Local\\Programs\\Python\\Python312')
+</code></pre>
+<ul>
+<li><a href="https://docs.python.org/3.12/library/tempfile.html#tempfile.NamedTemporaryFile"><code>tempfile.NamedTemporaryFile</code></a> received a boolean <code>delete_on_close</code> argument, which should be self-explanatory.</li>
+<li><a href="https://docs.python.org/3.12/library/tempfile.html#tempfile.mkdtemp"><code>tempfile.mkdtemp</code></a> always returns an absolute path now.</li>
+<li>Module <code>unittest</code> received a <code>--durations=N</code> flag to show the <code>N</code> slowest test cases.</li>
+<li><a href="https://www.bitecode.dev/p/python-312-what-didnt-make-the-headlines#%C2%A7a-better-debugging-experience">Inlined return values can be accessed in a debugger session</a>, without adding a intermediate variable.</li>
+</ul>
+<pre><code class="language-python"># module.py
+def g():
+    return 21*2
+
+def f():
+    breakpoint()
+    return g()
+
+f()
+</code></pre>
+<p>Here's how to show the return value:</p>
+<pre><code>$ python -m module
+&gt; /private/var/folders/mc/3ssj7_c51dv76d6ll79s5l3w0000gn/T/tmp.xHdeQkAESD/module.py(6)f()
+-&gt; return g()
+(Pdb) n
+--Return--
+&gt; /private/var/folders/mc/3ssj7_c51dv76d6ll79s5l3w0000gn/T/tmp.xHdeQkAESD/module.py(6)f()-&gt;42
+-&gt; return g()
+(Pdb) $_retval
+42
+(Pdb)
+</code></pre>
+
+
+      </main>
+    </div>
+    <div class="footer">
+      <footer>
+        
+<p class="center">
+  <a href="#">Back to top.</a>
+</p>
+
+      </footer>
+    </div>
+  </div>
+</body>
+
+</html>
+
+
+
+
