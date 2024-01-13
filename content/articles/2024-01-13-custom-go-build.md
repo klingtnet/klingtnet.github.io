@@ -1,12 +1,12 @@
 ```json
 {
   "author": "Andreas Linz",
-  "title": "How to build against a modified build of Go",
+  "title": "How to build against a modified version of Go",
   "description": "How to build your program against a modified build of the Go standard library.",
   "created_at": "2024-01-13"
 }
 ```
-# How to build against a modified build of Go
+# How to build against a modified version of Go
 
 This week I read [an article](https://jazco.dev/2024/01/10/golang-and-epoll/) about the vertical scaling limits of a Go application under heavy I/O load, that linked to [a Go issue](https://github.com/golang/go/issues/65064) in which the `syscall.EpollWait` bottleneck is investigated. One particular [comment](https://github.com/golang/go/issues/65064#issuecomment-1887777889) in this issue thread sparked my interest, it says:
 
