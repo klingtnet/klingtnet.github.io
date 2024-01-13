@@ -7,7 +7,7 @@
   
   <meta name="description" content="How to build your program against a modified build of the Go standard library.">
   
-  <title>Build you program against a modified build of Go</title>
+  <title>How to build against a modified build of Go</title>
 
   <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
   <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
@@ -65,7 +65,7 @@
     <div class="main">
       <main>
         
-<h1>Build you program against a modified build of Go</h1>
+<h1>How to build against a modified build of Go</h1>
 <p>This week I read <a href="https://jazco.dev/2024/01/10/golang-and-epoll/">an article</a> about the vertical scaling limits of a Go application under heavy I/O load, that linked to <a href="https://github.com/golang/go/issues/65064">a Go issue</a> in which the <code>syscall.EpollWait</code> bottleneck is investigated. One particular <a href="https://github.com/golang/go/issues/65064#issuecomment-1887777889">comment</a> in this issue thread sparked my interest, it says:</p>
 <blockquote>
 <p>Note that is possible to simply edit the runtime source in GOROOT and rebuild your program (no special steps required for the runtime, it is treated like any other package).</p>
