@@ -48,7 +48,7 @@ $ git clone --depth 1 --branch go1.21.6 git@github.com:golang/go _go
 Now we need to build the `go` tool from the cloned source:
 
 ```sh
-pushd _go/_src/go && ./make.bash; popd
+pushd _go/src/go && ./make.bash; popd
 ```
 
 If you forget to do this you'll see an error like
