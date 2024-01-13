@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="How to build your program against a modified build of the Go standard library.">
+  
+  <title>Build you program against a modified build of Go</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+  <script type="text/javascript">new Image().src='https://nullitics.com/n.gif?u=' + encodeURI(location.href) + '&r=' + encodeURI(document.referrer) + '&d=' + screen.width;</script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <header>
+        
+<nav>
+  <div class="header-bar">
+    <details class="mobile-menu">
+      <summary><img class="hamburger nav-icon invert-if-dark" src='https://klingt.net/assets/hamburger.svg'>
+      </summary>
+      <div class="dropdown sm-margin-top">
+        <ul class="nav nobullets">
+          
+          <li><a class="reset-color" href='https://klingt.net/index.html'>Home</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/articles'>Articles</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/about-me.html'>About Me</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/imprint.html'>Imprint</a></li>
+          
+          <li><a class="reset-color" href='https://klingt.net/privacy-policy.html'>Privacy Policy</a></li>
+          
+        </ul>
+      </div>
+    </details>
+    <div>
+      <span class="bold sm-margin-right">klingt.net</span>
+      <img class="valign nav-icon invert-if-dark" alt="website logo" src="https://klingt.net/assets/logo.svg">
+    </div>
+  </div>
+</nav>
+
+      </header>
+    </div>
+    <div class="main">
+      <main>
+        
+<h1>Build you program against a modified build of Go</h1>
+<p>This week I read <a href="https://jazco.dev/2024/01/10/golang-and-epoll/">an article</a> about the vertical scaling limits of a Go application under heaver I/O load, that linked to <a href="https://github.com/golang/go/issues/65064">a Go issue</a> in which the <code>syscall.EpollWait</code> bottleneck is investigated. One particular <a href="https://github.com/golang/go/issues/65064#issuecomment-1887777889">comment</a> in this issue thread sparked my interest, it says:</p>
+<blockquote>
+<p>Note that is possible to simply edit the runtime source in GOROOT and rebuild your program (no special steps required for the runtime, it is treated like any other package).</p>
+</blockquote>
+<p>What this means is, that any import of standard library packages is handled as if they're user packages, just that the standard library packages are resolved with <code>$GOROOT/src</code> as the base directory. Also, it's a little bit more complicated than the comment makes it look like, but we'll come to that.
+With this knowledge, let's try what is needed to run a Go program with a custom Go build.</p>
+<p>The following steps assume that a Go distribution is already available on your system.
+Let's create a simple hello-world Go app:</p>
+<pre><code class="language-sh">$ mkdir app &amp;&amp; cd app
+$ go mod init example.com/hello-app
+</code></pre>
+<p>Where <code>hello.go</code> contains the following lines:</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	fmt.Println(&quot;World!&quot;)
+}
+</code></pre>
+<p>Running <code>go run hello.go</code> will, obviously, print <code>World!</code> to the console.</p>
+<p>My contrived example will modify <code>fmt.Println</code> in a way that it always puts a <code>Hello,</code> before everything it prints. I know, a horrible idea, but nobody says you should ship something like this in production 😛.</p>
+<p>We need to clone a source copy of Go into some local folder, in this case I use <code>_go</code>, because the <a href="https://pkg.go.dev/cmd/go"><code>go</code> tool</a> ignores folders that are prefixed with either <code>_</code> or <code>.</code>.</p>
+<pre><code class="language-sh">$ git clone --depth 1 --branch go1.21.6 git@github.com:golang/go _go
+</code></pre>
+<p>Now we need to build the <code>go</code> tool from the cloned source:</p>
+<pre><code class="language-sh">pushd _go/_src/go &amp;&amp; ./make.bash; popd
+</code></pre>
+<p>If you forget to do this you'll an error like</p>
+<pre><code class="language-sh">go: no such tool &quot;compile&quot;
+</code></pre>
+<p>when trying to compile against your modified Go version.
+A slight environment modifications is necessary so that the custom <code>go</code> build is picked up:</p>
+<pre><code class="language-sh">export GOROOT=$PWD/_go
+export PATH=$GOROOT/bin:$PATH
+</code></pre>
+<p>With this done let's modify <code>$GOROOT/src/fmt/print.go</code> as shown in this diff:</p>
+<pre><code class="language-diff">diff --git a/src/fmt/print.go b/src/fmt/print.go
+index 9c3bd3e..3a83a99 100644
+--- a/src/fmt/print.go
++++ b/src/fmt/print.go
+@@ -301,6 +301,7 @@ func Append(b []byte, a ...any) []byte {
+ // It returns the number of bytes written and any write error encountered.
+ func Fprintln(w io.Writer, a ...any) (n int, err error) {
+ 	p := newPrinter()
++	p.doPrint([]any{&quot;Hello,&quot;})
+ 	p.doPrintln(a)
+ 	n, err = w.Write(p.buf)
+ 	p.free()
+</code></pre>
+<p>Another run of <code>go run hello.go</code> will now print <code>Hello,World!</code>.
+Success 🎉!</p>
+
+
+      </main>
+    </div>
+    <div class="footer">
+      <footer>
+        
+<p class="center">
+  <a href="#">Back to top.</a>
+</p>
+
+      </footer>
+    </div>
+  </div>
+</body>
+
+</html>
+
+
+
+
