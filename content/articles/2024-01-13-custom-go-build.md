@@ -51,7 +51,7 @@ Now we need to build the `go` tool from the cloned source:
 pushd _go/_src/go && ./make.bash; popd
 ```
 
-If you forget to do this you'll an error like
+If you forget to do this you'll see an error like
 
 ```sh
 go: no such tool "compile"
