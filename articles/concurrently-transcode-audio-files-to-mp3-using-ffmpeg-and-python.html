@@ -67,8 +67,8 @@
         
 <h1>Concurrently transcode audio files to MP3 using ffmpeg and Python</h1>
 <p>With the start of this year my Spotify subscription has ended and I'm now using Apple Music, mainly because it's part of my <a href="https://www.apple.com/de/apple-one/">Apple One</a> subscription, which not only makes it a lot cheaper than Spotify, Apple Music also allows me to hear my local music everywhere if it's on iCloud. However, that's where the advantages end, since Apple Music really sucks from a software quality standpoint. On iOS it's acceptable, but on macOS there were numerous crashes, it's kind of slow, and adding a single album to a playlist often ends in the album being added like a hundred times. Is there no QA for Apple desktop software anymore? I digress.</p>
-<p>One limitation of Apple Music is, that it only supports a handful of audio file formats, i.e. there's no support for FLAC, OGG, OPUS and all the other good stuff. Some weeks ago I took NPR's <a href="https://www.npr.org/sections/therecord/2015/06/02/411473508/how-well-can-you-hear-audio-quality">audio quality test</a>, and found that I couldn't distinguish between losless and 128kbps MP3 in most cases. In the early days of MP3 this was easy, especially for acoustic music. I remember that hi-hats for example sounded &quot;watery&quot;, due to the bad codecs back then. However, those days are over, and modern MP3 codecs have gotten a lot better. So I decided to &quot;bite in the sour apple&quot; (that's not an English phrase, is it?) and convert my local library to MP3 so I can listen to it on the go in Apple Music.</p>
-<p>I'm not a fan of bash scripts, at least not when they're longer than 5 lines. The natural choice, for me, is to use Python for such a scripting task. Below are the contents of <code>convert.py</code>, the script I wrote to convert the files concurrently.</p>
+<p>One limitation of Apple Music is, that it only supports a handful of audio file formats, i.e. there's no support for FLAC, OGG, OPUS and all the other good stuff. Some weeks ago I took NPR's <a href="https://www.npr.org/sections/therecord/2015/06/02/411473508/how-well-can-you-hear-audio-quality">audio quality test</a>, and found that I couldn't distinguish between lossless and 128kbps MP3 in most cases. In the early days of MP3 this was easy, especially for acoustic music. I remember that hi-hats for example sounded &quot;watery&quot;, due to the bad codecs back then. However, those days are over, and modern MP3 codecs have gotten a lot better. So I decided to &quot;bite in the sour apple&quot; (that's not an English phrase, is it?) and convert my local library to MP3, so I can listen to it on the go in Apple Music.</p>
+<p>I'm not a fan of bash scripts, at least not when they're longer than 5 lines. For me the natural choice is to use Python for such a scripting task. Below are the contents of <code>convert.py</code>, the script I wrote to convert the files concurrently.</p>
 <pre><code class="language-python">#!/usr/bin/env python3
 
 import concurrent
@@ -89,9 +89,9 @@ for dirpath, _, filenames in os.walk(source_dir):
         if p.suffix in known_extensions:
             source_files.append(p)
 
-# ...
+# 1/3
 </code></pre>
-<p>In this first step we're collecting the file paths of all audio files having a <code>known_extensions</code> relative to the source directory. It's important that we have the relative path, because this will simplify the path handling of the destination path.</p>
+<p>In this first step we're collecting the file paths relative to the source directory of all audio files, if they're matching one of the <code>known_extensions</code>. It's important that we have the relative path, because this will simplify the path handling of the destination path.</p>
 <pre><code class="language-python">args_list = []
 for source_file in source_files:
     source = source_dir.joinpath(source_file)
@@ -116,9 +116,9 @@ for source_file in source_files:
         ]
     )
 
-# ...
+# 2/3
 </code></pre>
-<p>In this section we build a list of arguments that we want to pass to the task function we use to schedule the work onto a thread pool. The speedup is almost linear, since <code>ffmpeg</code> will only use a single CPU core to transcode a file, hence this workload scales well with the number of available CPU cores. I decided to use average bit-rate (ABR), and the resulting files vary around 180kbps +/- 20kbps.
+<p>In this section we build a list of arguments that we want to pass to the task function we use to schedule the work onto a thread pool. The speedup is almost linear, since <code>ffmpeg</code> will only use a single CPU core to transcode a file, hence this workload scales well with the number of available CPU cores. I decided to use average bit-rate (ABR) encoding, and the resulting files vary around 180kbps +/- 20kbps.
 In a blind-test I could never tell that this is not 320kbps. If you disagree because you've golden ears, fine, I don't believe you can actually hear a difference 😛.</p>
 <pre><code class="language-python">def run(args: List[str]):
     subprocess.run(
@@ -132,7 +132,8 @@ with ThreadPoolExecutor(max_workers=4) as executor:
     for future in concurrent.futures.as_completed(futures):
         future.result()
 </code></pre>
-<p>Lastly we're defining the task function called <code>run</code> (could've named it <code>task</code> of course) and then use a <a href="https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor"><code>ThreadPoolExecutor</code></a> to schedule the workload onto 4 CPU cores. If you want to sature all your available CPU cores, use <code>multiprocessing.cpu_count()</code>. Python is fun 🥳</p>
+<p>Lastly we're defining the task function called <code>run</code> (could've named it <code>task</code> of course) and then use a <a href="https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor"><code>ThreadPoolExecutor</code></a> to schedule the workload onto 4 CPU cores. If you want to sature all your available CPU cores, use <code>multiprocessing.cpu_count()</code>.</p>
+<p>Python is <del>fin</del> fun 🥳</p>
 
 
       </main>
