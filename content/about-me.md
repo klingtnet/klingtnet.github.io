@@ -16,7 +16,7 @@ Sometimes I also do [illustrations](https://github.com/golang-leipzig/leipzig-go
 
 [Leipzig, Germany][l] is my place of living, and where I am co-organizing the [local Go Meetup](https://golangleipzig.space).
 
-[Drop me a mail](mailto:alinz@klingt.net) if you
+[Drop me a mail](mailto:mail@andreas-linz.de) if you
 
 - want to chat about some of the topics listed above, e.g. Go, audio programming, music etc.
 - need advice or help with some programming problem.
