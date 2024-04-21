@@ -7,4 +7,4 @@
 }
 ```
 
-Please see the [updated version of this article](./git-worktrees-update.html).  On GitHub you can still find the [original version](https://github.com/klingtnet/klingtnet.github.io/blob/c800968678ffda04ec8a0cab04f28b7774dcefef/content/articles/2022-10-07-git-worktree.md).
+Please see the [updated version of this article](./2022-10-18-git-worktrees-update.html).  On GitHub you can still find the [original version](https://github.com/klingtnet/klingtnet.github.io/blob/c800968678ffda04ec8a0cab04f28b7774dcefef/content/articles/2022-10-07-git-worktree.md).
