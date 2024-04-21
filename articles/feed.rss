@@ -4,11 +4,11 @@
     <link>https://klingt.net/articles</link>
     <description></description>
     <managingEditor> (Andreas Linz)</managingEditor>
-    <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+    <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     <item>
-      <title>GitHub Pages DNS Setup</title>
-      <link>https://klingt.net/articles/github-pages-dns-setup.html</link>
-      <description>In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.</description>
+      <title>Learning Touch Typing</title>
+      <link>https://klingt.net/articles/learning-touch-typing.html</link>
+      <description>My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.</description>
       <content:encoded><![CDATA[<!doctype html>
 <html lang="en">
 
@@ -16,9 +16,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <meta name="description" content="In this article I describe the DNS setup for my GitHub Pages website which is served under the www subdomain and the apex or base domain.">
+  <meta name="description" content="My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.">
   
-  <title>GitHub Pages DNS Setup</title>
+  <title>Learning Touch Typing</title>
 
   <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
   <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
@@ -42,27 +42,22 @@
     <div class="main">
       <main>
         
-<h1>GitHub Pages DNS Setup</h1>
-<p>I chose <a href="https://guides.github.com/features/pages/">GitHub Pages</a> to serve <a href="https://github.com/klingtnet/klingtnet.github.io">this website</a>.  By default a GitHub Pages website is served under <code>&lt;repo&gt;.github.io</code>, which is fine but not what I wanted.  As this is a replacement for my old website I wanted it to be served under my domain <code>klingt.net</code>.</p>
-<p>Fortunately, setting up a GitHub pages website is pretty easy.  Just create a repository and set the branch and directory which contains the website files in the repositories Pages settings.  <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-<p><img src="/articles/github-pages-settings-source-dialog.png" alt="GitHub Pages settings source dialog"></p>
-<p>Adding a custom domain is also straightforward and <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains">GitHub's excellent documentation has you covered</a> as usual.  For my case I wanted to serve this website to be served under the <code>www</code> subdomain, that is <code>www.klingt.net</code>, and the apex or base domain <code>klingt.net</code>.  Configuring an apex domain requires an additional step which is why I decided to write this article.</p>
-<p>First things first, let's start with setting up the required DNS records.  For the <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages#supported-custom-domains"><code>www</code> subdomain</a> I just needed to add a <code>CNAME</code> record that points <code>www.klingt.net</code> to <code>klingtnet.github.io</code>.  I use <code>dig</code> for debugging or showing DNS records and in the following command you will see how to retrieve a <code>CNAME</code> record for a domain:</p>
-<pre><code class="language-sh">$ dig +noall +answer www.klingt.net CNAME
-www.klingt.net.         3600    IN      CNAME   klingtnet.githive state and Cn is the <em>lowest level of activity</em> or <em>power consumption</em>.  Disabling c-states is actually wasting energy and thus not very desirable.  I then set both kernel parameters and tried the latest kernel and the LTS variant, but spontaneous reboots still occured.  For a moment I ran out of ideas and suspected that either my Ryzen CPU was defective.</p>
-<p>A couple of weeks passed and after some UEFI update I had to reset BIOS settings to <em>optimized defaults</em>.  With default settings no random reboots happened anymore!  Problem solved?  Not yet.  In default settings memory is not running at full speed and Ryzen CPUs scale quite well with memory bandwidth.  Enabling the <a href="https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html">XMP memory profile</a> is, except the a different boot order, the only thing I change from defaults.  This made me curious and after some googling I stumbled over a <a href="https://linustechtips.com/topic/1298348-ryzen-reboot-at-idle-solved-rma/">linustechtips forum thread</a> where someone suggested to disable memory <em>power down mode</em>.  Because BIOS settings are often undocumented I cannot exactly say what this settings does, except from the obviously disabling some memory power saving feature.  Anyways, this setting was located under <code>AI Tweaker -&gt; Memory Timing Controls</code> which is kind of hidden.</p>
-<p>To make a long story short, disabling memory <em>power down mode</em> made the random reboots disappear, even when if the memory XMP profile is activated.</p>
-<div class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1">
-<p>dmidecode to the rescue, god knows which RAM I had installed: <code>$ sudo dmidecode --type memory | grep -i part</code>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-<li id="fn:2">
-<p><code>$ journalctl --priority 0..3 --boot=-1</code>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</div>
+<h1>Learning Touch Typing</h1>
+<p>Lately two articles about developer productivity appeared in my news feed.  The first was <a href="https://scattered-thoughts.net/writing/speed-matters/">speed matters</a>, which is part of the great <a href="https://scattered-thoughts.net/writing/reflections-on-a-decade-of-coding/">reflections on a decade of coding</a> article series, and second is <a href="https://danluu.com/productivity-velocity/">some reasons to work on productivity and velocity</a> by Dan Luu.  Both articles stated that <a href="https://en.wikipedia.org/wiki/Touch_typing">touch typing</a> improved their productivity.  The productivity boost was not limited to a bare increase in word per minute that one can type, instead the greater leverage comes from an increased accuracy.  Making less typing errors improves the writing flow because every typo requires a context switch in order to fix the mistake.  Jamie Brandon wrote:</p>
+<blockquote>
+<p>If you compare two coders, one who can touch type and one who has to hunt and peck, the difference between them is not just down to typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.</p>
+</blockquote>
+<p>Dan Luu  wrote this about typing speed:</p>
+<blockquote>
+<p>I've actually looked at where my time goes and a lot of it goes to things that are canonical examples of things that you shouldn't waste time improving because people don't spend much time doing them.</p>
+<p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
+</blockquote>
+<p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
+<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower than my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
+<p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
+<p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
+<p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
+<p>Now it's all about practicing and getting back to speed.  For this reason I forced myself to write this article using touch typing which went okay but could have been a bit smoother 🙄  Anyways, if you now decide to learn this skill as well I wish you all the best 💪.  It's not as hard to learn as you might think and it should only take a month of typing to become fast and accurate.</p>
 
 
       </main>
@@ -73,206 +68,7 @@ www.klingt.net.         3600    IN      CNAME   klingtnet.githive state and Cn i
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
-    </item>
-    <item>
-      <title>Go Generics - A Quick Overview</title>
-      <link>https://klingt.net/articles/go-generics-a-quick-overview.html</link>
-      <description>In this blog post I will give a quick overview of Go Generics, i.e. what they are, how and when to use them.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="In this blog post I will give a quick overview of Go Generics, i.e. what they are, how and when to use them.">
-  
-  <title>Go Generics - A Quick Overview</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Go Generics - A Quick Overview</h1>
-<p>A large part of this article is based on Ian Lance Taylor's great <a href="https://www.youtube.com/watch?v=nr8EpUO9jhw">Using Generics in Go</a> talk that was presented at <a href="https://opensourcelive.withgoogle.com/events/go-day-2021">Go Day 2021</a>.</p>
-<p>The generics topic polarized the Go community and still does, even though not as much as it did initially.
-In the meantime the acceptance for adding generics to the language has increased a lot and only a a small—but not negligible—part of the Go community is rejecting the idea.
-Rarely in the last five years of Go programming has there been a situation where generics were either required or where they would have dramatically improved the readability or maintainability of my code.
-Of course, there are certain things that are much easier to implement in a reusable fashion with generics.
-For me this has been writing custom data structures, mostly sets and once or twice a tree, and also for utility and library code that worked with numeric types or on string and byte slices.</p>
-<p>Overall, I think they will be a great addition to the language and will enable the community to provide a series of powerful, new libraries.
-If you want to take a deep dive into the topic then take a look at <a href="https://golang.org/s/generics-proposal">type parameters proposal</a> which explains how generics will look like in Go 1.18, planned to be released in February 2022.</p>
-<p>Now that we've talked about generics, what are they actually?</p>
-<blockquote>
-<p>Generics let you write data-structures and functions with types specified later.</p>
-</blockquote>
-<p>Note that this feature is sometimes referred to as <a href="https://en.wikipedia.org/wiki/Parametric_polymorphism">parametric polymorphism</a>.
-Functions and types in Go 1.18+ may receive so called <em>type parameters</em> which help to <em>generalize</em> them over a set of applicable types, hence the name generics.
-This might sound confusing at first but I think the following example will clarify the concept.</p>
-<pre><code class="language-go">func min[T constraints.Ordered](a, b T) T {
-	if a &lt; b {
-		return a
-	} else {
-		return b
-	}
-}
-
-// min(12,3) will return 3
-</code></pre>
-<p>You can try out the above example using <a href="https://pkg.go.dev/golang.org/dl/gotip"><code>gotip</code></a>.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>
-What makes this function different from a regular Go function is the <em>type parameter list</em> <code>[T constraints.Ordered]</code>.
-It looks like a normal function parameter list, but is instead enclosed in square brackets.
-Each type parameter has a constraint that limits the set of actual types it can be instantiated with.
-The <a href="https://github.com/golang/go/blob/17980dff368256a0763cf042376d3fb36d06c109/src/constraints/constraints.go"><code>constraints</code> package</a> that ships with Go 1.18 will provide a set common constraints, but new ones can be defined as well (refer to the proposal if you want to know how to define them).
-There is also the special <code>any</code> constraint that allows all types without restriction.</p>
-<p>Type parameters are not limited to functions, they can also be applied to types.
-Below you will see the implementation of a simple stack with type parameters.
-A stack is a primitive first-in first-out (FIFO) data structure.</p>
-<pre><code class="language-go">type Stack[T any] struct {
-    elements []T
-}
-
-func NewStack[T any]() *Stack[T] {
-	return &amp;Stack[T]{elements: []T{}}
-}
-
-func (s *Stack[T]) Push(val T) {
-    s.elements = append(s.elements, val)
-}
-
-func (s *Stack[T]) Pop() T {
-    val := s.elements[len(s.elements)-1]
-    s.elements = s.elements[:len(s.elements)-1]
-    return val
-}
-</code></pre>
-<p>Following is short example that demonstrates how the stack works and how to call a function with type parameters but no arguments.</p>
-<pre><code class="language-go">s := NewStack[int]()
-s.Push(10)
-s.Push(20)
-fmt.Println(s.Pop(), s) // 20 &amp;{[10]}
-fmt.Println(s.Pop(), s) // 10 &amp;{[]}
-</code></pre>
-<p>Type parameters lists are not limited to a single parameter of course, e.g. <code>func F[A any, B constraints.Integer](a A, b B) {}</code> is perfectly valid.</p>
-<h2>When to use Generics?</h2>
-<p>Ian Lance Taylor's <a href="https://www.youtube.com/watch?v=nr8EpUO9jhw">talk</a> also gave some guidelines on <em>when</em> to use generics.</p>
-<blockquote>
-<p>Start with writing plain functions, type parameters can easily be added later.</p>
-</blockquote>
-<p>Another important question that was addressed in the talk is <em>When are type parameters useful?</em></p>
-<blockquote>
-<ul>
-<li>[For] Functions that work on slices, maps and channels of any element type.</li>
-<li>For general purpose data structures.</li>
-</ul>
-</blockquote>
-<p>The next guideline is particularly interesting because it might prevent a design failure that could lead to an cumbersome to use API:</p>
-<blockquote>
-<p>When operating on type parameters, prefer functions over methods!</p>
-</blockquote>
-<p>Let's say your type constraint requires a method like <code>isEqual(t T) bool</code> to be defined on any applicable type.
-This means that any type <code>T</code> would need to implement this method.
-As you can imagine this will get inconvenient pretty fast, especially for types not defined in your package.
-To illustrate this approach a function will be implemented that only adds a value to a slice if it is not already contained, just like <code>add</code> to a set works.
-Any value <code>T</code> must be equatable, i.e. it must implement a <code>isEqual(T) bool</code> method.</p>
-<pre><code class="language-go">func AppendIfNew[T interface{ isEqual(T) bool}](s []T, val T) []T {
-    for _, x := range s {
-        if x.isEqual(val) {
-            return s // unchanged
-        }
-    }
-    return append(s, val)
-}
-
-type myInt int
-
-func (m myInt) isEqual(x myInt) bool {
-	return m == x
-}
-
-// AppendIfNewBad([]myInt{1,2,3,4},5)
-// will return []myInt{1,2,3,4,5}
-</code></pre>
-<p>Of course we could not just use an <code>[]int</code> with <code>AppendIfNewBad</code> because <code>int</code> does not implement our custom &quot;equatable&quot; interface.
-So we needed to implement a custom <code>int</code> type that satisfies the interface.
-Luckily there's a better way.
-Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> accept a function that checks for equality.</p>
-<pre><code class="language-go">func AppendIfNew[T any](s []T, val T, isEqual func(T,T) bool) []T {
-    for _, x := range s {
-        if isEqual(x, val) {
-            return s // unchanged
-        }
-    }
-    return append(s, val)
-}
-
-// AppendIfNew[int]([]int{1,2,3,4}, 5, func(a, b int) bool { return a == b })
-// will return []int{1,2,3,4,5}
-</code></pre>
-<p>With the words of Ian Lance Taylor:</p>
-<blockquote>
-<p>It's much simpler to turn a method into a function than it is to add a method to a type!</p>
-</blockquote>
-<h2>When not to use generics?</h2>
-<p>Generics are no panacea, so it is important to consider when <em>not to use them</em>.</p>
-<blockquote>
-<p>Do not use generics when you are just calling a method on the type argument.</p>
-</blockquote>
-<pre><code class="language-go">func Copy[R io.Reader, W io.Writer](r R, w W) (int64, error) {
-    return io.Copy(w, r)
-}
-</code></pre>
-<p>The type parameters above are redundant and can be replaced by just accepting an <code>io.Reader</code> and <code>io.Writer</code> as shown below:</p>
-<pre><code class="language-go">func Copy(r io.Reader, w io.Writer) (int64, error) {
-    return io.Copy(w, r)
-}
-</code></pre>
-<p>Two additional rules given in the talk will mark the end of the article.  I hope you learned something!</p>
-<blockquote>
-<ul>
-<li>Do not use generics when the implementation of a common method is different for each type.</li>
-<li>Do not use type parameters prematurely; wait until you're about to write boilerplate code.</li>
-</ul>
-</blockquote>
-<p><a href="http://wiki.c2.com/?PrematureOptimization">Premature optimization is the root of all evil</a>.</p>
-<div class="footnotes" role="doc-endnotes">
-<hr>
-<ol>
-<li id="fn:1">
-<p>it won't compile in the <a href="https://go2goplay.golang.org/">go2go</a> because it is not compatible with the accepted generics proposal.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
-</li>
-</ol>
-</div>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
       <title>GitHub Pages DNS Setup</title>
@@ -351,12 +147,12 @@ klingt.net.             929     IN      A       185.199.110.153
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
-      <title>Learning Touch Typing</title>
-      <link>https://klingt.net/articles/learning-touch-typing.html</link>
-      <description>My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.</description>
+      <title>AMD Ryzen random reboots under Linux when in idle</title>
+      <link>https://klingt.net/articles/amd-ryzen-random-reboots-under-linux-when-in-idle.html</link>
+      <description>This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.</description>
       <content:encoded><![CDATA[<!doctype html>
 <html lang="en">
 
@@ -364,9 +160,9 @@ klingt.net.             929     IN      A       185.199.110.153
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <meta name="description" content="My experience of learning how to touch type, i.e. how to write on a keyboard using 10 fingers.">
+  <meta name="description" content="This post describes how to prevent random reboots for AMD Ryzen based Linux systems in idle state that use XMP memory profiles.">
   
-  <title>Learning Touch Typing</title>
+  <title>AMD Ryzen random reboots under Linux when in idle</title>
 
   <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
   <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
@@ -390,22 +186,40 @@ klingt.net.             929     IN      A       185.199.110.153
     <div class="main">
       <main>
         
-<h1>Learning Touch Typing</h1>
-<p>Lately two articles about developer productivity appeared in my news feed.  The first was <a href="https://scattered-thoughts.net/writing/speed-matters/">speed matters</a>, which is part of the great <a href="https://scattered-thoughts.net/writing/reflections-on-a-decade-of-coding/">reflections on a decade of coding</a> article series, and second is <a href="https://danluu.com/productivity-velocity/">some reasons to work on productivity and velocity</a> by Dan Luu.  Both articles stated that <a href="https://en.wikipedia.org/wiki/Touch_typing">touch typing</a> improved their productivity.  The productivity boost was not limited to a bare increase in word per minute that one can type, instead the greater leverage comes from an increased accuracy.  Making less typing errors improves the writing flow because every typo requires a context switch in order to fix the mistake.  Jamie Brandon wrote:</p>
-<blockquote>
-<p>If you compare two coders, one who can touch type and one who has to hunt and peck, the difference between them is not just down to typing speed. The hunter-and-pecker has to think about typing! This consumes attention and short-term memory that is sorely needed for thinking about the program itself.</p>
-</blockquote>
-<p>Dan Luu  wrote this about typing speed:</p>
-<blockquote>
-<p>I've actually looked at where my time goes and a lot of it goes to things that are canonical examples of things that you shouldn't waste time improving because people don't spend much time doing them.</p>
-<p>An example of one of these, the most commonly cited bad-thing-to-optimize example that I've seen, is typing speed (when discussing this, people usually say that typing speed doesn't matter because more time is spent thinking than typing). But, when I look at where my time goes, a lot of it is spent typing.</p>
-</blockquote>
-<p>Reading both articles motivated me to give it another try.  I was satisfied with the speed of my self learned four finger typing method but what actually annoyed me was how many typing errors I made.  One thing that I can say for sure is fixing too many typing mistakes let me loose my &quot;flow&quot;.</p>
-<p>Learning how to touch type takes a lot of dedication, it feels like learning an instrument or how to play the piano (even though it's quite a bit easier).  The hardest part for me was to realize that touch typing will be a lot slower than my current technique until I get more comfortable with it.  As always, learning something takes practice, practice and even more practice.</p>
-<p>Learning touch typing begins with the home row, this is the middle row of your keyboard where your fingers will rest and return to after hitting any key.  For the basics I used <a href="https://www.typingtom.com/lessons">typingtom.com</a> with which I learned how to type on the home and top row after a day or two.  But the lessons were too repetitive, so they quickly became boring.  Luckily there are a bunch of alternatives from which I chose <a href="https://www.keybr.com">keybr.com</a> because it provided some nice statistics for tracking the learning progress and the lessons used random but readable and pronounceable words spit out by some word generating algorithm.  Following is the progress chart after about a week of practicing touch typing:</p>
-<p><img src="touch-typing-progress.png" alt="progress of learning touch typing"></p>
-<p>The green line shows typing speed in words per minute, red is the number of errors and (kind of) purple is the number of keys in the lesson.  It took me about five days to learn all characters and to get as fast, if not even a bit faster, as with my previous hunt and peck approach.  In the last quarter of the graph you can see a steep decline in typing speed and this is because I activated capitalization and symbols.  On a US QWERTY keyboard most common symbols are located on the right half, hence they must be hit with the right hand pinky.  For me, one of the hardest things was learning to type with my pinky and ring finger.</p>
-<p>Now it's all about practicing and getting back to speed.  For this reason I forced myself to write this article using touch typing which went okay but could have been a bit smoother 🙄  Anyways, if you now decide to learn this skill as well I wish you all the best 💪.  It's not as hard to learn as you might think and it should only take a month of typing to become fast and accurate.</p>
+<h1>AMD Ryzen random reboots under Linux when in idle</h1>
+<p>At the end of 2019 I decided to replace my, now 10 years old, trusty Intel i7 920 machine.
+The main motivation was that the i7 was not powerful enough to drive a bunch of CPU hungry software synth, and I always wanted to have a machine that was able to handle any amount of audio plugins I throw at it.
+It was still fast enough for some casual gaming or web browsing so I gave it to a friend who was looking for PC at that time.  Otherwise I would have had to throw it away, which would have made me feel a little guilty.
+Anyways, AMD Ryzen was all the buzz at that time so I decided to go for that and ordered all the necessary parts.</p>
+<p>Here are the relevant specs for reference:</p>
+<ul>
+<li>CPU: AMD Ryzen 3700X</li>
+<li>Mainboard: ASUS ROG STRIX B450-I GAMING</li>
+<li>Memory: 32GB Corsair DDR4 DRAM 3200MHz (part no. <code>CMK32GX4M2B3200C16</code>) <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></li>
+<li>OS: Arch Linux kernel 5.14.8-arch1-1</li>
+</ul>
+<p>Now to the actual topic of this post that is the random reboots that the Ryzen PC showed when running in idle for some time.
+I ran a stress test over night and there was no spontaneous reboot so I could rule out a faulty power supply.
+Checking <code>journalctl</code> for errors did not reveal anything suspicious <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>, in fact the logs just ended before the reboot without any error message.</p>
+<p>There is a <a href="https://wiki.gentoo.org/wiki/Ryzen#Random_reboots_with_mce_events">Ryzen page on Gentoo's wiki</a> that recommends to set two kernel parameters:</p>
+<ul>
+<li><code>idle=nomwait</code></li>
+<li>and <code>processor.max_cstate=5</code></li>
+</ul>
+<p>The latter one disables certain processor <a href="https://www.thomas-krenn.com/en/wiki/Processor_P-states_and_C-states#C-states">c-states</a> which are basically sleep levels a processor can reach when idling, where C0 is the active state and Cn is the <em>lowest level of activity</em> or <em>power consumption</em>.  Disabling c-states is actually wasting energy and thus not very desirable.  I then set both kernel parameters and tried the latest kernel and the LTS variant, but spontaneous reboots still occured.  For a moment I ran out of ideas and suspected that either my Ryzen CPU was defective.</p>
+<p>A couple of weeks passed and after some UEFI update I had to reset BIOS settings to <em>optimized defaults</em>.  With default settings no random reboots happened anymore!  Problem solved?  Not yet.  In default settings memory is not running at full speed and Ryzen CPUs scale quite well with memory bandwidth.  Enabling the <a href="https://www.intel.com/content/www/us/en/gaming/extreme-memory-profile-xmp.html">XMP memory profile</a> is, except the a different boot order, the only thing I change from defaults.  This made me curious and after some googling I stumbled over a <a href="https://linustechtips.com/topic/1298348-ryzen-reboot-at-idle-solved-rma/">linustechtips forum thread</a> where someone suggested to disable memory <em>power down mode</em>.  Because BIOS settings are often undocumented I cannot exactly say what this settings does, except from the obviously disabling some memory power saving feature.  Anyways, this setting was located under <code>AI Tweaker -&gt; Memory Timing Controls</code> which is kind of hidden.</p>
+<p>To make a long story short, disabling memory <em>power down mode</em> made the random reboots disappear, even when if the memory XMP profile is activated.</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>dmidecode to the rescue, god knows which RAM I had installed: <code>$ sudo dmidecode --type memory | grep -i part</code>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2">
+<p><code>$ journalctl --priority 0..3 --boot=-1</code>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
 
 
       </main>
@@ -416,7 +230,7 @@ klingt.net.             929     IN      A       185.199.110.153
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
       <title>The simplest sorting algorithm</title>
@@ -516,7 +330,87 @@ from partially sorted inputs.</p>
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
+    </item>
+    <item>
+      <title>How to delete unreachable commits on GitHub</title>
+      <link>https://klingt.net/articles/how-to-delete-unreachable-commits-on-github.html</link>
+      <description>GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.">
+  
+  <title>How to delete unreachable commits on GitHub</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>How to delete unreachable commits on GitHub</h1>
+<p>The dangling<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> commit shown in the screenshot below should have never been on GitHub, at least not publicly visible.  The commit was part of a branch called <code>draft</code> that I pushed to the repository when it was still private.  If I am not mistaken then I removed the file, squashed and merged the <code>draft</code> branch into <code>master</code>, deleted the branch and then pushed it onto GitHub.  After making sure that branch <code>draft</code> was gone on GitHub I made the repository public.</p>
+<p><img src="unreachable-commit.png" alt="unreachable commit"></p>
+<p>As you can clearly see the commit is still there, and I only discovered this by accident when using GitHub's search.  So, the question is now how to delete this commit?  I cannot even reach the commit from my local repository:</p>
+<pre><code class="language-shell">$ git show b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
+fatal: bad object b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
+</code></pre>
+<p>Its parent commit is reachable though:</p>
+<pre><code class="language-shell">$ git show 01aea0c8e1bdceb7869403814a4ebb87e25883b2
+commit 01aea0c8e1bdceb7869403814a4ebb87e25883b2
+Author: Andreas Linz &lt;klingt.net@gmail.com&gt;
+Date:   Sun Jul 25 16:18:10 2021 +0200
+
+    Initial commit
+</code></pre>
+<p>If the commit would still be part of my local repository I could have removed it with this call and subsequent <code>git push</code>.</p>
+<pre><code class="language-shell">$ git reflog expire --expire-unreachable=all
+</code></pre>
+<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
+<blockquote>
+<p>As you mentioned, it does indeed appear to be an an unreferenced commit dangling in our cache. I went ahead and performed the garbage collection and cache clearance operations for the repository klingtnet/klingtnet.github.io. Attempting to access the commit directly now returns a 404.</p>
+</blockquote>
+<p>Luckily the commit contained no secrets, but what I learned from this lesson is that I need to double or triple check the contents of my repository before making it public on GitHub.  A simple deletion of a branch might not be sufficient.</p>
+<div class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1">
+<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.  The dangling commit was <code>https://github.com/klingtnet/klingtnet.github.io/blob/b2444ca54c74a7c9dde6504cf028b6c0f4729d8f/content/resume.md</code>, but this will return a 404 since the commit was deleted.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</div>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
       <title>My MacBook Air M1 setup</title>
@@ -711,7 +605,7 @@ $ gpgconf --kill gpg-agent
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
       <title>Go 1.18 with some fuzzing and a focus on generics</title>
@@ -910,7 +804,7 @@ func Write(w io.Writer) error {}
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
       <title>How I Detected and Removed Malware from a Wordpress Installation</title>
@@ -1339,12 +1233,12 @@ if (empty($_COOKIE['ssl_message'])) {
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
-      <title>How to delete unreachable commits on GitHub</title>
-      <link>https://klingt.net/articles/how-to-delete-unreachable-commits-on-github.html</link>
-      <description>GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.</description>
+      <title>Go Generics - A Quick Overview</title>
+      <link>https://klingt.net/articles/go-generics-a-quick-overview.html</link>
+      <description>In this blog post I will give a quick overview of Go Generics, i.e. what they are, how and when to use them.</description>
       <content:encoded><![CDATA[<!doctype html>
 <html lang="en">
 
@@ -1352,9 +1246,9 @@ if (empty($_COOKIE['ssl_message'])) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <meta name="description" content="GitHub&#39;s search revealed a file in one of my repositories that should not have been published.  The file was part of a commit that was unreachable or free-standing, meaning it was not part of any branch.  In this article I will describe how to find and delete such commits.">
+  <meta name="description" content="In this blog post I will give a quick overview of Go Generics, i.e. what they are, how and when to use them.">
   
-  <title>How to delete unreachable commits on GitHub</title>
+  <title>Go Generics - A Quick Overview</title>
 
   <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
   <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
@@ -1378,34 +1272,153 @@ if (empty($_COOKIE['ssl_message'])) {
     <div class="main">
       <main>
         
-<h1>How to delete unreachable commits on GitHub</h1>
-<p>The dangling<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> commit shown in the screenshot below should have never been on GitHub, at least not publicly visible.  The commit was part of a branch called <code>draft</code> that I pushed to the repository when it was still private.  If I am not mistaken then I removed the file, squashed and merged the <code>draft</code> branch into <code>master</code>, deleted the branch and then pushed it onto GitHub.  After making sure that branch <code>draft</code> was gone on GitHub I made the repository public.</p>
-<p><img src="unreachable-commit.png" alt="unreachable commit"></p>
-<p>As you can clearly see the commit is still there, and I only discovered this by accident when using GitHub's search.  So, the question is now how to delete this commit?  I cannot even reach the commit from my local repository:</p>
-<pre><code class="language-shell">$ git show b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
-fatal: bad object b2444ca54c74a7c9dde6504cf028b6c0f4729d8f
-</code></pre>
-<p>Its parent commit is reachable though:</p>
-<pre><code class="language-shell">$ git show 01aea0c8e1bdceb7869403814a4ebb87e25883b2
-commit 01aea0c8e1bdceb7869403814a4ebb87e25883b2
-Author: Andreas Linz &lt;klingt.net@gmail.com&gt;
-Date:   Sun Jul 25 16:18:10 2021 +0200
-
-    Initial commit
-</code></pre>
-<p>If the commit would still be part of my local repository I could have removed it with this call and subsequent <code>git push</code>.</p>
-<pre><code class="language-shell">$ git reflog expire --expire-unreachable=all
-</code></pre>
-<p>But, nothing happens since the commit is not in my local repository.  What to do now 🤔?  As far as I see there is nothing I can do locally and cloning the repository will also omit the commit I want to delete.  GitHub must trigger the garbage collection for this repository so I <a href="https://support.github.com/">opened a ticket</a> with them.  What really amazed me was how fast they responded, after 10 minutes everything was done and that's for a free account!  Here's what they wrote in the response:</p>
+<h1>Go Generics - A Quick Overview</h1>
+<p>A large part of this article is based on Ian Lance Taylor's great <a href="https://www.youtube.com/watch?v=nr8EpUO9jhw">Using Generics in Go</a> talk that was presented at <a href="https://opensourcelive.withgoogle.com/events/go-day-2021">Go Day 2021</a>.</p>
+<p>The generics topic polarized the Go community and still does, even though not as much as it did initially.
+In the meantime the acceptance for adding generics to the language has increased a lot and only a a small—but not negligible—part of the Go community is rejecting the idea.
+Rarely in the last five years of Go programming has there been a situation where generics were either required or where they would have dramatically improved the readability or maintainability of my code.
+Of course, there are certain things that are much easier to implement in a reusable fashion with generics.
+For me this has been writing custom data structures, mostly sets and once or twice a tree, and also for utility and library code that worked with numeric types or on string and byte slices.</p>
+<p>Overall, I think they will be a great addition to the language and will enable the community to provide a series of powerful, new libraries.
+If you want to take a deep dive into the topic then take a look at <a href="https://golang.org/s/generics-proposal">type parameters proposal</a> which explains how generics will look like in Go 1.18, planned to be released in February 2022.</p>
+<p>Now that we've talked about generics, what are they actually?</p>
 <blockquote>
-<p>As you mentioned, it does indeed appear to be an an unreferenced commit dangling in our cache. I went ahead and performed the garbage collection and cache clearance operations for the repository klingtnet/klingtnet.github.io. Attempting to access the commit directly now returns a 404.</p>
+<p>Generics let you write data-structures and functions with types specified later.</p>
 </blockquote>
-<p>Luckily the commit contained no secrets, but what I learned from this lesson is that I need to double or triple check the contents of my repository before making it public on GitHub.  A simple deletion of a branch might not be sufficient.</p>
+<p>Note that this feature is sometimes referred to as <a href="https://en.wikipedia.org/wiki/Parametric_polymorphism">parametric polymorphism</a>.
+Functions and types in Go 1.18+ may receive so called <em>type parameters</em> which help to <em>generalize</em> them over a set of applicable types, hence the name generics.
+This might sound confusing at first but I think the following example will clarify the concept.</p>
+<pre><code class="language-go">func min[T constraints.Ordered](a, b T) T {
+	if a &lt; b {
+		return a
+	} else {
+		return b
+	}
+}
+
+// min(12,3) will return 3
+</code></pre>
+<p>You can try out the above example using <a href="https://pkg.go.dev/golang.org/dl/gotip"><code>gotip</code></a>.<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>
+What makes this function different from a regular Go function is the <em>type parameter list</em> <code>[T constraints.Ordered]</code>.
+It looks like a normal function parameter list, but is instead enclosed in square brackets.
+Each type parameter has a constraint that limits the set of actual types it can be instantiated with.
+The <a href="https://github.com/golang/go/blob/17980dff368256a0763cf042376d3fb36d06c109/src/constraints/constraints.go"><code>constraints</code> package</a> that ships with Go 1.18 will provide a set common constraints, but new ones can be defined as well (refer to the proposal if you want to know how to define them).
+There is also the special <code>any</code> constraint that allows all types without restriction.</p>
+<p>Type parameters are not limited to functions, they can also be applied to types.
+Below you will see the implementation of a simple stack with type parameters.
+A stack is a primitive first-in first-out (FIFO) data structure.</p>
+<pre><code class="language-go">type Stack[T any] struct {
+    elements []T
+}
+
+func NewStack[T any]() *Stack[T] {
+	return &amp;Stack[T]{elements: []T{}}
+}
+
+func (s *Stack[T]) Push(val T) {
+    s.elements = append(s.elements, val)
+}
+
+func (s *Stack[T]) Pop() T {
+    val := s.elements[len(s.elements)-1]
+    s.elements = s.elements[:len(s.elements)-1]
+    return val
+}
+</code></pre>
+<p>Following is short example that demonstrates how the stack works and how to call a function with type parameters but no arguments.</p>
+<pre><code class="language-go">s := NewStack[int]()
+s.Push(10)
+s.Push(20)
+fmt.Println(s.Pop(), s) // 20 &amp;{[10]}
+fmt.Println(s.Pop(), s) // 10 &amp;{[]}
+</code></pre>
+<p>Type parameters lists are not limited to a single parameter of course, e.g. <code>func F[A any, B constraints.Integer](a A, b B) {}</code> is perfectly valid.</p>
+<h2>When to use Generics?</h2>
+<p>Ian Lance Taylor's <a href="https://www.youtube.com/watch?v=nr8EpUO9jhw">talk</a> also gave some guidelines on <em>when</em> to use generics.</p>
+<blockquote>
+<p>Start with writing plain functions, type parameters can easily be added later.</p>
+</blockquote>
+<p>Another important question that was addressed in the talk is <em>When are type parameters useful?</em></p>
+<blockquote>
+<ul>
+<li>[For] Functions that work on slices, maps and channels of any element type.</li>
+<li>For general purpose data structures.</li>
+</ul>
+</blockquote>
+<p>The next guideline is particularly interesting because it might prevent a design failure that could lead to an cumbersome to use API:</p>
+<blockquote>
+<p>When operating on type parameters, prefer functions over methods!</p>
+</blockquote>
+<p>Let's say your type constraint requires a method like <code>isEqual(t T) bool</code> to be defined on any applicable type.
+This means that any type <code>T</code> would need to implement this method.
+As you can imagine this will get inconvenient pretty fast, especially for types not defined in your package.
+To illustrate this approach a function will be implemented that only adds a value to a slice if it is not already contained, just like <code>add</code> to a set works.
+Any value <code>T</code> must be equatable, i.e. it must implement a <code>isEqual(T) bool</code> method.</p>
+<pre><code class="language-go">func AppendIfNew[T interface{ isEqual(T) bool}](s []T, val T) []T {
+    for _, x := range s {
+        if x.isEqual(val) {
+            return s // unchanged
+        }
+    }
+    return append(s, val)
+}
+
+type myInt int
+
+func (m myInt) isEqual(x myInt) bool {
+	return m == x
+}
+
+// AppendIfNewBad([]myInt{1,2,3,4},5)
+// will return []myInt{1,2,3,4,5}
+</code></pre>
+<p>Of course we could not just use an <code>[]int</code> with <code>AppendIfNewBad</code> because <code>int</code> does not implement our custom &quot;equatable&quot; interface.
+So we needed to implement a custom <code>int</code> type that satisfies the interface.
+Luckily there's a better way.
+Instead of requiring a method on <code>T</code> let <code>AppendIfNew</code> accept a function that checks for equality.</p>
+<pre><code class="language-go">func AppendIfNew[T any](s []T, val T, isEqual func(T,T) bool) []T {
+    for _, x := range s {
+        if isEqual(x, val) {
+            return s // unchanged
+        }
+    }
+    return append(s, val)
+}
+
+// AppendIfNew[int]([]int{1,2,3,4}, 5, func(a, b int) bool { return a == b })
+// will return []int{1,2,3,4,5}
+</code></pre>
+<p>With the words of Ian Lance Taylor:</p>
+<blockquote>
+<p>It's much simpler to turn a method into a function than it is to add a method to a type!</p>
+</blockquote>
+<h2>When not to use generics?</h2>
+<p>Generics are no panacea, so it is important to consider when <em>not to use them</em>.</p>
+<blockquote>
+<p>Do not use generics when you are just calling a method on the type argument.</p>
+</blockquote>
+<pre><code class="language-go">func Copy[R io.Reader, W io.Writer](r R, w W) (int64, error) {
+    return io.Copy(w, r)
+}
+</code></pre>
+<p>The type parameters above are redundant and can be replaced by just accepting an <code>io.Reader</code> and <code>io.Writer</code> as shown below:</p>
+<pre><code class="language-go">func Copy(r io.Reader, w io.Writer) (int64, error) {
+    return io.Copy(w, r)
+}
+</code></pre>
+<p>Two additional rules given in the talk will mark the end of the article.  I hope you learned something!</p>
+<blockquote>
+<ul>
+<li>Do not use generics when the implementation of a common method is different for each type.</li>
+<li>Do not use type parameters prematurely; wait until you're about to write boilerplate code.</li>
+</ul>
+</blockquote>
+<p><a href="http://wiki.c2.com/?PrematureOptimization">Premature optimization is the root of all evil</a>.</p>
 <div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1">
-<p>Dangling, free-standing, unreachable or unreferenced, all terms fit here.  The dangling commit was <code>https://github.com/klingtnet/klingtnet.github.io/blob/b2444ca54c74a7c9dde6504cf028b6c0f4729d8f/content/resume.md</code>, but this will return a 404 since the commit was deleted.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>it won't compile in the <a href="https://go2goplay.golang.org/">go2go</a> because it is not compatible with the accepted generics proposal.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </div>
@@ -1419,7 +1432,7 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
       <title>Git Worktrees</title>
@@ -1469,7 +1482,111 @@ Date:   Sun Jul 25 16:18:10 2021 +0200
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
+    </item>
+    <item>
+      <title>Reading the last bytes of a stream in Go</title>
+      <link>https://klingt.net/articles/reading-the-last-bytes-of-a-stream-in-go.html</link>
+      <description>In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.">
+  
+  <title>Reading the last bytes of a stream in Go</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Reading the last bytes of a stream in Go</h1>
+<p>It's about half a year since my last blog post, so it's about time to write another one.</p>
+<p>Yesterday I was working on a private project that required to read a block of bytes from the end of an <code>io.Reader</code>.
+On a first glance that sounds like a trivial problem, but doing this <em>efficiently</em> turned out to be more complicated than initially thought.</p>
+<p>If your <code>io.Reader</code> stems from a file you're lucky, because regular files allow random access through the system <a href="https://man7.org/linux/man-pages/man2/lseek.2.html">seek call</a> that is exposed on a <code>os.File</code> with its <a href="https://pkg.go.dev/os#File.Seek"><code>Seek</code> method</a>.  However, my function only accepts a plain <code>io.Reader</code> and not an <code>os.File</code>, so this option is out of question.</p>
+<p>How can we read the last N bytes of a <em>finite</em> stream of some kind?</p>
+<h2>Naïve solution</h2>
+<p>A naïve solution would be to <a href="https://pkg.go.dev/io#ReadAll">read the whole file into memory</a> and then discard everything except for some slice of bytes at the end.</p>
+<pre><code class="language-go">func readTail(r io.Reader, N int) ([]byte, error) {
+	data, err := io.ReadAll(r)
+	if err != nil {
+		return nil, err
+	}
+
+	return data[len(data)-N:], nil
+}
+</code></pre>
+<p>This is pretty wasteful and might require huge amounts of memory, depending on how long the stream you want to consume is.</p>
+<h2>Two interleaved buffers</h2>
+<p>The next idea I had was to read the stream in chunks of size N, and discarding every chunk except the last one.
+But this won't work because of a variety of reasons, first and foremost if the stream length is not an integer multiple of N then the last chunk might be incomplete since it is only the remainder of file size divided by chunk size (N).</p>
+<p><img src="unalinged-end-of-file-read.png" alt="illustration of an unaligned read"></p>
+<p>So, why not maintain two buffers, one for the previous read and another one for the current read.
+When reaching EOF we can then concatenate the second last read with the last and return an slice of size N, right?
+This might work, but turns out to be pretty complicated because of how <code>io.Read</code> might behave.
+A call to <code>Read</code> is not guaranteed to return <code>N</code> bytes, instead it might fill only a <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=60-61">part of the given buffer</a>:</p>
+<pre><code class="language-go">// If some data is available but not len(p) bytes, Read conventionally
+// returns what is available instead of waiting for more.
+</code></pre>
+<p>So, we can't easily fill the two buffers in an interleaved manner because a single read might not fill a whole buffer.
+Of course, there's <a href="https://pkg.go.dev/io#ReadFull"><code>io.ReadFull</code></a> which takes care of reading exactly N bytes if available, but the logic would still be quite convoluted.</p>
+<h2>Ring buffer</h2>
+<p>After dabbling around for a while with the solution I had, I realized that what I wrote looked almost like a <a href="https://en.wikipedia.org/wiki/Circular_buffer">ring buffer</a>.
+With a ring buffer, sometimes also called circular buffer, we only need O(n) space instead of O(2n) as required with the previous concept.
+The gist is to store each chunk in a ring buffer, wrapping around if it exceeds the end of the ring buffers internal array.</p>
+<p><img src="ring-buffer-end-of-file-read.png" alt="illustration of reading chunks with a ring buffer"></p>
+<p>After we reached the end of the stream we can just return a slice from the ring buffer, starting from the write head and reaching back N bytes.
+Those are two operations if we need to wrap around</p>
+<pre><code class="language-go">copy(dst[:N-wpos], ringbuf[wpos:])
+copy(dst[N-wpos:], ringbuf[:wpos])
+</code></pre>
+<p>where <code>wpos</code> is the index of the write head.</p>
+<p>One thing that bit me was that <code>io.Read</code> might return <code>io.EOF</code> together with a non-zero amount of bytes read, <em>or</em> it could return <code>0, io.EOF</code> after the last call that returned a non-zero amount of bytes and a <code>nil</code> error.
+This is <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=83">documented behavior</a> but could still be surprising.</p>
+<pre><code class="language-go">// An instance of this general case is that a Reader returning
+// a non-zero number of bytes at the end of the input stream may
+// return either err == EOF or err == nil. The next Read should
+// return 0, EOF.
+</code></pre>
+<p>You can find an ugly example in <a href="https://go.dev/play/p/M-WcpkVviGV">this playground</a> but be aware that you need to run it locally, since external URLs might not be resolved in the playground.</p>
+<p>There are a number of performance considerations that arise from this implementation, e.g. a very small <code>N</code> might lead to a huge number of read calls if the ring buffer's size is equal to <code>N</code>.
+Technically they are independent, the only condition is that the ring buffer must at least have a size of <code>N</code>.</p>
+<p>You might've guessed it already but the good old <code>tail</code> utility serves the same purpose.  I haven't had a look in <a href="https://github.com/coreutils/coreutils/blob/master/src/tail.c">GNU tail's source code</a> yet, but I'm curious to see how they achieved this.</p>
+<p>I hope that helped someone.
+Please let me know if you've an even more efficient solution or there is any other feedback for me.</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
       <title>Git Worktrees (Update)</title>
@@ -1578,7 +1695,7 @@ In the example above I would use <code>work/</code> for my local feature develop
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
       <title>Use your SSH key to sign git objects</title>
@@ -1651,7 +1768,7 @@ $ git commit --allow-empty --gpg-sign -m 'A test message'
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
       <title>How to setup and debug a cronjob in macOS</title>
@@ -1742,7 +1859,7 @@ Note that you can use <code>Cmd+Shift+G</code> to enter a particular location in
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
       <title>Go 1.20, what&#39;s new</title>
@@ -1926,7 +2043,374 @@ A typical handler may print log records to standard error, or write them to a fi
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
+    </item>
+    <item>
+      <title>How to build against a modified version of Go</title>
+      <link>https://klingt.net/articles/how-to-build-against-a-modified-version-of-go.html</link>
+      <description>How to build your program against a modified build of the Go standard library.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="How to build your program against a modified build of the Go standard library.">
+  
+  <title>How to build against a modified version of Go</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>How to build against a modified version of Go</h1>
+<p>This week I read <a href="https://jazco.dev/2024/01/10/golang-and-epoll/">an article</a> about the vertical scaling limits of a Go application under heavy I/O load, that linked to <a href="https://github.com/golang/go/issues/65064">a Go issue</a> in which the <code>syscall.EpollWait</code> bottleneck is investigated. One particular <a href="https://github.com/golang/go/issues/65064#issuecomment-1887777889">comment</a> in this issue thread sparked my interest, it says:</p>
+<blockquote>
+<p>Note that is possible to simply edit the runtime source in GOROOT and rebuild your program (no special steps required for the runtime, it is treated like any other package).</p>
+</blockquote>
+<p>What this means is, that any import of standard library packages is handled as if they're user packages, just that the standard library packages are resolved with <code>$GOROOT/src</code> as the base directory. Also, it's a little bit more complicated than the comment makes it look like, but we'll come to that.
+With this knowledge, let's try what is needed to run a Go program with a custom Go build.</p>
+<p>The following steps assume that a Go distribution is already available on your system.
+Let's create a simple hello-world Go app:</p>
+<pre><code class="language-sh">$ mkdir app &amp;&amp; cd app
+$ go mod init example.com/hello-app
+</code></pre>
+<p>Where <code>hello.go</code> contains the following lines:</p>
+<pre><code class="language-go">package main
+
+import &quot;fmt&quot;
+
+func main() {
+	fmt.Println(&quot;World!&quot;)
+}
+</code></pre>
+<p>Running <code>go run hello.go</code> will, obviously, print <code>World!</code> to the console.</p>
+<p>My contrived example will modify <code>fmt.Println</code> in a way that it always puts a <code>Hello,</code> before everything it prints. I know, a horrible idea, but nobody says you should ship something like this in production 😛.</p>
+<p>We need to clone a source copy of Go into some local folder, in this case I use <code>_go</code>, because the <a href="https://pkg.go.dev/cmd/go"><code>go</code> tool</a> ignores folders that are prefixed with either <code>_</code> or <code>.</code>.</p>
+<pre><code class="language-sh">$ git clone --depth 1 --branch go1.21.6 git@github.com:golang/go _go
+</code></pre>
+<p>Now we need to build the <code>go</code> tool from the cloned source:</p>
+<pre><code class="language-sh">pushd _go/src/go &amp;&amp; ./make.bash; popd
+</code></pre>
+<p>If you forget to do this you'll see an error like</p>
+<pre><code class="language-sh">go: no such tool &quot;compile&quot;
+</code></pre>
+<p>when trying to compile against your modified Go version.
+A slight environment modifications is necessary so that the custom <code>go</code> build is picked up:</p>
+<pre><code class="language-sh">export GOROOT=$PWD/_go
+export PATH=$GOROOT/bin:$PATH
+</code></pre>
+<p>With this done let's modify <code>$GOROOT/src/fmt/print.go</code> as shown in this diff:</p>
+<pre><code class="language-diff">diff --git a/src/fmt/print.go b/src/fmt/print.go
+index 9c3bd3e..3a83a99 100644
+--- a/src/fmt/print.go
++++ b/src/fmt/print.go
+@@ -301,6 +301,7 @@ func Append(b []byte, a ...any) []byte {
+ // It returns the number of bytes written and any write error encountered.
+ func Fprintln(w io.Writer, a ...any) (n int, err error) {
+ 	p := newPrinter()
++	p.doPrint([]any{&quot;Hello,&quot;})
+ 	p.doPrintln(a)
+ 	n, err = w.Write(p.buf)
+ 	p.free()
+</code></pre>
+<p>Another run of <code>go run hello.go</code> will now print <code>Hello,World!</code>.
+Success 🎉!</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
+    </item>
+    <item>
+      <title>Python 3.12</title>
+      <link>https://klingt.net/articles/python-3-12.html</link>
+      <description>My summary of the Python 3.12 release highlights.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="My summary of the Python 3.12 release highlights.">
+  
+  <title>Python 3.12</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Yet another Python 3.12 release highlight summary</h1>
+<p>I'm doing a fair bit of Python lately, and thus need to stay up-to-date with the language releases.  Some days ago Python 3.12 was released.  The <a href="https://www.python.org/downloads/release/python-3120/">release note overview</a>, and the detailed <a href="https://docs.python.org/3.12/whatsnew/3.12.html">release notes</a> in particular, are worth a read.  Other articles I can recommend are <a href="https://www.bitecode.dev/p/python-312-what-didnt-make-the-headlines">What didn't make the headlines</a> and <a href="https://realpython.com/python312-typing/">Static typing improvements</a>.</p>
+<ul>
+<li><a href="https://peps.python.org/pep-0701/">PEP-701</a> formalisation of f-strings will lift some limitations, like nested f-strings, use of the quotation delimiter of the f-strings inside an expression, comments in multi-line f-strings. Examples are listed in the PEP.</li>
+</ul>
+<pre><code class="language-python">&gt;&gt;&gt; m = {'a': 'b'}
+# This wasn't possible in prior versions.
+&gt;&gt;&gt; f'm={m['a']}'
+'m=b'
+</code></pre>
+<p>Since Python3.8 there's also a debug format in f-strings, that is used when post-fixing a variable with <code>=</code>:</p>
+<pre><code class="language-python">&gt;&gt;&gt; f'{m=}'
+&quot;m={'a': 'b'}&quot;
+# or as nested f-string
+&gt;&gt;&gt; f'Debug output {f'{m=}'}'
+&quot;Debug output m={'a': 'b'}&quot;
+</code></pre>
+<ul>
+<li><a href="https://docs.python.org/3.12/whatsnew/3.12.html#pep-688-making-the-buffer-protocol-accessible-in-python">PEP 688</a> exposes the <em>Buffer protocol</em> (interface) to Python code.  This was limited to CPython before. I'm not sure what this is useful for.</li>
+<li><a href="https://peps.python.org/pep-0669/">PEP 669</a> introduces a new, low-overhead debugging and profiling API.</li>
+<li><a href="https://peps.python.org/pep-0684">PEP 684</a> adds support for isolated sub-interpreters with separate GILs, and is only available through the C-API. So, not of any particular use for me.</li>
+<li><a href="https://docs.python.org/3.12/whatsnew/3.12.html#improved-error-messages">Improved error messages</a>.</li>
+<li>Large and small <a href="https://docs.python.org/3.12/whatsnew/3.12.html#optimizations">performance improvements</a>, enhanced <a href="https://docs.python.org/3.12/howto/perf_profiling.html">Linux <code>perf</code> support</a>.</li>
+<li><a href="https://peps.python.org/pep-0695/">PEP 695</a> adds a new type annotation syntax.</li>
+</ul>
+<p>More compact way to create generic functions and classes:</p>
+<pre><code class="language-python">def max[T](args: Iterable[T]) -&gt; T:
+	...
+</code></pre>
+<p>Type aliases can be generic:</p>
+<pre><code class="language-python">type Point[T] = tuple[T, T]
+</code></pre>
+<ul>
+<li><a href="https://docs.python.org/3.12/whatsnew/3.12.html#pep-698-override-decorator-for-static-typing">PEP 698</a> adds a <code>@override</code> decorator to indicate methods that should be overridden in a sub-class.</li>
+<li>The <code>sqlite3</code> module received a <a href="https://docs.python.org/3.12/library/sqlite3.html#sqlite3-cli">command-line interface</a>.  This might be useful as a simple SQLite interface on systems that only have Python available.</li>
+</ul>
+<pre><code class="language-bash"># python -m sqlite3 [-h] [-v] [filename] [sql]
+$ python -m sqlite3
+sqlite3 shell, running on SQLite version 3.39.5
+Connected to a transient in-memory database
+
+Each command will be run using execute() on the cursor.
+Type &quot;.help&quot; for more information; type &quot;.quit&quot; or CTRL-D to quit.
+sqlite&gt;
+</code></pre>
+<ul>
+<li>The <code>uuid</code> package receive a <a href="https://docs.python.org/3.12/library/uuid.html#uuid-cli">CLI</a> as well. Now there's an easy cross-platform way to create UUIDs!</li>
+</ul>
+<pre><code class="language-python3"># python -m uuid [-h] [-u {uuid1,uuid3,uuid4,uuid5}] [-n NAMESPACE] [-N NAME]
+$ python -m uuid -u uuid4
+6ebeb0e2-6257-4eba-a638-97a20a222bed
+</code></pre>
+<ul>
+<li><a href="https://docs.python.org/3.12/library/itertools.html#itertools.batched"><code>itertools.batched</code></a> will be very useful for splitting workloads into evenly sized chunks.</li>
+</ul>
+<pre><code class="language-python">&gt;&gt;&gt; from itertools import batched
+&gt;&gt;&gt; files = [f'{i}.txt' for i in range(1,11)]
+&gt;&gt;&gt; list(batched(files, 3))
+[('1.txt', '2.txt', '3.txt'), ('4.txt', '5.txt', '6.txt'), ('7.txt', '8.txt', '9.txt'), ('10.txt',)]
+</code></pre>
+<ul>
+<li>There's now <code>pathlib.Path</code> directory traversal function <a href="https://docs.python.org/3.12/library/pathlib.html#pathlib.Path.walk"><code>pathlib.Path.walk</code></a>.</li>
+<li><a href="https://docs.python.org/3.12/library/os.path.html#os.path.splitroot"><code>os.path.splitroot</code></a> splits a path into a three tuple of <code>(drive, root, tail)</code> where <code>drive</code> is always empty on POSIX systems.</li>
+</ul>
+<pre><code class="language-python"># POSIX
+&gt;&gt;&gt; os.path.splitroot(os.getcwd())
+('', '/', 'Users/someuser')
+# Windows
+('C:', '\\', 'Users\\someuser\\AppData\\Local\\Programs\\Python\\Python312')
+</code></pre>
+<ul>
+<li><a href="https://docs.python.org/3.12/library/tempfile.html#tempfile.NamedTemporaryFile"><code>tempfile.NamedTemporaryFile</code></a> received a boolean <code>delete_on_close</code> argument, which should be self-explanatory.</li>
+<li><a href="https://docs.python.org/3.12/library/tempfile.html#tempfile.mkdtemp"><code>tempfile.mkdtemp</code></a> always returns an absolute path now.</li>
+<li>Module <code>unittest</code> received a <code>--durations=N</code> flag to show the <code>N</code> slowest test cases.</li>
+<li><a href="https://www.bitecode.dev/p/python-312-what-didnt-make-the-headlines#%C2%A7a-better-debugging-experience">Inlined return values can be accessed in a debugger session</a>, without adding a intermediate variable.</li>
+</ul>
+<pre><code class="language-python"># module.py
+def g():
+    return 21*2
+
+def f():
+    breakpoint()
+    return g()
+
+f()
+</code></pre>
+<p>Here's how to show the return value:</p>
+<pre><code>$ python -m module
+&gt; /private/var/folders/mc/3ssj7_c51dv76d6ll79s5l3w0000gn/T/tmp.xHdeQkAESD/module.py(6)f()
+-&gt; return g()
+(Pdb) n
+--Return--
+&gt; /private/var/folders/mc/3ssj7_c51dv76d6ll79s5l3w0000gn/T/tmp.xHdeQkAESD/module.py(6)f()-&gt;42
+-&gt; return g()
+(Pdb) $_retval
+42
+(Pdb)
+</code></pre>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
+    </item>
+    <item>
+      <title>Concurrently transcode audio files to MP3 using ffmpeg and Python</title>
+      <link>https://klingt.net/articles/concurrently-transcode-audio-files-to-mp3-using-ffmpeg-and-python.html</link>
+      <description>A Python script that concurrently calls ffmpeg to transcode audio files to MP3.</description>
+      <content:encoded><![CDATA[<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="description" content="A Python script that concurrently calls ffmpeg to transcode audio files to MP3.">
+  
+  <title>Concurrently transcode audio files to MP3 using ffmpeg and Python</title>
+
+  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
+  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
+
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
+  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
+  
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
+    media="screen and (prefers-color-scheme: light)" />
+  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
+    media="screen and (prefers-color-scheme: dark)" />
+  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
+  <script defer>
+    hljs.highlightAll();
+  </script>
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="main">
+      <main>
+        
+<h1>Concurrently transcode audio files to MP3 using ffmpeg and Python</h1>
+<p>With the start of this year my Spotify subscription has ended and I'm now using Apple Music, mainly because it's part of my <a href="https://www.apple.com/de/apple-one/">Apple One</a> subscription, which not only makes it a lot cheaper than Spotify, Apple Music also allows me to hear my local music everywhere if it's on iCloud. However, that's where the advantages end, since Apple Music really sucks from a software quality standpoint. On iOS it's acceptable, but on macOS there were numerous crashes, it's kind of slow, and adding a single album to a playlist often ends in the album being added like a hundred times. Is there no QA for Apple desktop software anymore? I digress.</p>
+<p>One limitation of Apple Music is, that it only supports a handful of audio file formats, i.e. there's no support for FLAC, OGG, OPUS and all the other good stuff. Some weeks ago I took NPR's <a href="https://www.npr.org/sections/therecord/2015/06/02/411473508/how-well-can-you-hear-audio-quality">audio quality test</a>, and found that I couldn't distinguish between lossless and 128kbps MP3 in most cases. In the early days of MP3 this was easy, especially for acoustic music. I remember that hi-hats for example sounded &quot;watery&quot;, due to the bad codecs back then. However, those days are over, and modern MP3 codecs have gotten a lot better. So I decided to &quot;bite in the sour apple&quot; (that's not an English phrase, is it?) and convert my local library to MP3, so I can listen to it on the go in Apple Music.</p>
+<p>I'm not a fan of bash scripts, at least not when they're longer than 5 lines. For me the natural choice is to use Python for such a scripting task. Below are the contents of <code>convert.py</code>, the script I wrote to convert the files concurrently.</p>
+<pre><code class="language-python">#!/usr/bin/env python3
+
+import concurrent
+from concurrent.futures import ThreadPoolExecutor
+import os
+from pathlib import Path
+import subprocess
+import sys
+from typing import List
+
+source_dir = Path(sys.argv[1])
+dest_dir = Path(sys.argv[2])
+known_extensions = set([&quot;.m4a&quot;, &quot;.flac&quot;, &quot;.ogg&quot;])
+source_files = []
+for dirpath, _, filenames in os.walk(source_dir):
+    for filename in filenames:
+        p = Path(dirpath).relative_to(source_dir).joinpath(filename)
+        if p.suffix in known_extensions:
+            source_files.append(p)
+
+# 1/3
+</code></pre>
+<p>In this first step we're collecting the file paths relative to the source directory of all audio files, if they're matching one of the <code>known_extensions</code>. It's important that we have the relative path, because this will simplify the path handling of the destination path.</p>
+<pre><code class="language-python">args_list = []
+for source_file in source_files:
+    source = source_dir.joinpath(source_file)
+    dest = dest_dir.joinpath(source_file).with_suffix(&quot;.mp3&quot;)
+    try:
+        os.makedirs(dest.parent)
+    except FileExistsError:
+        print(f&quot;{dest.parent} already exists...&quot;)
+    # https://trac.ffmpeg.org/wiki/Encode/MP3
+    args_list.append(
+        [
+            &quot;ffmpeg&quot;,
+            &quot;-i&quot;,
+            str(source),
+            &quot;-c:a&quot;,
+            &quot;libmp3lame&quot;,
+            &quot;-qscale:a&quot;,
+            &quot;2&quot;,  # Use high quality encoding, 4 is default
+            &quot;-abr&quot;,
+            &quot;1&quot;,  # Enable average bitrate
+            str(dest),
+        ]
+    )
+
+# 2/3
+</code></pre>
+<p>In this section we build a list of arguments that we want to pass to the task function we use to schedule the work onto a thread pool. The speedup is almost linear, since <code>ffmpeg</code> will only use a single CPU core to transcode a file, hence this workload scales well with the number of available CPU cores. I decided to use average bit-rate (ABR) encoding, and the resulting files vary around 180kbps +/- 20kbps.
+In a blind-test I could never tell that this is not 320kbps. If you disagree because you've golden ears, fine, I don't believe you can actually hear a difference 😛.</p>
+<pre><code class="language-python">def run(args: List[str]):
+    subprocess.run(
+        args=args,
+        check=True,
+    )
+
+
+with ThreadPoolExecutor(max_workers=4) as executor:
+    futures = [executor.submit(run, args) for args in args_list]
+    for future in concurrent.futures.as_completed(futures):
+        future.result()
+</code></pre>
+<p>Lastly we're defining the task function called <code>run</code> (could've named it <code>task</code> of course) and then use a <a href="https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor"><code>ThreadPoolExecutor</code></a> to schedule the workload onto 4 CPU cores. If you want to sature all your available CPU cores, use <code>multiprocessing.cpu_count()</code>.</p>
+<p>Python is <del>fin</del> fun 🥳</p>
+
+
+      </main>
+    </div>
+  </div>
+</body>
+
+</html>
+]]></content:encoded>
+      <author>Andreas Linz</author>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
     <item>
       <title>(Almost) 30 Best Albums of 2021</title>
@@ -2143,478 +2627,7 @@ A typical handler may print log records to standard error, or write them to a fi
 </html>
 ]]></content:encoded>
       <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
-    </item>
-    <item>
-      <title>Python 3.12</title>
-      <link>https://klingt.net/articles/python-3-12.html</link>
-      <description>My summary of the Python 3.12 release highlights.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="My summary of the Python 3.12 release highlights.">
-  
-  <title>Python 3.12</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Yet another Python 3.12 release highlight summary</h1>
-<p>I'm doing a fair bit of Python lately, and thus need to stay up-to-date with the language releases.  Some days ago Python 3.12 was released.  The <a href="https://www.python.org/downloads/release/python-3120/">release note overview</a>, and the detailed <a href="https://docs.python.org/3.12/whatsnew/3.12.html">release notes</a> in particular, are worth a read.  Other articles I can recommend are <a href="https://www.bitecode.dev/p/python-312-what-didnt-make-the-headlines">What didn't make the headlines</a> and <a href="https://realpython.com/python312-typing/">Static typing improvements</a>.</p>
-<ul>
-<li><a href="https://peps.python.org/pep-0701/">PEP-701</a> formalisation of f-strings will lift some limitations, like nested f-strings, use of the quotation delimiter of the f-strings inside an expression, comments in multi-line f-strings. Examples are listed in the PEP.</li>
-</ul>
-<pre><code class="language-python">&gt;&gt;&gt; m = {'a': 'b'}
-# This wasn't possible in prior versions.
-&gt;&gt;&gt; f'm={m['a']}'
-'m=b'
-</code></pre>
-<p>Since Python3.8 there's also a debug format in f-strings, that is used when post-fixing a variable with <code>=</code>:</p>
-<pre><code class="language-python">&gt;&gt;&gt; f'{m=}'
-&quot;m={'a': 'b'}&quot;
-# or as nested f-string
-&gt;&gt;&gt; f'Debug output {f'{m=}'}'
-&quot;Debug output m={'a': 'b'}&quot;
-</code></pre>
-<ul>
-<li><a href="https://docs.python.org/3.12/whatsnew/3.12.html#pep-688-making-the-buffer-protocol-accessible-in-python">PEP 688</a> exposes the <em>Buffer protocol</em> (interface) to Python code.  This was limited to CPython before. I'm not sure what this is useful for.</li>
-<li><a href="https://peps.python.org/pep-0669/">PEP 669</a> introduces a new, low-overhead debugging and profiling API.</li>
-<li><a href="https://peps.python.org/pep-0684">PEP 684</a> adds support for isolated sub-interpreters with separate GILs, and is only available through the C-API. So, not of any particular use for me.</li>
-<li><a href="https://docs.python.org/3.12/whatsnew/3.12.html#improved-error-messages">Improved error messages</a>.</li>
-<li>Large and small <a href="https://docs.python.org/3.12/whatsnew/3.12.html#optimizations">performance improvements</a>, enhanced <a href="https://docs.python.org/3.12/howto/perf_profiling.html">Linux <code>perf</code> support</a>.</li>
-<li><a href="https://peps.python.org/pep-0695/">PEP 695</a> adds a new type annotation syntax.</li>
-</ul>
-<p>More compact way to create generic functions and classes:</p>
-<pre><code class="language-python">def max[T](args: Iterable[T]) -&gt; T:
-	...
-</code></pre>
-<p>Type aliases can be generic:</p>
-<pre><code class="language-python">type Point[T] = tuple[T, T]
-</code></pre>
-<ul>
-<li><a href="https://docs.python.org/3.12/whatsnew/3.12.html#pep-698-override-decorator-for-static-typing">PEP 698</a> adds a <code>@override</code> decorator to indicate methods that should be overridden in a sub-class.</li>
-<li>The <code>sqlite3</code> module received a <a href="https://docs.python.org/3.12/library/sqlite3.html#sqlite3-cli">command-line interface</a>.  This might be useful as a simple SQLite interface on systems that only have Python available.</li>
-</ul>
-<pre><code class="language-bash"># python -m sqlite3 [-h] [-v] [filename] [sql]
-$ python -m sqlite3
-sqlite3 shell, running on SQLite version 3.39.5
-Connected to a transient in-memory database
-
-Each command will be run using execute() on the cursor.
-Type &quot;.help&quot; for more information; type &quot;.quit&quot; or CTRL-D to quit.
-sqlite&gt;
-</code></pre>
-<ul>
-<li>The <code>uuid</code> package receive a <a href="https://docs.python.org/3.12/library/uuid.html#uuid-cli">CLI</a> as well. Now there's an easy cross-platform way to create UUIDs!</li>
-</ul>
-<pre><code class="language-python3"># python -m uuid [-h] [-u {uuid1,uuid3,uuid4,uuid5}] [-n NAMESPACE] [-N NAME]
-$ python -m uuid -u uuid4
-6ebeb0e2-6257-4eba-a638-97a20a222bed
-</code></pre>
-<ul>
-<li><a href="https://docs.python.org/3.12/library/itertools.html#itertools.batched"><code>itertools.batched</code></a> will be very useful for splitting workloads into evenly sized chunks.</li>
-</ul>
-<pre><code class="language-python">&gt;&gt;&gt; from itertools import batched
-&gt;&gt;&gt; files = [f'{i}.txt' for i in range(1,11)]
-&gt;&gt;&gt; list(batched(files, 3))
-[('1.txt', '2.txt', '3.txt'), ('4.txt', '5.txt', '6.txt'), ('7.txt', '8.txt', '9.txt'), ('10.txt',)]
-</code></pre>
-<ul>
-<li>There's now <code>pathlib.Path</code> directory traversal function <a href="https://docs.python.org/3.12/library/pathlib.html#pathlib.Path.walk"><code>pathlib.Path.walk</code></a>.</li>
-<li><a href="https://docs.python.org/3.12/library/os.path.html#os.path.splitroot"><code>os.path.splitroot</code></a> splits a path into a three tuple of <code>(drive, root, tail)</code> where <code>drive</code> is always empty on POSIX systems.</li>
-</ul>
-<pre><code class="language-python"># POSIX
-&gt;&gt;&gt; os.path.splitroot(os.getcwd())
-('', '/', 'Users/someuser')
-# Windows
-('C:', '\\', 'Users\\someuser\\AppData\\Local\\Programs\\Python\\Python312')
-</code></pre>
-<ul>
-<li><a href="https://docs.python.org/3.12/library/tempfile.html#tempfile.NamedTemporaryFile"><code>tempfile.NamedTemporaryFile</code></a> received a boolean <code>delete_on_close</code> argument, which should be self-explanatory.</li>
-<li><a href="https://docs.python.org/3.12/library/tempfile.html#tempfile.mkdtemp"><code>tempfile.mkdtemp</code></a> always returns an absolute path now.</li>
-<li>Module <code>unittest</code> received a <code>--durations=N</code> flag to show the <code>N</code> slowest test cases.</li>
-<li><a href="https://www.bitecode.dev/p/python-312-what-didnt-make-the-headlines#%C2%A7a-better-debugging-experience">Inlined return values can be accessed in a debugger session</a>, without adding a intermediate variable.</li>
-</ul>
-<pre><code class="language-python"># module.py
-def g():
-    return 21*2
-
-def f():
-    breakpoint()
-    return g()
-
-f()
-</code></pre>
-<p>Here's how to show the return value:</p>
-<pre><code>$ python -m module
-&gt; /private/var/folders/mc/3ssj7_c51dv76d6ll79s5l3w0000gn/T/tmp.xHdeQkAESD/module.py(6)f()
--&gt; return g()
-(Pdb) n
---Return--
-&gt; /private/var/folders/mc/3ssj7_c51dv76d6ll79s5l3w0000gn/T/tmp.xHdeQkAESD/module.py(6)f()-&gt;42
--&gt; return g()
-(Pdb) $_retval
-42
-(Pdb)
-</code></pre>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
-    </item>
-    <item>
-      <title>How to build against a modified version of Go</title>
-      <link>https://klingt.net/articles/how-to-build-against-a-modified-version-of-go.html</link>
-      <description>How to build your program against a modified build of the Go standard library.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="How to build your program against a modified build of the Go standard library.">
-  
-  <title>How to build against a modified version of Go</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>How to build against a modified version of Go</h1>
-<p>This week I read <a href="https://jazco.dev/2024/01/10/golang-and-epoll/">an article</a> about the vertical scaling limits of a Go application under heavy I/O load, that linked to <a href="https://github.com/golang/go/issues/65064">a Go issue</a> in which the <code>syscall.EpollWait</code> bottleneck is investigated. One particular <a href="https://github.com/golang/go/issues/65064#issuecomment-1887777889">comment</a> in this issue thread sparked my interest, it says:</p>
-<blockquote>
-<p>Note that is possible to simply edit the runtime source in GOROOT and rebuild your program (no special steps required for the runtime, it is treated like any other package).</p>
-</blockquote>
-<p>What this means is, that any import of standard library packages is handled as if they're user packages, just that the standard library packages are resolved with <code>$GOROOT/src</code> as the base directory. Also, it's a little bit more complicated than the comment makes it look like, but we'll come to that.
-With this knowledge, let's try what is needed to run a Go program with a custom Go build.</p>
-<p>The following steps assume that a Go distribution is already available on your system.
-Let's create a simple hello-world Go app:</p>
-<pre><code class="language-sh">$ mkdir app &amp;&amp; cd app
-$ go mod init example.com/hello-app
-</code></pre>
-<p>Where <code>hello.go</code> contains the following lines:</p>
-<pre><code class="language-go">package main
-
-import &quot;fmt&quot;
-
-func main() {
-	fmt.Println(&quot;World!&quot;)
-}
-</code></pre>
-<p>Running <code>go run hello.go</code> will, obviously, print <code>World!</code> to the console.</p>
-<p>My contrived example will modify <code>fmt.Println</code> in a way that it always puts a <code>Hello,</code> before everything it prints. I know, a horrible idea, but nobody says you should ship something like this in production 😛.</p>
-<p>We need to clone a source copy of Go into some local folder, in this case I use <code>_go</code>, because the <a href="https://pkg.go.dev/cmd/go"><code>go</code> tool</a> ignores folders that are prefixed with either <code>_</code> or <code>.</code>.</p>
-<pre><code class="language-sh">$ git clone --depth 1 --branch go1.21.6 git@github.com:golang/go _go
-</code></pre>
-<p>Now we need to build the <code>go</code> tool from the cloned source:</p>
-<pre><code class="language-sh">pushd _go/src/go &amp;&amp; ./make.bash; popd
-</code></pre>
-<p>If you forget to do this you'll see an error like</p>
-<pre><code class="language-sh">go: no such tool &quot;compile&quot;
-</code></pre>
-<p>when trying to compile against your modified Go version.
-A slight environment modifications is necessary so that the custom <code>go</code> build is picked up:</p>
-<pre><code class="language-sh">export GOROOT=$PWD/_go
-export PATH=$GOROOT/bin:$PATH
-</code></pre>
-<p>With this done let's modify <code>$GOROOT/src/fmt/print.go</code> as shown in this diff:</p>
-<pre><code class="language-diff">diff --git a/src/fmt/print.go b/src/fmt/print.go
-index 9c3bd3e..3a83a99 100644
---- a/src/fmt/print.go
-+++ b/src/fmt/print.go
-@@ -301,6 +301,7 @@ func Append(b []byte, a ...any) []byte {
- // It returns the number of bytes written and any write error encountered.
- func Fprintln(w io.Writer, a ...any) (n int, err error) {
- 	p := newPrinter()
-+	p.doPrint([]any{&quot;Hello,&quot;})
- 	p.doPrintln(a)
- 	n, err = w.Write(p.buf)
- 	p.free()
-</code></pre>
-<p>Another run of <code>go run hello.go</code> will now print <code>Hello,World!</code>.
-Success 🎉!</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
-    </item>
-    <item>
-      <title>Concurrently transcode audio files to MP3 using ffmpeg and Python</title>
-      <link>https://klingt.net/articles/concurrently-transcode-audio-files-to-mp3-using-ffmpeg-and-python.html</link>
-      <description>A Python script that concurrently calls ffmpeg to transcode audio files to MP3.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="A Python script that concurrently calls ffmpeg to transcode audio files to MP3.">
-  
-  <title>Concurrently transcode audio files to MP3 using ffmpeg and Python</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Concurrently transcode audio files to MP3 using ffmpeg and Python</h1>
-<p>With the start of this year my Spotify subscription has ended and I'm now using Apple Music, mainly because it's part of my <a href="https://www.apple.com/de/apple-one/">Apple One</a> subscription, which not only makes it a lot cheaper than Spotify, Apple Music also allows me to hear my local music everywhere if it's on iCloud. However, that's where the advantages end, since Apple Music really sucks from a software quality standpoint. On iOS it's acceptable, but on macOS there were numerous crashes, it's kind of slow, and adding a single album to a playlist often ends in the album being added like a hundred times. Is there no QA for Apple desktop software anymore? I digress.</p>
-<p>One limitation of Apple Music is, that it only supports a handful of audio file formats, i.e. there's no support for FLAC, OGG, OPUS and all the other good stuff. Some weeks ago I took NPR's <a href="https://www.npr.org/sections/therecord/2015/06/02/411473508/how-well-can-you-hear-audio-quality">audio quality test</a>, and found that I couldn't distinguish between lossless and 128kbps MP3 in most cases. In the early days of MP3 this was easy, especially for acoustic music. I remember that hi-hats for example sounded &quot;watery&quot;, due to the bad codecs back then. However, those days are over, and modern MP3 codecs have gotten a lot better. So I decided to &quot;bite in the sour apple&quot; (that's not an English phrase, is it?) and convert my local library to MP3, so I can listen to it on the go in Apple Music.</p>
-<p>I'm not a fan of bash scripts, at least not when they're longer than 5 lines. For me the natural choice is to use Python for such a scripting task. Below are the contents of <code>convert.py</code>, the script I wrote to convert the files concurrently.</p>
-<pre><code class="language-python">#!/usr/bin/env python3
-
-import concurrent
-from concurrent.futures import ThreadPoolExecutor
-import os
-from pathlib import Path
-import subprocess
-import sys
-from typing import List
-
-source_dir = Path(sys.argv[1])
-dest_dir = Path(sys.argv[2])
-known_extensions = set([&quot;.m4a&quot;, &quot;.flac&quot;, &quot;.ogg&quot;])
-source_files = []
-for dirpath, _, filenames in os.walk(source_dir):
-    for filename in filenames:
-        p = Path(dirpath).relative_to(source_dir).joinpath(filename)
-        if p.suffix in known_extensions:
-            source_files.append(p)
-
-# 1/3
-</code></pre>
-<p>In this first step we're collecting the file paths relative to the source directory of all audio files, if they're matching one of the <code>known_extensions</code>. It's important that we have the relative path, because this will simplify the path handling of the destination path.</p>
-<pre><code class="language-python">args_list = []
-for source_file in source_files:
-    source = source_dir.joinpath(source_file)
-    dest = dest_dir.joinpath(source_file).with_suffix(&quot;.mp3&quot;)
-    try:
-        os.makedirs(dest.parent)
-    except FileExistsError:
-        print(f&quot;{dest.parent} already exists...&quot;)
-    # https://trac.ffmpeg.org/wiki/Encode/MP3
-    args_list.append(
-        [
-            &quot;ffmpeg&quot;,
-            &quot;-i&quot;,
-            str(source),
-            &quot;-c:a&quot;,
-            &quot;libmp3lame&quot;,
-            &quot;-qscale:a&quot;,
-            &quot;2&quot;,  # Use high quality encoding, 4 is default
-            &quot;-abr&quot;,
-            &quot;1&quot;,  # Enable average bitrate
-            str(dest),
-        ]
-    )
-
-# 2/3
-</code></pre>
-<p>In this section we build a list of arguments that we want to pass to the task function we use to schedule the work onto a thread pool. The speedup is almost linear, since <code>ffmpeg</code> will only use a single CPU core to transcode a file, hence this workload scales well with the number of available CPU cores. I decided to use average bit-rate (ABR) encoding, and the resulting files vary around 180kbps +/- 20kbps.
-In a blind-test I could never tell that this is not 320kbps. If you disagree because you've golden ears, fine, I don't believe you can actually hear a difference 😛.</p>
-<pre><code class="language-python">def run(args: List[str]):
-    subprocess.run(
-        args=args,
-        check=True,
-    )
-
-
-with ThreadPoolExecutor(max_workers=4) as executor:
-    futures = [executor.submit(run, args) for args in args_list]
-    for future in concurrent.futures.as_completed(futures):
-        future.result()
-</code></pre>
-<p>Lastly we're defining the task function called <code>run</code> (could've named it <code>task</code> of course) and then use a <a href="https://docs.python.org/3/library/concurrent.futures.html#threadpoolexecutor"><code>ThreadPoolExecutor</code></a> to schedule the workload onto 4 CPU cores. If you want to sature all your available CPU cores, use <code>multiprocessing.cpu_count()</code>.</p>
-<p>Python is <del>fin</del> fun 🥳</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
-    </item>
-    <item>
-      <title>Reading the last bytes of a stream in Go</title>
-      <link>https://klingt.net/articles/reading-the-last-bytes-of-a-stream-in-go.html</link>
-      <description>In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.</description>
-      <content:encoded><![CDATA[<!doctype html>
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <meta name="description" content="In this post I explain how to efficiently read the last bytes of a stream of file, just like the good old tail utility.">
-  
-  <title>Reading the last bytes of a stream in Go</title>
-
-  <link rel="icon" type="image/svg+xml" href='https://klingt.net/assets/logo.svg'>
-  <link rel="apple-touch-icon" href='https://klingt.net/assets/logo-apple-touch-icon.png'>
-
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraCode/fira_code.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/fonts/FiraGO/fira_go.css' />
-  <link rel="stylesheet" type="text/css" href='https://klingt.net/assets/base.css' />
-  
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github.min.css'
-    media="screen and (prefers-color-scheme: light)" />
-  <link rel="stylesheet" href='https://klingt.net/assets/highlightjs/styles/github-dark.min.css'
-    media="screen and (prefers-color-scheme: dark)" />
-  <script src='https://klingt.net/assets/highlightjs/highlight.min.js'></script>
-  <script defer>
-    hljs.highlightAll();
-  </script>
-</head>
-
-<body>
-  <div class="wrapper">
-    <div class="main">
-      <main>
-        
-<h1>Reading the last bytes of a stream in Go</h1>
-<p>It's about half a year since my last blog post, so it's about time to write another one.</p>
-<p>Yesterday I was working on a private project that required to read a block of bytes from the end of an <code>io.Reader</code>.
-On a first glance that sounds like a trivial problem, but doing this <em>efficiently</em> turned out to be more complicated than initially thought.</p>
-<p>If your <code>io.Reader</code> stems from a file you're lucky, because regular files allow random access through the system <a href="https://man7.org/linux/man-pages/man2/lseek.2.html">seek call</a> that is exposed on a <code>os.File</code> with its <a href="https://pkg.go.dev/os#File.Seek"><code>Seek</code> method</a>.  However, my function only accepts a plain <code>io.Reader</code> and not an <code>os.File</code>, so this option is out of question.</p>
-<p>How can we read the last N bytes of a <em>finite</em> stream of some kind?</p>
-<h2>Naïve solution</h2>
-<p>A naïve solution would be to <a href="https://pkg.go.dev/io#ReadAll">read the whole file into memory</a> and then discard everything except for some slice of bytes at the end.</p>
-<pre><code class="language-go">func readTail(r io.Reader, N int) ([]byte, error) {
-	data, err := io.ReadAll(r)
-	if err != nil {
-		return nil, err
-	}
-
-	return data[len(data)-N:], nil
-}
-</code></pre>
-<p>This is pretty wasteful and might require huge amounts of memory, depending on how long the stream you want to consume is.</p>
-<h2>Two interleaved buffers</h2>
-<p>The next idea I had was to read the stream in chunks of size N, and discarding every chunk except the last one.
-But this won't work because of a variety of reasons, first and foremost if the stream length is not an integer multiple of N then the last chunk might be incomplete since it is only the remainder of file size divided by chunk size (N).</p>
-<p><img src="unalinged-end-of-file-read.png" alt="illustration of an unaligned read"></p>
-<p>So, why not maintain two buffers, one for the previous read and another one for the current read.
-When reaching EOF we can then concatenate the second last read with the last and return an slice of size N, right?
-This might work, but turns out to be pretty complicated because of how <code>io.Read</code> might behave.
-A call to <code>Read</code> is not guaranteed to return <code>N</code> bytes, instead it might fill only a <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=60-61">part of the given buffer</a>:</p>
-<pre><code class="language-go">// If some data is available but not len(p) bytes, Read conventionally
-// returns what is available instead of waiting for more.
-</code></pre>
-<p>So, we can't easily fill the two buffers in an interleaved manner because a single read might not fill a whole buffer.
-Of course, there's <a href="https://pkg.go.dev/io#ReadFull"><code>io.ReadFull</code></a> which takes care of reading exactly N bytes if available, but the logic would still be quite convoluted.</p>
-<h2>Ring buffer</h2>
-<p>After dabbling around for a while with the solution I had, I realized that what I wrote looked almost like a <a href="https://en.wikipedia.org/wiki/Circular_buffer">ring buffer</a>.
-With a ring buffer, sometimes also called circular buffer, we only need O(n) space instead of O(2n) as required with the previous concept.
-The gist is to store each chunk in a ring buffer, wrapping around if it exceeds the end of the ring buffers internal array.</p>
-<p><img src="ring-buffer-end-of-file-read.png" alt="illustration of reading chunks with a ring buffer"></p>
-<p>After we reached the end of the stream we can just return a slice from the ring buffer, starting from the write head and reaching back N bytes.
-Those are two operations if we need to wrap around</p>
-<pre><code class="language-go">copy(dst[:N-wpos], ringbuf[wpos:])
-copy(dst[N-wpos:], ringbuf[:wpos])
-</code></pre>
-<p>where <code>wpos</code> is the index of the write head.</p>
-<p>One thing that bit me was that <code>io.Read</code> might return <code>io.EOF</code> together with a non-zero amount of bytes read, <em>or</em> it could return <code>0, io.EOF</code> after the last call that returned a non-zero amount of bytes and a <code>nil</code> error.
-This is <a href="https://cs.opensource.google/go/go/+/refs/tags/go1.19.2:src/io/io.go;l=83">documented behavior</a> but could still be surprising.</p>
-<pre><code class="language-go">// An instance of this general case is that a Reader returning
-// a non-zero number of bytes at the end of the input stream may
-// return either err == EOF or err == nil. The next Read should
-// return 0, EOF.
-</code></pre>
-<p>You can find an ugly example in <a href="https://go.dev/play/p/M-WcpkVviGV">this playground</a> but be aware that you need to run it locally, since external URLs might not be resolved in the playground.</p>
-<p>There are a number of performance considerations that arise from this implementation, e.g. a very small <code>N</code> might lead to a huge number of read calls if the ring buffer's size is equal to <code>N</code>.
-Technically they are independent, the only condition is that the ring buffer must at least have a size of <code>N</code>.</p>
-<p>You might've guessed it already but the good old <code>tail</code> utility serves the same purpose.  I haven't had a look in <a href="https://github.com/coreutils/coreutils/blob/master/src/tail.c">GNU tail's source code</a> yet, but I'm curious to see how they achieved this.</p>
-<p>I hope that helped someone.
-Please let me know if you've an even more efficient solution or there is any other feedback for me.</p>
-
-
-      </main>
-    </div>
-  </div>
-</body>
-
-</html>
-]]></content:encoded>
-      <author>Andreas Linz</author>
-      <pubDate>Sat, 09 Mar 2024 16:25:46 +0000</pubDate>
+      <pubDate>Sun, 21 Apr 2024 11:54:11 +0000</pubDate>
     </item>
   </channel>
 </rss>
